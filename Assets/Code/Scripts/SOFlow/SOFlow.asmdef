@@ -1,0 +1,21 @@
+{
+    "name": "SOFlow",
+    "references": [
+        "Pather",
+        "StandaloneFileBrowser",
+        "Unity.TextMeshPro",
+        "Unity.TextMeshPro.Editor",
+        "UltEvents",
+        "XNode",
+        "XNodeEditor",
+        "SerializableCallback"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
