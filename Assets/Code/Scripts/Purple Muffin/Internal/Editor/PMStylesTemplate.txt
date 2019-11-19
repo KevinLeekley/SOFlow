@@ -1,0 +1,54 @@
+#if UNITY_EDITOR
+using System.IO;
+using UnityEditor;
+using UnityEngine;
+
+namespace PurpleMuffin.Internal
+{
+    public static class PMStyles
+    {
+        // The available styles.
+#STYLES#
+        /// <summary>
+        /// The GUI styles.
+        /// </summary>
+        private static GUISkin Styles
+        {
+            get
+            {
+                if(_styles == null)
+                {
+                    _styles = AssetDatabase.LoadAssetAtPath<GUISkin>(Path.Combine("Assets", "Code", "Scripts",
+                                                                                 "Purple Muffin", "Internal", "Editor",
+                                                                                 "PM GUI Skin.guiskin"));
+                }
+
+                return _styles;
+            }
+        }
+
+        /// <summary>
+        /// The GUI styles.
+        /// </summary>
+        private static GUISkin _styles;
+
+        /// <summary>
+        /// Gets the style for the given key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        private static GUIStyle GetStyle(string key)
+        {
+            foreach(GUIStyle style in Styles.customStyles)
+            {
+                if(style.name == key)
+                {
+                    return style;
+                }
+            }
+
+            return GUIStyle.none;
+        }
+    }
+}
+#endif

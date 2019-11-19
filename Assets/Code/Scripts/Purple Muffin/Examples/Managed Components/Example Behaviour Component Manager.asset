@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5cd14ff79aa2b489460d756da4baf5, type: 3}
+  m_Name: Example Behaviour Component Manager
+  m_EditorClassIdentifier: 
+  Entities: []
+  GamePaused:
+    UseConstant: 0
+    ConstantValueType: 0
+    VariableType: {fileID: 11400000, guid: e24361bb1584ed3489794b643a571be0, type: 2}
+  GameActive:
+    UseConstant: 0
+    ConstantValueType: 0
+    VariableType: {fileID: 11400000, guid: 93759417cdc0b62419b2da527d6f103c, type: 2}
+  GameSpeed:
+    UseConstant: 0
+    ConstantValueType: 0
+    VariableType: {fileID: 11400000, guid: 726d5b718e724bf41a8a2e621c3722ea, type: 2}

@@ -1,0 +1,23 @@
+{
+    "name": "PurpleMuffin",
+    "references": [
+        "Pather",
+        "StandaloneFileBrowser",
+        "Cinemachine",
+        "Unity.TextMeshPro",
+        "Unity.TextMeshPro.Editor",
+        "UltEvents",
+        "XNode",
+        "XNodeEditor",
+        "SerializableCallback"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
