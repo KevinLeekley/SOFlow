@@ -8,29 +8,14 @@ namespace SOFlow.Fading
     public class FloatDataFadable : Fadable
     {
 	    /// <summary>
-	    ///     The fade range.
-	    /// </summary>
-	    public Vector2 FadeRange;
-
-	    /// <summary>
-	    ///     The maximum fade range.
-	    /// </summary>
-	    public FloatField FadeReferenceRangeMax;
-
-	    /// <summary>
-	    ///     The minimum fade range.
-	    /// </summary>
-	    public FloatField FadeReferenceRangeMin;
-
-	    /// <summary>
 	    ///     The float data to fade.
 	    /// </summary>
 	    public FloatField FloatData;
 
 	    /// <summary>
-	    ///     Indicates whether FloatField references should be used for the fade range.
+	    ///     The fade range.
 	    /// </summary>
-	    public bool UseReferenceRange;
+	    public Vector2Field FadeRange;
 
         /// <inheritdoc />
         protected override Color GetColour()
@@ -41,10 +26,7 @@ namespace SOFlow.Fading
         /// <inheritdoc />
         public override void UpdateColour(Color colour, float percentage)
         {
-            if(UseReferenceRange)
-                FloatData.Value = Mathf.Lerp(FadeReferenceRangeMin.Value, FadeReferenceRangeMax.Value, percentage);
-            else
-                FloatData.Value = Mathf.Lerp(FadeRange.x, FadeRange.y, percentage);
+            FloatData.Value = Mathf.Lerp(FadeRange.Value.x, FadeRange.Value.y, percentage);
         }
     }
 }
