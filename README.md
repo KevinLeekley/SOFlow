@@ -15,6 +15,18 @@ scenes and other components. This is achieved by encapsulating functionality nor
 remove any scene dependencies. But `ScriptableObjects` can do so much more. This SDK is an attempt to
 realize that potential.
 
+# Pros
+
+1. Completely scene and prefab independent referencing of data and events. Player data, game manager states, pretty much anything can be shared across scenes and prefabs with this SDK.
+2. All data is serialized natively by Unity and can easily be exported to JSON. Data can also be imported back into `ScriptableObjects` from JSON. This can be very handy for adding support for custom player levels, maps, or even just saving player data quick and dirty like.
+3. Entire games can be made purely by using the SDK as is. Unlike visual scripting tools that aim to completely migrate the game development flow into a visual scripting interface, SOFlow attempts to blend with Unity as is.
+4. A fully debuggable `Game Event` system. Since a lot of functionality is now directly linked to data assets and `Game Objects`, it can become difficult to debug when things go wrong. I have made my best efforts to alleviate this with bug tracking for `Game Events` right inside Unity. And at times when we need to get down and dirty with code, hyperlinks to the code in question are available as well.
+5. A wide variety of useful components always coming to the SDK. The SDK is ever-evolving, but each new features will maintain the same general workflow encouraged by SOFlow.
+
+# Cons
+
+What are '_cons_'?
+
 # Features
 
 - **Data Types**
@@ -48,3 +60,44 @@ containers or using exclusive values:
 
 NOTE: Using the `Primitive Data` root class as a variable does not support toggling between data containers
 and exclusive values, as there would be no data defined as exclusive values.
+
+- **Game Events And Game Event Listeners**
+
+Another one of the foundations of the SDK. Not to be confused with `UnityEvents` or `UltEvents`. `Game
+Events` act as messengers between components. That is essentially their only purpose. Though as dull as that
+may sound, it is actually their most powerful (if only) feature. `Game Events` work together with
+`Game Event Listeners`, who act as receivers of the messages carried by `Game Events`. A short breakdown of
+what this means for us:
+
+1. We choose when to send out a message.
+2. `Game Events` ensure our message goes out to all interested components.
+3. `Game Event Listeners` receive the message and lets us know the message has arrived.
+4. We decide what to do after having received said message.
+
+To demonstrate this concept, let's use the previous example with setting text to some data. Previously,
+we had to enter Play Mode for the text to update. This time, we can simply send out a message to say when
+the text should be updated: 
+
+<p align="center"><img src="https://i.imgur.com/6Z8WeFs.gif"></p>
+
+`Game Events` can also be dragged directly into a scene and will automatically create an associated
+`Game Event Listener`: 
+
+<p align="center"><img src="https://i.imgur.com/2fmIFG7.gif"></p>
+
+Messages can be sent directly through code by exposing a `GameEvent` field, then calling `MyGameEvent.Raise()`.
+My preferred method, and one the SDK encourages, is to send messages using `UltEvents` (or `UnityEvents` if
+`UltEvents` are not available).
+
+- **[UltEvents](https://kybernetikgames.github.io/ultevents/)**
+
+`UltEvents` are a wonder on their own. Think of them as severely overpowered `UnityEvents`. If you are
+unfamiliar with either `UnityEvents` or `UltEvents`, I highly suggest [checking them out.](https://www.youtube.com/watch?v=pjWqsFDozSo)
+`UltEvents` can serve an large number of purposes, and for the SDK, they provide the perfect interface
+to create interactions between `Data Types` and `Game Events`.
+
+In the example below, a `Comparison` component uses `UltEvents`, one for if what is being compared for
+matches, and another if the comparison does not match. In our case, when the comparison matches, we
+send off our example message:
+
+<p align="center"><img src="https://i.imgur.com/cdM4aFV.gif"></p>
