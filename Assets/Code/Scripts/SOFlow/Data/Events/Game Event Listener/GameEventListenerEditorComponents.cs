@@ -57,6 +57,22 @@ namespace SOFlow.Data.Events
                 }
             }
         }
+
+        /// <summary>
+        ///     Adds a Game Event Listener to the scene..
+        /// </summary>
+        [MenuItem("GameObject/SOFlow/Events/Add Game Event Listener", false, 10)]
+        public static void AddGameEventListener()
+        {
+            GameObject listener = new GameObject("Game Event Listener", typeof(GameEventListener));
+            
+            if(Selection.activeTransform != null)
+            {
+                listener.transform.SetParent(Selection.activeTransform);
+            }
+
+            Selection.activeGameObject = listener;
+        }
     }
 }
 #endif
