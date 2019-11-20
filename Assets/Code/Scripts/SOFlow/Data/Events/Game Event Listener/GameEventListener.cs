@@ -12,29 +12,14 @@ namespace SOFlow.Data.Events
     public partial class GameEventListener : MonoBehaviour, IEventListener
     {
         /// <summary>
-        ///     The game object reference.
+        ///     The game event to listen for.
         /// </summary>
-        private GameObject _gameObjectReference;
-
-        /// <summary>
-        ///     The list of conditions for this event.
-        /// </summary>
-        public List<EventCondition> Conditions = new List<EventCondition>();
-
-        /// <summary>
-        ///     Indicates whether this event should be debugged.
-        /// </summary>
-        public bool Debug;
+        public List<GameEvent> Events = new List<GameEvent>();
 
         /// <summary>
         ///     The event listener order.
         /// </summary>
         public float EventListenerOrder;
-
-        /// <summary>
-        ///     The game event to listen for.
-        /// </summary>
-        public List<GameEvent> Events = new List<GameEvent>();
 
         /// <summary>
         ///     Indicates whether this listener should be prioritized after other listeners when events are raised.
@@ -47,9 +32,24 @@ namespace SOFlow.Data.Events
         public bool RegisterOnAwake;
 
         /// <summary>
+        ///     Indicates whether this event should be debugged.
+        /// </summary>
+        public bool Debug;
+
+        /// <summary>
+        ///     The list of conditions for this event.
+        /// </summary>
+        public List<EventCondition> Conditions = new List<EventCondition>();
+
+        /// <summary>
         ///     The response to the game event.
         /// </summary>
         public DynamicEvent Response;
+
+        /// <summary>
+        ///     The game object reference.
+        /// </summary>
+        private GameObject _gameObjectReference;
 
         /// <inheritdoc />
         public void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent)
