@@ -237,16 +237,16 @@ namespace SOFlow.Internal
                                                                                                   SOFlowEditorSettings
                                                                                                      .AcceptContextColour)
                                                             )
-                                                                SavePMStyles();
+                                                                SaveSOFlowStyles();
                                                         });
         }
 
         /// <summary>
         ///     Saves the SOFlow Styles to script.
         /// </summary>
-        private void SavePMStyles()
+        private void SaveSOFlowStyles()
         {
-            string scriptTemplatePath = Path.Combine(_dataPath, "PMStylesTemplate.txt");
+            string scriptTemplatePath = Path.Combine(_dataPath, "SOFlowStylesTemplate.txt");
 
             if(File.Exists(scriptTemplatePath))
             {
@@ -261,7 +261,7 @@ namespace SOFlow.Internal
 
                 scriptTemplate = scriptTemplate.Replace("#STYLES#", scriptText.ToString());
 
-                File.WriteAllText(Path.Combine(_dataPath, "PMStyles.cs"), scriptTemplate);
+                File.WriteAllText(Path.Combine(_dataPath, "SOFlowStyles.cs"), scriptTemplate);
 
                 AssetDatabase.Refresh();
             }

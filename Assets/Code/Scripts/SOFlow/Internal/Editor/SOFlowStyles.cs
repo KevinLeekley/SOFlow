@@ -9,62 +9,58 @@ namespace SOFlow.Internal
 {
     public static class SOFlowStyles
     {
-        /// <summary>
-        ///     The GUI styles.
-        /// </summary>
-        private static GUISkin _styles;
-
         // The available styles.
         public static GUIStyle Label => GetStyle("Label");
-
         public static GUIStyle CenteredLabel => GetStyle("CenteredLabel");
-
         public static GUIStyle BoldLeftLabel => GetStyle("BoldLeftLabel");
-
         public static GUIStyle BoldCenterLabel => GetStyle("BoldCenterLabel");
-
         public static GUIStyle BoldFieldCenteredLabel => GetStyle("BoldFieldCenteredLabel");
-
         public static GUIStyle BoldTextField => GetStyle("BoldTextField");
-
         public static GUIStyle WordWrappedLabel => GetStyle("WordWrappedLabel");
-
         public static GUIStyle WordWrappedMiniLabel => GetStyle("WordWrappedMiniLabel");
-
         public static GUIStyle CenterTextHelpBox => GetStyle("CenterTextHelpBox");
-
         public static GUIStyle HelpBox => GetStyle("HelpBox");
-
         public static GUIStyle TextArea => GetStyle("TextArea");
-
         public static GUIStyle Button => GetStyle("Button");
+        public static GUIStyle PressedButton => GetStyle("PressedButton");
 
         /// <summary>
-        ///     The GUI styles.
+        /// The GUI styles.
         /// </summary>
         private static GUISkin Styles
         {
             get
             {
                 if(_styles == null)
+                {
                     _styles = AssetDatabase.LoadAssetAtPath<GUISkin>(Path.Combine("Assets", "Code", "Scripts",
-                                                                                  "SOFlow", "Internal", "Editor",
-                                                                                  "SOFlow GUI Skin.guiskin"));
+                                                                                 "SOFlow", "Internal", "Editor",
+                                                                                 "SOFlow GUI Skin.guiskin"));
+                }
 
                 return _styles;
             }
         }
 
         /// <summary>
-        ///     Gets the style for the given key.
+        /// The GUI styles.
+        /// </summary>
+        private static GUISkin _styles;
+
+        /// <summary>
+        /// Gets the style for the given key.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         private static GUIStyle GetStyle(string key)
         {
             foreach(GUIStyle style in Styles.customStyles)
+            {
                 if(style.name == key)
+                {
                     return style;
+                }
+            }
 
             return GUIStyle.none;
         }
