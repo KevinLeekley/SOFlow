@@ -17,9 +17,6 @@ namespace SOFlow.Data.Primitives.Editor
         private bool  _isConstant;
         private float _lineHeight;
 
-        private GUIStyle _optionsStyle;
-        private int      _popupSelection;
-
         private float _positionWidth;
 
         // Property values.
@@ -55,116 +52,95 @@ namespace SOFlow.Data.Primitives.Editor
 
                 EditorGUI.LabelField(position, label);
 
-                if(_optionsStyle == null)
+                Rect buttonsRect = new Rect(_currentPosition)
+                                   {
+                                       width = 25f
+                                   };
+
+                if(GUI.Button(buttonsRect, "R", _isConstant ? SOFlowStyles.Button : SOFlowStyles.PressedButton))
                 {
-                    _optionsStyle = new GUIStyle(EditorStyles.label)
-                                    {
-                                        normal =
-                                        {
-                                            background =
-                                                (Texture2D)
-                                                AssetDatabase
-                                                   .LoadAssetAtPath("Assets/Code/Sprites/Editor/options-icon.png",
-                                                                    typeof(Texture2D))
-                                        }
-                                    };
-
-                    _optionsStyle.active.background  = _optionsStyle.normal.background;
-                    _optionsStyle.focused.background = _optionsStyle.normal.background;
-                    _optionsStyle.hover.background   = _optionsStyle.normal.background;
-                    _optionsStyle.fixedWidth         = 40f;
+                    _isConstant = false;
                 }
-
-                Color originalColour = GUI.contentColor;
-                GUI.contentColor = Color.clear;
-
-                _popupSelection = EditorGUI.Popup(_currentPosition,
-                                                  _isConstant ? 0 : 1,
-                                                  new[]
-                                                  {
-                                                      "Constant", "Reference"
-                                                  },
-                                                  _optionsStyle);
-
-                GUI.contentColor = originalColour;
+                
+                buttonsRect.x += 25f;
+                
+                if(GUI.Button(buttonsRect, "V", _isConstant ? SOFlowStyles.PressedButton : SOFlowStyles.Button))
+                {
+                    _isConstant = true;
+                }
 
                 _currentPosition.x     += _positionWidth * 0.22f;
                 _currentPosition.width =  _positionWidth * 0.78f;
 
                 bool propertyIsArray = property.propertyPath.Contains("Array");
 
-                switch(_popupSelection)
+                if(_isConstant)
                 {
-                    case 0:
+                    EditorGUI.PropertyField(_currentPosition, property.FindPropertyRelative("ConstantValueType"),
+                                            GUIContent.none);
 
-                        EditorGUI.PropertyField(_currentPosition, property.FindPropertyRelative("ConstantValueType"),
-                                                GUIContent.none);
+                    _lineHeight = propertyIsArray ? _lineHeight : 0f;
+                }
+                else
+                {
+                    SerializedProperty referenceProperty = property.FindPropertyRelative("VariableType");
 
+                    bool  nullDetected  = false;
+                    Color currentColour = Color.white;
+
+                    if(referenceProperty.propertyType == SerializedPropertyType.ObjectReference)
+                    {
+                        nullDetected = referenceProperty.objectReferenceValue == null;
+
+                        if(nullDetected)
+                        {
+                            currentColour = GUI.color;
+                            GUI.color     = SOFlowEditorSettings.DeclineContextColour;
+                        }
+                    }
+
+                    EditorGUI.PropertyField(_currentPosition, referenceProperty,
+                                            GUIContent.none);
+
+                    if(nullDetected) GUI.color = currentColour;
+
+                    DataField dataValue = null;
+
+                    if(!propertyIsArray)
+                    {
+                        Type      dataType  = property.serializedObject.targetObject.GetType();
+                        FieldInfo fieldData = dataType.GetField(property.propertyPath);
+
+                        if(fieldData != null)
+                            dataValue = (DataField)fieldData.GetValue(property.serializedObject.targetObject);
+                    }
+                    else
+                    {
+                        Resolver resolver = new Resolver();
+
+                        dataValue = (DataField)resolver.Resolve(property.serializedObject.targetObject,
+                                                                property.propertyPath.Replace(".Array.data", ""));
+                    }
+
+                    if(dataValue != null && dataValue.GetVariable()?.GetValueData() != null)
+                    {
+                        _currentPosition.y += EditorGUIUtility.singleLineHeight;
+                        _lineHeight        =  EditorGUIUtility.singleLineHeight;
+
+                        EditorGUI.LabelField(_currentPosition, dataValue.GetVariable().GetValueData().ToString(),
+                                             EditorStyles.toolbarButton);
+                    }
+                    else
+                    {
                         _lineHeight = propertyIsArray ? _lineHeight : 0f;
-
-                        break;
-                    case 1:
-
-                        SerializedProperty referenceProperty = property.FindPropertyRelative("VariableType");
-
-                        bool  nullDetected  = false;
-                        Color currentColour = Color.white;
-
-                        if(referenceProperty.propertyType == SerializedPropertyType.ObjectReference)
-                        {
-                            nullDetected = referenceProperty.objectReferenceValue == null;
-
-                            if(nullDetected)
-                            {
-                                currentColour = GUI.color;
-                                GUI.color     = SOFlowEditorSettings.DeclineContextColour;
-                            }
-                        }
-
-                        EditorGUI.PropertyField(_currentPosition, referenceProperty,
-                                                GUIContent.none);
-
-                        if(nullDetected) GUI.color = currentColour;
-
-                        DataField dataValue = null;
-
-                        if(!propertyIsArray)
-                        {
-                            Type      dataType  = property.serializedObject.targetObject.GetType();
-                            FieldInfo fieldData = dataType.GetField(property.propertyPath);
-
-                            if(fieldData != null)
-                                dataValue = (DataField)fieldData.GetValue(property.serializedObject.targetObject);
-                        }
-                        else
-                        {
-                            Resolver resolver = new Resolver();
-
-                            dataValue = (DataField)resolver.Resolve(property.serializedObject.targetObject,
-                                                                    property.propertyPath.Replace(".Array.data", ""));
-                        }
-
-                        if(dataValue != null && dataValue.GetVariable()?.GetValueData() != null)
-                        {
-                            _currentPosition.y += EditorGUIUtility.singleLineHeight;
-                            _lineHeight        =  EditorGUIUtility.singleLineHeight;
-
-                            EditorGUI.LabelField(_currentPosition, dataValue.GetVariable().GetValueData().ToString(),
-                                                 EditorStyles.toolbarButton);
-                        }
-                        else
-                        {
-                            _lineHeight = propertyIsArray ? _lineHeight : 0f;
-                        }
-
-                        break;
+                    }
                 }
 
                 EditorGUI.EndProperty();
 
                 if(GUI.changed)
                 {
-                    _useConstant.boolValue = _popupSelection == 0;
+                    _useConstant.boolValue = _isConstant;
                     property.serializedObject.ApplyModifiedProperties();
                 }
             }
