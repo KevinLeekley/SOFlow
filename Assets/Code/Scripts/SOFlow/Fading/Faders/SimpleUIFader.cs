@@ -10,10 +10,14 @@ namespace SOFlow.Fading
     public class SimpleUIFader : MonoBehaviour
     {
         /// <summary>
-        ///     The cached set of canvas renderers.
+        ///     The fade target.
         /// </summary>
-        private readonly Dictionary<GameObject, List<CanvasRenderer>> _cachedRenderers =
-            new Dictionary<GameObject, List<CanvasRenderer>>();
+        public GameObject FadeTarget;
+
+        /// <summary>
+        ///     The unfaded colour.
+        /// </summary>
+        public Color UnfadedColour = Color.white;
 
         /// <summary>
         ///     The faded colour.
@@ -21,14 +25,24 @@ namespace SOFlow.Fading
         public Color FadedColour = Color.white;
 
         /// <summary>
-        ///     The fade target.
+        ///     Enable to only allow fading in.
         /// </summary>
-        public GameObject FadeTarget;
+        public bool OnlyFade;
 
         /// <summary>
         ///     The fade time.
         /// </summary>
         public float FadeTime;
+
+        /// <summary>
+        ///     The unfade time.
+        /// </summary>
+        public float UnfadeTime;
+
+        /// <summary>
+        ///     The wait between fades.
+        /// </summary>
+        public float WaitBetweenFades;
 
         /// <summary>
         ///     The list of objects to ignore.
@@ -46,24 +60,10 @@ namespace SOFlow.Fading
         public UltEvent OnFadeWait;
 
         /// <summary>
-        ///     Enable to only allow fading in.
+        ///     The cached set of canvas renderers.
         /// </summary>
-        public bool OnlyFade;
-
-        /// <summary>
-        ///     The unfaded colour.
-        /// </summary>
-        public Color UnfadedColour = Color.white;
-
-        /// <summary>
-        ///     The unfade time.
-        /// </summary>
-        public float UnfadeTime;
-
-        /// <summary>
-        ///     The wait between fades.
-        /// </summary>
-        public float WaitBetweenFades;
+        private readonly Dictionary<GameObject, List<CanvasRenderer>> _cachedRenderers =
+            new Dictionary<GameObject, List<CanvasRenderer>>();
 
         /// <summary>
         ///     Indicates whether we are currently fading.

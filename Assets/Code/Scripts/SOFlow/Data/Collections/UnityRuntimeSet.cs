@@ -11,12 +11,6 @@ namespace SOFlow.Data.Collections
     public class UnityRuntimeSet : SOFlowScriptableObject
     {
         /// <summary>
-        ///     The list of items within this set.
-        /// </summary>
-        [SerializeField]
-        private List<Object> _items = new List<Object>();
-
-        /// <summary>
         ///     Event raised when data is added to the list.
         /// </summary>
         public UltEvent OnDataAddedToList;
@@ -35,6 +29,12 @@ namespace SOFlow.Data.Collections
         ///     Event raised when this set becomes empty.
         /// </summary>
         public UltEvent OnListEmpty;
+
+        /// <summary>
+        ///     The list of items within this set.
+        /// </summary>
+        [SerializeField]
+        private List<Object> _items = new List<Object>();
 
         /// <summary>
         ///     The current item count.

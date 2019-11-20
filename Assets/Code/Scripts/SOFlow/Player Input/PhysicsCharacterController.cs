@@ -9,34 +9,19 @@ namespace SOFlow.PlayerInput
     public class PhysicsCharacterController : MonoBehaviour
     {
         /// <summary>
-        ///     The clamped velocity.
+        ///     The rigidbody reference.
         /// </summary>
-        private Vector3 _clampedVelocity;
-
-        /// <summary>
-        ///     The fall speed.
-        /// </summary>
-        private float _fallSpeed;
-
-        /// <summary>
-        ///     The target rotation.
-        /// </summary>
-        private float _targetRotation;
-
-        /// <summary>
-        ///     The x axis input.
-        /// </summary>
-        private float _xAxisInput;
-
-        /// <summary>
-        ///     The z axis input.
-        /// </summary>
-        private float _zAxisInput;
-
+        public Rigidbody Rigidbody;
+        
         /// <summary>
         ///     The horizontal axis.
         /// </summary>
         public string HorizontalAxis = "Horizontal";
+
+        /// <summary>
+        ///     The vertical axis.
+        /// </summary>
+        public string VerticalAxis = "Vertical";
 
         /// <summary>
         ///     The max speed.
@@ -44,14 +29,24 @@ namespace SOFlow.PlayerInput
         public float MaxSpeed = 2f;
 
         /// <summary>
+        ///     The move speed.
+        /// </summary>
+        public float MoveSpeed = 3000f;
+
+        /// <summary>
+        ///     The rotation speed.
+        /// </summary>
+        public float RotationSpeed = 3f;
+
+        /// <summary>
         ///     Indicates whether this component should move the target rigidbody.
         /// </summary>
         public bool MoveCharacter = true;
 
         /// <summary>
-        ///     The move speed.
+        ///     Indicates whether this component should rotate the target rigidbody.
         /// </summary>
-        public float MoveSpeed = 3000f;
+        public bool RotateCharacter = true;
 
         /// <summary>
         ///     Event raised when the character starts moving.
@@ -75,24 +70,29 @@ namespace SOFlow.PlayerInput
         public DynamicEvent OnCharacterStopRotating;
 
         /// <summary>
-        ///     The rigidbody reference.
+        ///     The clamped velocity.
         /// </summary>
-        public Rigidbody Rigidbody;
+        private Vector3 _clampedVelocity;
 
         /// <summary>
-        ///     Indicates whether this component should rotate the target rigidbody.
+        ///     The fall speed.
         /// </summary>
-        public bool RotateCharacter = true;
+        private float _fallSpeed;
 
         /// <summary>
-        ///     The rotation speed.
+        ///     The target rotation.
         /// </summary>
-        public float RotationSpeed = 3f;
+        private float _targetRotation;
 
         /// <summary>
-        ///     The vertical axis.
+        ///     The x axis input.
         /// </summary>
-        public string VerticalAxis = "Vertical";
+        private float _xAxisInput;
+
+        /// <summary>
+        ///     The z axis input.
+        /// </summary>
+        private float _zAxisInput;
 
         /// <summary>
         ///     Indicates whether this character is currently moving.
