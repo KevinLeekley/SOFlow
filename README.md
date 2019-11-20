@@ -21,7 +21,8 @@ realize that potential.
 2. All data is serialized natively by Unity and can easily be exported to JSON. Data can also be imported back into `ScriptableObjects` from JSON. This can be very handy for adding support for custom player levels, maps, or even just saving player data quick and dirty like.
 3. Entire games can be made purely by using the SDK as is. Unlike visual scripting tools that aim to completely migrate the game development flow into a visual scripting interface, SOFlow attempts to blend with Unity as is.
 4. A fully debuggable `Game Event` system. Since a lot of functionality is now directly linked to data assets and `Game Objects`, it can become difficult to debug when things go wrong. I have made my best efforts to alleviate this with bug tracking for `Game Events` right inside Unity. And at times when we need to get down and dirty with code, hyperlinks to the code in question are available as well.
-5. A wide variety of useful components always coming to the SDK. The SDK is ever-evolving, but each new features will maintain the same general workflow encouraged by SOFlow.
+5. Customize the look and feel of most inspectors. All components that do not have a dedicated `Custom Editor` will automatically use SOFlow to display their contents.
+6. A wide variety of useful components always coming to the SDK. The SDK is ever-evolving, but each new features will maintain the same general workflow encouraged by SOFlow.
 
 # Cons
 
@@ -101,3 +102,21 @@ matches, and another if the comparison does not match. In our case, when the com
 send off our example message:
 
 <p align="center"><img src="https://i.imgur.com/cdM4aFV.gif"></p>
+
+- **Game Event Log**
+
+Even in the safest of project environments, things can and eventually will go wrong. When they do go
+wrong, it's always great to have a tool or two handy to figure out what went wrong. That is the main
+goal of the `Game Event Log`. The `Game Event Log` keeps track of all `Game Events` that send messages
+during a session. It will color code `Game Events` based on what happened when they sent their messages.
+The coloring will depend on your individual color settings for the SDK. For me, green means everything
+went smoothly, and red means an error occurred with that `Game Event`.
+
+The `Game Event Log` itself does not track exactly what went wrong, instead the `Game Events` themselves
+keep their own logs of what happened during each message they have sent. If an error occurred when a
+message was sent, we can check the logs within the `Game Event` to see exactly what the error was, and
+if necessary, navigate straight to the line of code that caused the error.
+
+Below is an example of both the `Game Event Log` and `Game Event` error logging in action:
+
+<p align="center"><img src="https://i.imgur.com/2tNlx7C.gif"></p>
