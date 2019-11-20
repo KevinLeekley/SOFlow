@@ -1,4 +1,5 @@
 // Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
+// Original concept by https://answers.unity.com/users/382789/glitchers.html
 
 using System;
 using UnityEngine;
