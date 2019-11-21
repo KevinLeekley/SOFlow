@@ -7,6 +7,12 @@ namespace SOFlow.Data.Primitives
     public class PrimitiveData : ScriptableObject
     {
         /// <summary>
+        /// The developer description for this primitive data.
+        /// </summary>
+        [Multiline]
+        public string Description;
+        
+        /// <summary>
         ///     Returns the value of this data.
         /// </summary>
         /// <returns></returns>
