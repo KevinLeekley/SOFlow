@@ -32,7 +32,7 @@ realize that potential.
 
 What are '_cons_'?
 
-# Features
+# Core Features
 
 - **Data Types**
 
@@ -124,3 +124,15 @@ if necessary, navigate straight to the line of code that caused the error.
 Below is an example of both the `Game Event Log` and `Game Event` error logging in action:
 
 <p align="center"><img src="https://i.imgur.com/2tNlx7C.gif"></p>
+
+# Additional Features
+
+Each feature listed here will have example scenes and assets explaining and demonstrating how they work
+within Unity itself. These examples can be found under : Assets/Code/Scripts/SOFlow/Examples
+
+- `Audio Source` sharing through `Scriptable Objects`.
+- `Camera` sharing through `Scriptable Objects`.
+- Screen resolution tracking.
+- Fading and data lerping using `Fadables` and `Faders`.
+- `Managed Components`, a more controlled form of updating components vs directly using `Update()`.
+- Simple motion of objects using the `Basic Motion` component.
