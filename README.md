@@ -2,6 +2,10 @@
 
 --- *Original concept credited to [Ryan Hipple](https://www.youtube.com/watch?v=raQ3iHhE_Kk&t=2s)* --- 
 
+# Releases
+
+[SOFlow v1](https://github.com/BLUDRAG/SOFlow/releases/tag/v1)
+
 # Requirements
 
 Any Unity version supporting API compatibility version .NET 4.x
