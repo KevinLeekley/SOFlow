@@ -326,5 +326,23 @@ namespace SOFlow.Data.Evaluations
 
             return true;
         }
+        
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Comparison to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Evaluations/Add Comparison", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Comparison", typeof(Comparison));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

@@ -37,5 +37,30 @@ namespace SOFlow.Fading
 
             Fadables.AddRange(fadables);
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Fadable Group to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Fading/Fadables/Add Fadable Group", false, 10)]
+        public static void AddComponentToScene()
+        {
+            if(UnityEditor.Selection.activeGameObject != null)
+            {
+                UnityEditor.Selection.activeGameObject.AddComponent<FadableGroup>();
+
+                return;
+            }
+
+            GameObject _gameObject = new GameObject("Fadable Group", typeof(FadableGroup));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

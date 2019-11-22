@@ -25,5 +25,23 @@ namespace SOFlow.Audio
         {
             AudioLink.ClearClipCache();
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Audio Bridge to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Audio/Add Audio Bridge", false, 10)]
+        public static void AddComponentToScene()
+        {
+	        GameObject _gameObject = new GameObject("Audio Bridge", typeof(AudioBridge));
+
+	        if(UnityEditor.Selection.activeTransform != null)
+	        {
+		        _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+	        }
+
+	        UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

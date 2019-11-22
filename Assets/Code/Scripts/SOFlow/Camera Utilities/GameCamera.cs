@@ -45,5 +45,33 @@ namespace SOFlow.CameraUtilities
                 if(!_primaryGameCamera) Destroy(gameObject);
             }
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Game Camera to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Camera Utilities/Add Game Camera", false, 10)]
+        public static void AddComponentToScene()
+        {
+            Camera camera = UnityEditor.Selection.activeGameObject?.GetComponent<Camera>();
+            
+            if(camera != null)
+            {
+                GameCamera gameCamera = camera.gameObject.AddComponent<GameCamera>();
+                gameCamera.SceneCameraReference = camera;
+
+                return;
+            }
+
+            GameObject _gameObject = new GameObject("Game Camera", typeof(GameCamera));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

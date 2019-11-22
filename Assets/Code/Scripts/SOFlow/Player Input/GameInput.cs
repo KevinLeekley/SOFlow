@@ -54,7 +54,7 @@ namespace SOFlow.PlayerInput
         /// </summary>
         public void InvokeEvent()
         {
-            Event?.Invoke();
+            Event.Invoke();
         }
 
         /// <summary>

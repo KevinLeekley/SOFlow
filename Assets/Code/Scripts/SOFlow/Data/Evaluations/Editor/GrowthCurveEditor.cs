@@ -89,7 +89,7 @@ namespace SOFlow.Data.Evaluations.Editor
         {
             serializedObject.DrawProperty("CurveValue");
             serializedObject.DrawProperty("EvaluatedValue");
-            _target.GrowthMultiplier = EditorGUILayout.FloatField("Growth Multiplier", _target.GrowthMultiplier);
+            serializedObject.DrawProperty("GrowthMultiplier");
         }
 
         /// <summary>

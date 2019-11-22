@@ -91,10 +91,9 @@ namespace SOFlow.Data.Events
         ///     Notifies all registered listeners to invoke their events.
         /// </summary>
         /// <param name="eventParameter"></param>
-        public void Raise(dynamic eventParameter)
+        public void Raise(object eventParameter)
         {
-            if(eventParameter == null) EventParameter = null;
-
+            if(eventParameter != null)
             {
                 EventParameter = new SOFlowDynamic
                                  {

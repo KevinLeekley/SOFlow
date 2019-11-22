@@ -29,5 +29,23 @@ namespace SOFlow.PlayerInput
         {
             foreach(GameInput input in Input) input.CheckInputState();
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Game Input Listener to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Input/Add Game Input Listener", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Game Input Listener", typeof(GameInputListener));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

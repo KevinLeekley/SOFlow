@@ -28,5 +28,23 @@ namespace SOFlow.Fading
         {
             FloatData.Value = Mathf.Lerp(FadeRange.Value.x, FadeRange.Value.y, percentage);
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Float Data Fadable to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Fading/Fadables/Add Float Data Fadable", false, 10)]
+        public static void AddComponentToScene()
+        {
+	        GameObject _gameObject = new GameObject("Float Data Fadable", typeof(FloatDataFadable));
+
+	        if(UnityEditor.Selection.activeTransform != null)
+	        {
+		        _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+	        }
+
+	        UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

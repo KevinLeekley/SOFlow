@@ -48,5 +48,33 @@ namespace SOFlow
                 // Ignore
             }
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Data Text Setter to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/TextMesh Pro/Add Data Text Setter", false, 10)]
+        public static void AddComponentToScene()
+        {
+	        TMP_Text text = UnityEditor.Selection.activeGameObject?.GetComponent<TMP_Text>();
+
+	        if(text != null)
+	        {
+		        DataTextSetter dataTextSetter = text.gameObject.AddComponent<DataTextSetter>();
+		        dataTextSetter.TextElement = text;
+
+		        return;
+	        }
+
+	        GameObject _gameObject = new GameObject("Data Text Setter", typeof(DataTextSetter));
+
+	        if(UnityEditor.Selection.activeTransform != null)
+	        {
+		        _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+	        }
+
+	        UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

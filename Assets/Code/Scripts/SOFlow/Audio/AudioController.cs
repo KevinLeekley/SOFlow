@@ -66,5 +66,23 @@ namespace SOFlow.Audio
 
             audioSource.volume = targetVolume;
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Audio Controller to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Audio/Add Audio Controller", false, 10)]
+        public static void AddComponentToScene()
+        {
+	        GameObject _gameObject = new GameObject("Audio Controller", typeof(AudioController));
+
+	        if(UnityEditor.Selection.activeTransform != null)
+	        {
+		        _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+	        }
+
+	        UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

@@ -2,10 +2,9 @@
 
 using System;
 using SOFlow.Data.Primitives;
-using SOFlow.ManagedComponents.Components;
 using UnityEngine;
 
-namespace SOFlow.Motion
+namespace SOFlow.ManagedComponents.Components
 {
     public class SimpleMotionComponent : BehaviourComponent
     {
@@ -55,5 +54,23 @@ namespace SOFlow.Motion
                 _appliedMotionVelocity = MotionVelocity * _previousSpeedModifier;
             }
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Simple Motion Component to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Managed Components/Components/Add Simple Motion Component", false, 10)]
+        public static void AddComponentToScene()
+        {
+	        GameObject _gameObject = new GameObject("Simple Motion Component", typeof(SimpleMotionComponent));
+
+	        if(UnityEditor.Selection.activeTransform != null)
+	        {
+		        _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+	        }
+
+	        UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

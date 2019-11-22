@@ -39,7 +39,25 @@ namespace SOFlow.Data.Events
         {
             if(EventWaitTime > 0f) yield return new WaitForSeconds(EventWaitTime);
 
-            Event.Invoke(null);
+            Event.Invoke(null);    
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Game Event Raiser to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Events/Add Game Event Raiser", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Game Event Raiser", typeof(GameEventRaiser));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

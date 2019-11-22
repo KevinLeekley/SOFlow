@@ -21,5 +21,23 @@ namespace SOFlow.Data.Events
         {
             foreach(GameEventReactor @event in Events) @event.DeactivateReactor();
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Game Event Reactor Set to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Events/Add Game Event Reactor Set", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Game Event Reactor Set", typeof(GameEventReactorSet));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

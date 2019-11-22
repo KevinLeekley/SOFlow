@@ -41,5 +41,23 @@ namespace SOFlow.Data.Evaluations
 
             return true;
         }
+
+#if UNITY_EDITOR
+	    /// <summary>
+	    ///     Adds an Evaluator to the scene.
+	    /// </summary>
+	    [UnityEditor.MenuItem("GameObject/SOFlow/Evaluations/Add Evaluator", false, 10)]
+	    public static void AddComponentToScene()
+	    {
+		    GameObject _gameObject = new GameObject("Evaluator", typeof(Evaluator));
+
+		    if(UnityEditor.Selection.activeTransform != null)
+		    {
+			    _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+		    }
+
+		    UnityEditor.Selection.activeGameObject = _gameObject;
+	    }
+#endif
     }
 }

@@ -197,9 +197,9 @@ namespace SOFlow.Internal
                                                  {
                                                      reorderableList.DoLayoutList();
                                                  }
-                                                 catch(Exception e)
+                                                 catch(Exception)
                                                  {
-                                                     Debug.LogWarning($"{e.Message}\n\n{e.StackTrace}");
+                                                     // Ignore
                                                  }
 
                                                  Rect listRect =

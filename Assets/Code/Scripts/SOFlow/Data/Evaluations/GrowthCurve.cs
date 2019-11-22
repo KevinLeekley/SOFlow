@@ -25,7 +25,10 @@ namespace SOFlow.Data.Evaluations
         /// <summary>
         ///     The multiplier to apply to the growth curve.
         /// </summary>
-        public float GrowthMultiplier = 1f;
+        public FloatField GrowthMultiplier = new FloatField
+                                             {
+                                                 Value = 1f
+                                             };
 
         /// <summary>
         ///     Enable to evaluate the growth curve every editor update.
@@ -42,5 +45,23 @@ namespace SOFlow.Data.Evaluations
 
             return EvaluatedValue.Value;
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Growth Curve to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Evaluations/Add Growth Curve", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Growth Curve", typeof(GrowthCurve));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

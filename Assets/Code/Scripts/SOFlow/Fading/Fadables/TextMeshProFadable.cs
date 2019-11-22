@@ -23,5 +23,33 @@ namespace SOFlow.Fading
         {
             Text.color = colour;
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a TextMesh Pro Fadable to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Fading/Fadables/Add TextMesh Pro Fadable", false, 10)]
+        public static void AddComponentToScene()
+        {
+            TMP_Text text = UnityEditor.Selection.activeGameObject?.GetComponent<TMP_Text>();
+
+            if(text != null)
+            {
+                TextMeshProFadable fadable = text.gameObject.AddComponent<TextMeshProFadable>();
+                fadable.Text = text;
+
+                return;
+            }
+
+            GameObject _gameObject = new GameObject("TextMesh Pro Fadable", typeof(TextMeshProFadable));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

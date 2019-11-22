@@ -49,5 +49,23 @@ namespace SOFlow.CameraUtilities
                 ResolutionState.CurrentScreenResolution = _previousScreenSize;
             }
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Screen Size Monitor to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Camera Utilities/Add Screen Size Monitor", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Screen Size Monitor", typeof(ScreenSizeMonitor));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

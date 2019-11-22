@@ -175,5 +175,23 @@ namespace SOFlow.Fading
             Fading = false;
             OnFadeComplete.Invoke();
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Simple UI Fader to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Fading/Faders/Add Simple UI Fader", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Simple UI Fader", typeof(SimpleUIFader));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

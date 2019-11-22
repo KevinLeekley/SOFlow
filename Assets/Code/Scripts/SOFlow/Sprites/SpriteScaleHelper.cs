@@ -48,5 +48,23 @@ namespace SOFlow.Sprites
 
             transform.localScale = _spriteScale;
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Sprite Scale Helper to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Sprites/Add Sprite Scale Helper", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Sprite Scale Helper", typeof(SpriteScaleHelper));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

@@ -95,5 +95,30 @@ namespace SOFlow.Data.Events
         {
             if(ListenForCollisionExit) OnCollisionExitEvent.Invoke(null);
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Physics Game Event Reactor to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Events/Add Physics Game Event Reactor", false, 10)]
+        public static void AddComponentToScene()
+        {
+            if(UnityEditor.Selection.activeGameObject?.GetComponent<Collider>() != null)
+            {
+                UnityEditor.Selection.activeGameObject.AddComponent<PhysicsGameEventReactor>();
+
+                return;
+            }
+
+            GameObject _gameObject = new GameObject("Physics Game Event Reactor", typeof(PhysicsGameEventReactor));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

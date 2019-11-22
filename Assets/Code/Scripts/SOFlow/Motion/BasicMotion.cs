@@ -223,5 +223,23 @@ namespace SOFlow.Motion
             else
                 target.position += VelocityMultiplier * Time.deltaTime * _appliedVelocity;
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Basic Motion to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Motion/Add Basic Motion", false, 10)]
+        public static void AddComponentToScene()
+        {
+	        GameObject _gameObject = new GameObject("Basic Motion", typeof(BasicMotion));
+
+	        if(UnityEditor.Selection.activeTransform != null)
+	        {
+		        _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+	        }
+
+	        UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

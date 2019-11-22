@@ -22,5 +22,33 @@ namespace SOFlow.Fading
         {
             SpriteRenderer.color = colour;
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Sprite Renderer Fadable to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Fading/Fadables/Add Sprite Renderer Fadable", false, 10)]
+        public static void AddComponentToScene()
+        {
+            SpriteRenderer sprite = UnityEditor.Selection.activeGameObject?.GetComponent<SpriteRenderer>();
+
+            if(sprite != null)
+            {
+                SpriteRendererFadable fadable = sprite.gameObject.AddComponent<SpriteRendererFadable>();
+                fadable.SpriteRenderer = sprite;
+
+                return;
+            }
+
+            GameObject _gameObject = new GameObject("Sprite Renderer Fadable", typeof(SpriteRendererFadable));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

@@ -22,5 +22,33 @@ namespace SOFlow.Fading
         {
             LightSource.color = colour;
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Light Fadable to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Fading/Fadables/Add Light Fadable", false, 10)]
+        public static void AddComponentToScene()
+        {
+            Light light = UnityEditor.Selection.activeGameObject?.GetComponent<Light>();
+
+            if(light != null)
+            {
+                LightFadeable fadable = light.gameObject.AddComponent<LightFadeable>();
+                fadable.LightSource = light;
+                
+                return;
+            }
+
+            GameObject _gameObject = new GameObject("Light Fadable", typeof(LightFadeable));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }
