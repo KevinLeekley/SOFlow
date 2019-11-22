@@ -1,9 +1,8 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 using System;
-using SOFlow.Data.Primitives;
 
-namespace SOFlow
+namespace SOFlow.Data.Events
 {
     [Serializable]
     public class EventCondition
@@ -11,7 +10,7 @@ namespace SOFlow
 	    /// <summary>
 	    ///     The condition to test against.
 	    /// </summary>
-	    public BoolData Condition;
+	    public ConditionalEvent Condition;
 
 	    /// <summary>
 	    ///     Indicates whether this condition should be inverted.
@@ -23,10 +22,12 @@ namespace SOFlow
 	    /// </summary>
 	    /// <returns></returns>
 	    public bool Evaluate()
-        {
-            if(InvertCondition) return !Condition.Value;
+	    {
+		    bool result = Condition.Invoke();
+		    
+            if(InvertCondition) return !result;
 
-            return Condition.Value;
+            return result;
         }
     }
 }
