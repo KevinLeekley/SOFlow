@@ -26,7 +26,7 @@ namespace SOFlow.ManagedComponents.Components
 	    /// <summary>
 	    ///     The motion velocity.
 	    /// </summary>
-	    public Vector3 MotionVelocity;
+	    public Vector3Field MotionVelocity;
 
 	    /// <summary>
 	    ///     The motion speed modifier.
@@ -51,7 +51,7 @@ namespace SOFlow.ManagedComponents.Components
             if(Math.Abs(SpeedModifier - _previousSpeedModifier) > Mathf.Epsilon)
             {
                 _previousSpeedModifier = SpeedModifier;
-                _appliedMotionVelocity = MotionVelocity * _previousSpeedModifier;
+                _appliedMotionVelocity = MotionVelocity.Value * _previousSpeedModifier;
             }
         }
 
