@@ -23,6 +23,7 @@ namespace SOFlow.Internal
         public static GUIStyle TextArea => GetStyle("TextArea");
         public static GUIStyle Button => GetStyle("Button");
         public static GUIStyle PressedButton => GetStyle("PressedButton");
+        public static GUIStyle BoldCenterTextHelpBox => GetStyle("BoldCenterTextHelpBox");
 
         /// <summary>
         /// The GUI styles.
