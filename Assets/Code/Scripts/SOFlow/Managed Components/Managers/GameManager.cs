@@ -61,5 +61,23 @@ namespace SOFlow.ManagedComponents.Managers
         {
             foreach(ManagerBase manager in Managers) manager.InitializeManager();
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Game Manager to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Managed Components/Managers/Add Game Manager", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Game Manager", typeof(GameManager));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

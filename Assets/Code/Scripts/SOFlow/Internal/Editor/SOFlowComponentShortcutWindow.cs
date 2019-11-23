@@ -195,6 +195,7 @@ namespace SOFlow.Internal
                                                                new SectionEntry("Managed Components",
                                                                                 new[]
                                                                                 {
+                                                                                    typeof(GameManager),
                                                                                     typeof(SimpleMotionComponent)
                                                                                 })
                                                            };
