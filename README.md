@@ -133,6 +133,9 @@ within Unity itself. These examples can be found under : Assets/Code/Scripts/SOF
 - `Audio Source` sharing through `Scriptable Objects`.
 - `Camera` sharing through `Scriptable Objects`.
 - Screen resolution tracking.
+- Dynamic sprite scaling based on screen resolution.
 - Fading and data lerping using `Fadables` and `Faders`.
 - `Managed Components`, a more controlled form of updating components vs directly using `Update()`.
 - Simple motion of objects using the `Basic Motion` component.
+- Object pooling through `Scriptable Objects`.
+- Simple input handling using the `Game Input Listener` component.
