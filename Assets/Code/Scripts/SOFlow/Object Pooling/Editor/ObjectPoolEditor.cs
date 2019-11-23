@@ -42,7 +42,7 @@ namespace SOFlow.ObjectPooling
 
                                                          EditorGUILayout.LabelField("ID", SOFlowStyles.BoldCenterLabel);
 
-                                                         EditorGUILayout.LabelField("Pool Count",
+                                                         EditorGUILayout.LabelField($"Pool Count - {_target.CurrentPoolSize}",
                                                                                     SOFlowStyles.BoldCenterLabel);
 
                                                          EditorGUILayout.EndHorizontal();
