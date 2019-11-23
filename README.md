@@ -125,6 +125,15 @@ Below is an example of both the `Game Event Log` and `Game Event` error logging 
 
 <p align="center"><img src="https://i.imgur.com/2tNlx7C.gif"></p>
 
+- **Component Shortcuts**
+
+The SDK contains an extensive list of components and it may be hard to find what you are looking for.
+The Component Shortcut Window aims to make finding and creating components you need easier. The
+Component Shortcut Window can be found under SOFlow -> Component Shortcut Window. Below is a preview
+of how the window works:
+
+<p align="center"><img src="https://i.imgur.com/xSzXcir.gif"></p>
+
 # Additional Features
 
 Each feature listed here will have example scenes and assets explaining and demonstrating how they work
