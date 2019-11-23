@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SOFlow.Fading
 {
-    public class LightFadeable : Fadable
+    public class LightFadable : Fadable
     {
 	    /// <summary>
 	    ///     The light source to fade.
@@ -34,13 +34,13 @@ namespace SOFlow.Fading
 
             if(light != null)
             {
-                LightFadeable fadable = light.gameObject.AddComponent<LightFadeable>();
+                LightFadable fadable = light.gameObject.AddComponent<LightFadable>();
                 fadable.LightSource = light;
                 
                 return;
             }
 
-            GameObject _gameObject = new GameObject("Light Fadable", typeof(LightFadeable));
+            GameObject _gameObject = new GameObject("Light Fadable", typeof(LightFadable));
 
             if(UnityEditor.Selection.activeTransform != null)
             {
