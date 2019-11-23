@@ -24,7 +24,8 @@ namespace SOFlow.Data.Evaluations
             Float  = 1,
             String = 2,
             Bool   = 3,
-            Data   = 4
+            Data   = 4,
+            Method = 5
         }
 
         /// <summary>
@@ -100,6 +101,11 @@ namespace SOFlow.Data.Evaluations
         ///     The primitive operator to use for this comparison.
         /// </summary>
         public PrimitiveOperators PrimitiveOperator;
+
+        /// <summary>
+        ///  The conditional event.
+        /// </summary>
+        public ConditionalEvent ConditionalEvent;
 
         /// <summary>
         ///     An override used for invoking responses during edit time.
@@ -191,6 +197,10 @@ namespace SOFlow.Data.Evaluations
                 case ComparisonTypes.Data:
                     _result = CompareData(FirstData, SecondData);
 
+                    break;
+                case ComparisonTypes.Method:
+                    _result = ConditionalEvent.Invoke();
+                    
                     break;
             }
 

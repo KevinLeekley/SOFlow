@@ -111,7 +111,7 @@ namespace SOFlow.Data.Evaluations.Editor
                                                                               "Equal", "Not Equal"
                                                                           });
             }
-            else
+            else if((Comparison.ComparisonTypes)_comparisonType.enumValueIndex != Comparison.ComparisonTypes.Method)
             {
                 EditorGUILayout.PropertyField(_primitiveOperator);
             }
@@ -130,6 +130,13 @@ namespace SOFlow.Data.Evaluations.Editor
         /// </summary>
         private void DrawComparisons()
         {
+            if((Comparison.ComparisonTypes)_comparisonType.enumValueIndex == Comparison.ComparisonTypes.Method)
+            {
+                serializedObject.DrawProperty(nameof(_target.ConditionalEvent));
+
+                return;
+            }
+
             RetrieveFields();
 
             switch(_target.PrimitiveOperator)
