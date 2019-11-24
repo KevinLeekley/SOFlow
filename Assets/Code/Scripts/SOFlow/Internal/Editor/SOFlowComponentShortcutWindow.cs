@@ -37,6 +37,16 @@ namespace SOFlow.Internal
         private static SOFlowComponentShortcutWindow _window;
 
         /// <summary>
+        /// The current asset search filter.
+        /// </summary>
+        private static string _assetSearchFilter = "";
+
+        /// <summary>
+        /// The current scene search filter.
+        /// </summary>
+        private static string _sceneSearchFilter = "";
+
+        /// <summary>
         /// The category height.
         /// </summary>
         private static float _categoryHeight = 220f;
@@ -45,6 +55,11 @@ namespace SOFlow.Internal
         /// The section width.
         /// </summary>
         private static float _sectionWidth = 200f;
+
+        /// <summary>
+        /// The search box width.
+        /// </summary>
+        private static float _searchBoxWidth = 200f;
 
         /// <summary>
         /// The asset components scroll position.
@@ -213,7 +228,7 @@ namespace SOFlow.Internal
 
             if(_window == null)
             {
-                _window = GetWindow<SOFlowComponentShortcutWindow>("SOFlow-Component Shortcuts");
+                _window = this;
             }
         }
 
@@ -267,14 +282,52 @@ namespace SOFlow.Internal
                                                                        SOFlowStyles.CenterTextHelpBox);
                                                     });
 
-            EditorGUILayout.LabelField("Scriptable Objects", SOFlowStyles.BoldCenterTextHelpBox);
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField("Scriptable Objects", SOFlowStyles.BoldCenterTextHelpBox,
+                                       GUILayout.Height(EditorGUIUtility.singleLineHeight * 2.5f));
+
+            EditorGUILayout.BeginVertical(SOFlowStyles.CenterTextHelpBox, GUILayout.MaxWidth(_searchBoxWidth));
+
+            EditorGUILayout.LabelField("Search", SOFlowStyles.CenteredLabel, GUILayout.MaxWidth(_searchBoxWidth));
+
+            Color originalColor = GUI.backgroundColor;
+            GUI.backgroundColor = SOFlowEditorSettings.SecondaryLayerColour;
+
+            _assetSearchFilter =
+                EditorGUILayout.TextField(_assetSearchFilter, GUILayout.MaxWidth(_searchBoxWidth)).Trim().ToLower();
+
+            GUI.backgroundColor = originalColor;
+
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.EndHorizontal();
 
             SOFlowEditorUtilities.DrawScrollViewColourLayer(SOFlowEditorSettings.SecondaryLayerColour,
                                                             ref _assetComponentsScrollPosition,
                                                             DrawAssetComponentShortcuts,
                                                             GUILayout.MaxHeight(_categoryHeight));
 
-            EditorGUILayout.LabelField("Components", SOFlowStyles.BoldCenterTextHelpBox);
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField("Components", SOFlowStyles.BoldCenterTextHelpBox,
+                                       GUILayout.Height(EditorGUIUtility.singleLineHeight * 2.5f));
+
+            EditorGUILayout.BeginVertical(SOFlowStyles.CenterTextHelpBox, GUILayout.MaxWidth(_searchBoxWidth));
+
+            EditorGUILayout.LabelField("Search", SOFlowStyles.CenteredLabel, GUILayout.MaxWidth(_searchBoxWidth));
+
+            originalColor       = GUI.backgroundColor;
+            GUI.backgroundColor = SOFlowEditorSettings.SecondaryLayerColour;
+
+            _sceneSearchFilter =
+                EditorGUILayout.TextField(_sceneSearchFilter, GUILayout.MaxWidth(_searchBoxWidth)).Trim().ToLower();
+
+            GUI.backgroundColor = originalColor;
+
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.EndHorizontal();
 
             SOFlowEditorUtilities.DrawScrollViewColourLayer(SOFlowEditorSettings.SecondaryLayerColour,
                                                             ref _sceneComponentsScrollPosition,
@@ -291,11 +344,35 @@ namespace SOFlow.Internal
 
             foreach(SectionEntry sectionEntry in _assetSections)
             {
-                SOFlowEditorUtilities.DrawSecondaryLayer(() =>
-                                                         {
-                                                             DrawAssetComponentsSection(sectionEntry.TypeHeader,
-                                                                                        sectionEntry.Types);
-                                                         }, GUILayout.Width(_sectionWidth));
+                bool partOfSearch = false;
+
+                if(!string.IsNullOrEmpty(_assetSearchFilter))
+                {
+                    foreach(Type type in sectionEntry.Types)
+                    {
+                        string formattedName = FormatTypeName(type);
+
+                        if(formattedName.ToLower().Contains(_assetSearchFilter))
+                        {
+                            partOfSearch = true;
+
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    partOfSearch = true;
+                }
+
+                if(partOfSearch)
+                {
+                    SOFlowEditorUtilities.DrawSecondaryLayer(() =>
+                                                             {
+                                                                 DrawAssetComponentsSection(sectionEntry.TypeHeader,
+                                                                                            sectionEntry.Types);
+                                                             }, GUILayout.Width(_sectionWidth));
+                }
             }
 
             EditorGUILayout.EndHorizontal();
@@ -313,6 +390,11 @@ namespace SOFlow.Internal
             foreach(Type type in types)
             {
                 string formattedName = FormatTypeName(type);
+
+                if(!formattedName.ToLower().Contains(_assetSearchFilter))
+                {
+                    continue;
+                }
 
                 if(SOFlowEditorUtilities.DrawColourButton(formattedName, SOFlowEditorSettings.AcceptContextColour))
                 {
@@ -335,11 +417,35 @@ namespace SOFlow.Internal
 
             foreach(SectionEntry sectionEntry in _sceneSections)
             {
-                SOFlowEditorUtilities.DrawSecondaryLayer(() =>
-                                                         {
-                                                             DrawSceneComponentsSection(sectionEntry.TypeHeader,
-                                                                                        sectionEntry.Types);
-                                                         }, GUILayout.Width(_sectionWidth));
+                bool partOfSearch = false;
+
+                if(!string.IsNullOrEmpty(_sceneSearchFilter))
+                {
+                    foreach(Type type in sectionEntry.Types)
+                    {
+                        string formattedName = FormatTypeName(type);
+
+                        if(formattedName.ToLower().Contains(_sceneSearchFilter))
+                        {
+                            partOfSearch = true;
+
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    partOfSearch = true;
+                }
+
+                if(partOfSearch)
+                {
+                    SOFlowEditorUtilities.DrawSecondaryLayer(() =>
+                                                             {
+                                                                 DrawSceneComponentsSection(sectionEntry.TypeHeader,
+                                                                                            sectionEntry.Types);
+                                                             }, GUILayout.Width(_sectionWidth));
+                }
             }
 
             EditorGUILayout.EndHorizontal();
@@ -357,6 +463,11 @@ namespace SOFlow.Internal
             foreach(Type type in types)
             {
                 string formattedName = FormatTypeName(type);
+
+                if(!formattedName.ToLower().Contains(_sceneSearchFilter))
+                {
+                    continue;
+                }
 
                 if(SOFlowEditorUtilities.DrawColourButton(formattedName, SOFlowEditorSettings.AcceptContextColour))
                 {
