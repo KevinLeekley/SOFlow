@@ -10,6 +10,14 @@ namespace SOFlow.ManagedComponents.Managers
     public class GameManager : MonoBehaviour
     {
         /// <summary>
+        /// Indicates whether the Game Manager should initialize automatically when Awake is called.
+        /// </summary>
+        public BoolField AutoInitializeOnAwake = new BoolField
+                                                 {
+                                                     Value = true
+                                                 };
+    
+        /// <summary>
         ///     The Game Manager stopwatch.
         /// </summary>
         private readonly Stopwatch _stopwatch = new Stopwatch();
@@ -34,6 +42,11 @@ namespace SOFlow.ManagedComponents.Managers
 
         private void Awake()
         {
+            if(AutoInitializeOnAwake)
+            {
+                InitializeManagers();
+            }
+            
             _stopwatch.Start();
         }
 
