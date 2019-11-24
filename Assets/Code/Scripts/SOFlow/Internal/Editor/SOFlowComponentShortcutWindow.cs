@@ -471,9 +471,16 @@ namespace SOFlow.Internal
 
                 if(SOFlowEditorUtilities.DrawColourButton(formattedName, SOFlowEditorSettings.AcceptContextColour))
                 {
-                    GameObject newObject = new GameObject($"New {formattedName}", type);
+                    if(Selection.activeGameObject != null)
+                    {
+                        Selection.activeGameObject.AddComponent(type);
+                    }
+                    else
+                    {
+                        GameObject newObject = new GameObject($"New {formattedName}", type);
 
-                    Selection.activeObject = newObject;
+                        Selection.activeObject = newObject;
+                    }
                 }
             }
         }
