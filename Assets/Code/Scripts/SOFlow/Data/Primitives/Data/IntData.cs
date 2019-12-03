@@ -119,14 +119,13 @@ namespace SOFlow.Data.Primitives
             return Value;
         }
 
-#if UNITY_EDITOR
-        protected void OnValidate()
+        /// <inheritdoc />
+        public override void ResetValue()
         {
-            // Resync the Play Mode safe representation with the
-            // true asset value during editing.
+            base.ResetValue();
+
             _playModeValue = AssetValue;
         }
-#endif
 
         /// <summary>
         ///     Attempts to set the value of this data to the supplied value.

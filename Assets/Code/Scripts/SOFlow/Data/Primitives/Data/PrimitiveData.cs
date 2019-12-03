@@ -11,6 +11,15 @@ namespace SOFlow.Data.Primitives
         /// </summary>
         [Multiline]
         public string Description;
+
+#if UNITY_EDITOR
+        protected void OnValidate()
+        {
+            // Resync the Play Mode safe representation with the
+            // true asset value during editing.
+            ResetValue();
+        }
+#endif
         
         /// <summary>
         ///     Returns the value of this data.
@@ -19,6 +28,13 @@ namespace SOFlow.Data.Primitives
         public virtual object GetValueData()
         {
             return null;
+        }
+
+        /// <summary>
+        /// Resets the value of this data to its default state.
+        /// </summary>
+        public virtual void ResetValue()
+        {
         }
     }
 }
