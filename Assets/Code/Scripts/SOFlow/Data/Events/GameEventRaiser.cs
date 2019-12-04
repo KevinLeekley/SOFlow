@@ -23,6 +23,11 @@ namespace SOFlow.Data.Events
         public bool RaiseOnStart = true;
 
         /// <summary>
+        /// Indicates whether the event should be repeated.
+        /// </summary>
+        public bool RepeatEvent = false;
+
+        /// <summary>
         /// A cached version of the delay used before executing the event.
         /// </summary>
         private WaitForSeconds _cachedEventDelay;
@@ -31,6 +36,11 @@ namespace SOFlow.Data.Events
         /// Keeps track of the previous delay time to determine when _cachedEventDelay needs to be updated.
         /// </summary>
         private float _previousDelayTime = -1f;
+
+        /// <summary>
+        /// Indicates whether the event has been scheduled for cancellation.
+        /// </summary>
+        private bool _cancelEventScheduled = false;
 
         private void Start()
         {
@@ -42,6 +52,9 @@ namespace SOFlow.Data.Events
         /// </summary>
         public void RaiseEvent()
         {
+            // Nullify any cancellation schedules as a new event has been invoked.
+            _cancelEventScheduled = false;
+            
             StartCoroutine(nameof(RaiseEventOverTime));
         }
 
@@ -58,7 +71,27 @@ namespace SOFlow.Data.Events
                 yield return _cachedEventDelay;
             }
 
+            if(_cancelEventScheduled)
+            {
+                _cancelEventScheduled = false;
+                
+                yield break;
+            }
+
             Event.Invoke(null);
+
+            if(RepeatEvent)
+            {
+                RaiseEvent();
+            }
+        }
+
+        /// <summary>
+        /// Cancels the event if it has been scheduled.
+        /// </summary>
+        public void CancelEvent()
+        {
+            _cancelEventScheduled = true;
         }
 
 #if UNITY_EDITOR
