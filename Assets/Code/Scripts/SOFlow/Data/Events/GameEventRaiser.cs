@@ -22,6 +22,16 @@ namespace SOFlow.Data.Events
         /// </summary>
         public bool RaiseOnStart = true;
 
+        /// <summary>
+        /// A cached version of the delay used before executing the event.
+        /// </summary>
+        private WaitForSeconds _cachedEventDelay;
+
+        /// <summary>
+        /// Keeps track of the previous delay time to determine when _cachedEventDelay needs to be updated.
+        /// </summary>
+        private float _previousDelayTime = -1f;
+
         private void Start()
         {
             if(RaiseOnStart) RaiseEvent();
@@ -37,9 +47,18 @@ namespace SOFlow.Data.Events
 
         private IEnumerator RaiseEventOverTime()
         {
-            if(EventWaitTime > 0f) yield return new WaitForSeconds(EventWaitTime);
+            if(EventWaitTime > 0f)
+            {
+                if(Mathf.Abs(EventWaitTime - _previousDelayTime) > Mathf.Epsilon)
+                {
+                    _cachedEventDelay  = new WaitForSeconds(EventWaitTime);
+                    _previousDelayTime = EventWaitTime;
+                }
 
-            Event.Invoke(null);    
+                yield return _cachedEventDelay;
+            }
+
+            Event.Invoke(null);
         }
 
 #if UNITY_EDITOR
