@@ -508,6 +508,7 @@ namespace SOFlow.Internal
                                         : SOFlowStyles.Button, GUILayout.MaxWidth(20f)))
                 {
                     ObjectPickerHistoryWindow.EditingProperty = property;
+                    ObjectPickerHistoryWindow.ShowWindow();
                 }
 
                 EditorGUILayout.EndHorizontal();

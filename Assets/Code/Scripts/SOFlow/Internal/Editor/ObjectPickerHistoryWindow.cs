@@ -15,7 +15,7 @@ namespace SOFlow.Internal
         /// THe list of objects that have been selected.
         /// </summary>
         public static readonly List<Object> ObjectPickerHistoryObjects = new List<Object>();
-        
+
         /// <summary>
         /// Indicates whether a property is currently being edited.
         /// </summary>
@@ -96,7 +96,16 @@ namespace SOFlow.Internal
 
         private void OnDisable()
         {
-            IsOpen = false;
+            IsOpen  = false;
+            _window = null;
+        }
+
+        /// <summary>
+        /// Shows the window.
+        /// </summary>
+        public static void ShowWindow()
+        {
+            _window = GetWindow<ObjectPickerHistoryWindow>("SOFlow-Object Picker History");
         }
 
         /// <summary>
@@ -113,7 +122,7 @@ namespace SOFlow.Internal
                                                                                                                   SOFlowStyles
                                                                                                                      .BoldCenterTextHelpBox);
                                                                                                });
-                                                       
+
                                                        SOFlowEditorUtilities
                                                           .DrawScrollViewColourLayer(SOFlowEditorSettings.SecondaryLayerColour,
                                                                                      ref _scrollPosition,
