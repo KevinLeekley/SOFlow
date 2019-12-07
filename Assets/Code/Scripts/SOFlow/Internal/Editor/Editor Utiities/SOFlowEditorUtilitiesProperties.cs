@@ -389,12 +389,7 @@ namespace SOFlow.Internal
             if(property.propertyType == SerializedPropertyType.Integer ||
                property.propertyType == SerializedPropertyType.Float)
             {
-                long propertyID = GetObjectLocalIDInFile(property.serializedObject.targetObject);
-
-                if(propertyID == -1)
-                {
-                    propertyID = $"{property.serializedObject.targetObject}{property.propertyPath}".GetHashCode();
-                }
+                int propertyID = $"{GetObjectLocalIDInFile(property.serializedObject.targetObject)}{property.propertyPath}".GetHashCode();
 
                 NumericSliderData sliderData;
                 
@@ -409,33 +404,51 @@ namespace SOFlow.Internal
                 EditorGUILayout.LabelField(property.displayName, GUILayout.Width(EditorGUIUtility.labelWidth - 4f));
 
                 EditorGUILayout.BeginHorizontal();
-                
+
+                bool sliderDatachanged = false;
+
                 if(sliderData.SliderActive)
                 {
                     if(property.propertyType == SerializedPropertyType.Integer)
                     {
+                        EditorGUI.BeginChangeCheck();
+                        
                         sliderData.SliderMinValue =
                             EditorGUILayout.IntField((int)sliderData.SliderMinValue, SOFlowStyles.CenterTextHelpBox,
                                                      GUILayout.MaxWidth(_numericSliderRangeWidth));
+
+                        sliderDatachanged = EditorGUI.EndChangeCheck();
                         
                         property.intValue = EditorGUILayout.IntSlider(property.intValue, (int)sliderData.SliderMinValue, (int)sliderData.SliderMaxValue);
 
+                        EditorGUI.BeginChangeCheck();
+                        
                         sliderData.SliderMaxValue =
                             EditorGUILayout.IntField((int)sliderData.SliderMaxValue, SOFlowStyles.CenterTextHelpBox,
                                                      GUILayout.MaxWidth(_numericSliderRangeWidth));
+
+                        sliderDatachanged = sliderDatachanged || EditorGUI.EndChangeCheck();
                     }
                     else
                     {
+                        EditorGUI.BeginChangeCheck();
+                        
                         sliderData.SliderMinValue =
                             EditorGUILayout.FloatField(sliderData.SliderMinValue, SOFlowStyles.CenterTextHelpBox,
                                                      GUILayout.MaxWidth(_numericSliderRangeWidth));
+
+                        sliderDatachanged = EditorGUI.EndChangeCheck();
                         
                         property.floatValue = EditorGUILayout.Slider(property.floatValue, sliderData.SliderMinValue,
                                                sliderData.SliderMaxValue);
 
+                        EditorGUI.BeginChangeCheck();
+                        
                         sliderData.SliderMaxValue =
                             EditorGUILayout.FloatField(sliderData.SliderMaxValue, SOFlowStyles.CenterTextHelpBox,
                                                        GUILayout.MaxWidth(_numericSliderRangeWidth));
+
+                        sliderDatachanged = sliderDatachanged || EditorGUI.EndChangeCheck();
                     }
                 }
                 else
@@ -453,8 +466,14 @@ namespace SOFlow.Internal
                 if(DrawColourButton("S", SOFlowEditorSettings.AcceptContextColour, sliderData.SliderActive ? SOFlowStyles.PressedButton : SOFlowStyles.Button, GUILayout.MaxWidth(20f)))
                 {
                     sliderData.SliderActive = !sliderData.SliderActive;
+                    sliderDatachanged = true;
                 }
-                
+
+                if(sliderDatachanged)
+                {
+                    SaveNumericSliderData();
+                }
+
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.EndHorizontal();
             }

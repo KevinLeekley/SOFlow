@@ -21,7 +21,12 @@ namespace SOFlow.Internal
         /// <summary>
         /// The list of numeric slider data.
         /// </summary>
-        private static readonly Dictionary<long, NumericSliderData> _numericSliders = new Dictionary<long, NumericSliderData>();
+        private static readonly Dictionary<int, NumericSliderData> _numericSliders = new Dictionary<int, NumericSliderData>();
+
+        /// <summary>
+        /// The numeric slider data file name.
+        /// </summary>
+        private static readonly string _numericSlidersFile = "Numeric Sliders.data";
 
         /// <summary>
         ///     Draws the item field.

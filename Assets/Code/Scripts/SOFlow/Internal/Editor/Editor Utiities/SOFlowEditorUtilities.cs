@@ -1,7 +1,12 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 #if UNITY_EDITOR
+using Object = UnityEngine.Object;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,6 +47,67 @@ namespace SOFlow.Internal
             result.a = EditorPrefs.GetFloat(key + "-a");
 
             return result;
+        }
+
+        /// <summary>
+        /// Saves the SOFlow numeric slider data.
+        /// </summary>
+        public static void SaveNumericSliderData()
+        {
+            StringBuilder numericSliderData = new StringBuilder();
+
+            foreach(KeyValuePair<int, NumericSliderData> data in _numericSliders)
+            {
+                numericSliderData.Append($"{data.Key},{data.Value.SliderActive},{data.Value.SliderMinValue},{data.Value.SliderMaxValue}\n");
+            }
+
+            try
+            {
+                File.WriteAllText(Path.Combine(Application.persistentDataPath, _numericSlidersFile), numericSliderData.ToString());
+            }
+            catch(Exception e)
+            {
+                Debug.LogError($"Failed to save numeric slider data.\n\n{e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Loads the SOFlow numeric slider data.
+        /// </summary>
+        [UnityEditor.Callbacks.DidReloadScripts]
+        public static void LoadNumericSliderData()
+        {
+            try
+            {
+                string[] numericSliderData = File.ReadAllLines(Path.Combine(Application.persistentDataPath, _numericSlidersFile));
+
+                foreach(string data in numericSliderData)
+                {
+                    string[] splitData = data.Split(',');
+
+                    int sliderID = int.Parse(splitData[0]);
+
+                    if(!_numericSliders.ContainsKey(sliderID))
+                    {
+                        _numericSliders.Add(sliderID, new NumericSliderData
+                                                      {
+                                                          SliderActive = bool.Parse(splitData[1]),
+                                                          SliderMinValue = float.Parse(splitData[2]),
+                                                          SliderMaxValue = float.Parse(splitData[3])
+                                                      });
+                    }
+                    else
+                    {
+                        _numericSliders[sliderID].SliderActive = bool.Parse(splitData[1]);
+                        _numericSliders[sliderID].SliderMinValue = float.Parse(splitData[2]);
+                        _numericSliders[sliderID].SliderMaxValue = float.Parse(splitData[3]);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.LogError($"Failed to load numeric slider data.\n\n{e.Message}");
+            }
         }
 
         /// <summary>
