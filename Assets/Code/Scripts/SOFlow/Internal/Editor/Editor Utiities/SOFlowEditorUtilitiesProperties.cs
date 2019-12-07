@@ -1,11 +1,11 @@
 // Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
+#if UNITY_EDITOR
 using System;
 using SOFlow.Extensions;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
-#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditorInternal;
 
@@ -169,7 +169,8 @@ namespace SOFlow.Internal
                                                                     .serializedProperty
                                                                     .DeleteArrayElementAtIndex(index);
 
-                                                             EditorGUI.LabelField(rect, "-", SOFlowStyles.CenteredLabel);
+                                                             EditorGUI.LabelField(rect, "-",
+                                                                                  SOFlowStyles.CenteredLabel);
 
                                                              GUI.backgroundColor = originalGUIColor;
 
@@ -370,7 +371,11 @@ namespace SOFlow.Internal
         /// </summary>
         /// <param name="property"></param>
         /// <param name="includeChildren"></param>
-        public static void DrawPropertyWithNullCheck(SerializedProperty property, bool includeChildren = true)
+        /// <param name="propertyLabel"></param>
+        /// <param name="layoutOptions"></param>
+        public static void DrawPropertyWithNullCheck(SerializedProperty       property, bool includeChildren = true,
+                                                     string                   propertyLabel = null,
+                                                     params GUILayoutOption[] layoutOptions)
         {
             bool  nullDetected  = false;
             Color currentColour = _originalGUIColour;
@@ -381,18 +386,20 @@ namespace SOFlow.Internal
 
                 if(nullDetected)
                 {
-                    currentColour = GUI.color;
-                    GUI.color     = SOFlowEditorSettings.DeclineContextColour;
+                    currentColour       = GUI.backgroundColor;
+                    GUI.backgroundColor = SOFlowEditorSettings.DeclineContextColour;
                 }
             }
 
             if(property.propertyType == SerializedPropertyType.Integer ||
                property.propertyType == SerializedPropertyType.Float)
             {
-                int propertyID = $"{GetObjectLocalIDInFile(property.serializedObject.targetObject)}{property.propertyPath}".GetHashCode();
+                int propertyID =
+                    $"{GetObjectLocalIDInFile(property.serializedObject.targetObject)}{property.propertyPath}"
+                       .GetHashCode();
 
                 NumericSliderData sliderData;
-                
+
                 if(!_numericSliders.TryGetValue(propertyID, out sliderData))
                 {
                     sliderData = new NumericSliderData();
@@ -401,7 +408,8 @@ namespace SOFlow.Internal
 
                 EditorGUILayout.BeginHorizontal();
 
-                EditorGUILayout.LabelField(property.displayName, GUILayout.Width(EditorGUIUtility.labelWidth - 4f));
+                EditorGUILayout.LabelField(propertyLabel ?? property.displayName,
+                                           GUILayout.Width(EditorGUIUtility.labelWidth - 4f));
 
                 EditorGUILayout.BeginHorizontal();
 
@@ -412,17 +420,18 @@ namespace SOFlow.Internal
                     if(property.propertyType == SerializedPropertyType.Integer)
                     {
                         EditorGUI.BeginChangeCheck();
-                        
+
                         sliderData.SliderMinValue =
                             EditorGUILayout.IntField((int)sliderData.SliderMinValue, SOFlowStyles.CenterTextHelpBox,
                                                      GUILayout.MaxWidth(_numericSliderRangeWidth));
 
                         sliderDatachanged = EditorGUI.EndChangeCheck();
-                        
-                        property.intValue = EditorGUILayout.IntSlider(property.intValue, (int)sliderData.SliderMinValue, (int)sliderData.SliderMaxValue);
+
+                        property.intValue = EditorGUILayout.IntSlider(property.intValue, (int)sliderData.SliderMinValue,
+                                                                      (int)sliderData.SliderMaxValue);
 
                         EditorGUI.BeginChangeCheck();
-                        
+
                         sliderData.SliderMaxValue =
                             EditorGUILayout.IntField((int)sliderData.SliderMaxValue, SOFlowStyles.CenterTextHelpBox,
                                                      GUILayout.MaxWidth(_numericSliderRangeWidth));
@@ -432,18 +441,18 @@ namespace SOFlow.Internal
                     else
                     {
                         EditorGUI.BeginChangeCheck();
-                        
+
                         sliderData.SliderMinValue =
                             EditorGUILayout.FloatField(sliderData.SliderMinValue, SOFlowStyles.CenterTextHelpBox,
-                                                     GUILayout.MaxWidth(_numericSliderRangeWidth));
+                                                       GUILayout.MaxWidth(_numericSliderRangeWidth));
 
                         sliderDatachanged = EditorGUI.EndChangeCheck();
-                        
+
                         property.floatValue = EditorGUILayout.Slider(property.floatValue, sliderData.SliderMinValue,
-                                               sliderData.SliderMaxValue);
+                                                                     sliderData.SliderMaxValue);
 
                         EditorGUI.BeginChangeCheck();
-                        
+
                         sliderData.SliderMaxValue =
                             EditorGUILayout.FloatField(sliderData.SliderMaxValue, SOFlowStyles.CenterTextHelpBox,
                                                        GUILayout.MaxWidth(_numericSliderRangeWidth));
@@ -455,18 +464,20 @@ namespace SOFlow.Internal
                 {
                     if(property.propertyType == SerializedPropertyType.Integer)
                     {
-                        property.intValue = EditorGUILayout.IntField(property.intValue);
+                        property.intValue = EditorGUILayout.IntField(property.intValue, layoutOptions);
                     }
                     else
                     {
-                        property.floatValue = EditorGUILayout.FloatField(property.floatValue);
+                        property.floatValue = EditorGUILayout.FloatField(property.floatValue, layoutOptions);
                     }
                 }
 
-                if(DrawColourButton("S", SOFlowEditorSettings.AcceptContextColour, sliderData.SliderActive ? SOFlowStyles.PressedButton : SOFlowStyles.Button, GUILayout.MaxWidth(20f)))
+                if(DrawColourButton("S", SOFlowEditorSettings.AcceptContextColour,
+                                    sliderData.SliderActive ? SOFlowStyles.PressedButton : SOFlowStyles.Button,
+                                    GUILayout.MaxWidth(20f)))
                 {
                     sliderData.SliderActive = !sliderData.SliderActive;
-                    sliderDatachanged = true;
+                    sliderDatachanged       = true;
                 }
 
                 if(sliderDatachanged)
@@ -477,12 +488,45 @@ namespace SOFlow.Internal
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.EndHorizontal();
             }
+            else if(property.propertyType == SerializedPropertyType.ObjectReference &&
+                    property.propertyPath != "m_Script")
+            {
+                EditorGUILayout.BeginHorizontal();
+
+                EditorGUILayout.LabelField(propertyLabel ?? property.displayName,
+                                           GUILayout.Width(EditorGUIUtility.labelWidth - 4f));
+
+                EditorGUILayout.BeginHorizontal();
+
+                EditorGUILayout.PropertyField(property, GUIContent.none, layoutOptions);
+                
+                if(DrawColourButton("H", SOFlowEditorSettings.AcceptContextColour,
+                                    ObjectPickerHistoryWindow.PropertyAvailable &&
+                                    ObjectPickerHistoryWindow.EditingProperty.propertyPath ==
+                                    property.propertyPath
+                                        ? SOFlowStyles.PressedButton
+                                        : SOFlowStyles.Button, GUILayout.MaxWidth(20f)))
+                {
+                    ObjectPickerHistoryWindow.EditingProperty = property;
+                }
+
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndHorizontal();
+            }
             else
             {
-                EditorGUILayout.PropertyField(property, includeChildren);
+                if(propertyLabel == null)
+                {
+                    EditorGUILayout.PropertyField(property, includeChildren, layoutOptions);
+                }
+                else
+                {
+                    EditorGUILayout.PropertyField(property, new GUIContent(propertyLabel), includeChildren,
+                                                  layoutOptions);
+                }
             }
 
-            if(nullDetected) GUI.color = currentColour;
+            if(nullDetected) GUI.backgroundColor = currentColour;
         }
     }
 }
