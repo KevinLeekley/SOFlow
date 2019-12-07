@@ -75,6 +75,7 @@ namespace SOFlow.Internal
         /// Loads the SOFlow numeric slider data.
         /// </summary>
         [UnityEditor.Callbacks.DidReloadScripts]
+        [InitializeOnLoadMethod]
         public static void LoadNumericSliderData()
         {
             try
