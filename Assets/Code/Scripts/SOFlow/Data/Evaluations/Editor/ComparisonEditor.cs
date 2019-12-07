@@ -26,10 +26,7 @@ namespace SOFlow.Data.Evaluations.Editor
 
         // The fields to evaluate.
         private SerializedProperty _firstField;
-        private SerializedProperty _OnComparisonFail;
-        private SerializedProperty _OnComparisonSuccess;
         private SerializedProperty _primitiveOperator;
-        private SerializedProperty _respondInEditor;
 
         /// <summary>
         ///     The result text style.
@@ -94,7 +91,7 @@ namespace SOFlow.Data.Evaluations.Editor
             _trigger           = serializedObject.FindProperty("Trigger");
             _dataOperator      = serializedObject.FindProperty("DataOperator");
 
-            EditorGUILayout.PropertyField(_comparisonType);
+            serializedObject.DrawProperty(nameof(_target.ComparisonType));
 
             if((Comparison.ComparisonTypes)_comparisonType.enumValueIndex == Comparison.ComparisonTypes.String ||
                (Comparison.ComparisonTypes)_comparisonType.enumValueIndex == Comparison.ComparisonTypes.Bool   ||
@@ -113,13 +110,13 @@ namespace SOFlow.Data.Evaluations.Editor
             }
             else if((Comparison.ComparisonTypes)_comparisonType.enumValueIndex != Comparison.ComparisonTypes.Method)
             {
-                EditorGUILayout.PropertyField(_primitiveOperator);
+                serializedObject.DrawProperty(nameof(_target.PrimitiveOperator));
             }
 
-            EditorGUILayout.PropertyField(_trigger);
+            serializedObject.DrawProperty(nameof(_target.Trigger));
 
             if((Comparison.ComparisonTypes)_comparisonType.enumValueIndex == Comparison.ComparisonTypes.Data)
-                EditorGUILayout.PropertyField(_dataOperator);
+                serializedObject.DrawProperty(nameof(_target.DataOperator));
 
             GUILayout.Space(20f);
             DrawComparisons();
@@ -288,15 +285,11 @@ namespace SOFlow.Data.Evaluations.Editor
         /// </summary>
         private void DrawEventData()
         {
-            _OnComparisonSuccess = serializedObject.FindProperty("OnComparisonSuccess");
-            _OnComparisonFail    = serializedObject.FindProperty("OnComparisonFail");
-            _respondInEditor     = serializedObject.FindProperty("RespondInEditor");
-
             SOFlowEditorUtilities.DrawSecondaryLayer(() =>
                                                  {
-                                                     EditorGUILayout.PropertyField(_respondInEditor);
-                                                     EditorGUILayout.PropertyField(_OnComparisonSuccess);
-                                                     EditorGUILayout.PropertyField(_OnComparisonFail);
+                                                     serializedObject.DrawProperty(nameof(_target.RespondInEditor));
+                                                     serializedObject.DrawProperty(nameof(_target.OnComparisonSuccess));
+                                                     serializedObject.DrawProperty(nameof(_target.OnComparisonFail));
                                                  });
         }
     }
