@@ -20,6 +20,11 @@ namespace SOFlow.Internal
             new Dictionary<string, ReorderableList>();
 
         /// <summary>
+        /// The GUI width of numeric slider ranges.
+        /// </summary>
+        private static readonly float _numericSliderRangeWidth = 50f;
+
+        /// <summary>
         ///     Draws the given property for the serialized object if the property is available.
         /// </summary>
         /// <param name="serializedObject"></param>
@@ -30,7 +35,7 @@ namespace SOFlow.Internal
         {
             SerializedProperty serializedProperty = serializedObject.FindProperty(property);
 
-            if(serializedProperty != null) EditorGUILayout.PropertyField(serializedProperty, includeChildren);
+            if(serializedProperty != null) DrawPropertyWithNullCheck(serializedProperty, includeChildren);
         }
 
         /// <summary>
@@ -364,7 +369,8 @@ namespace SOFlow.Internal
         ///     Draws the given property and indicates whether the property object value is null.
         /// </summary>
         /// <param name="property"></param>
-        public static void DrawPropertyWithNullCheck(SerializedProperty property)
+        /// <param name="includeChildren"></param>
+        public static void DrawPropertyWithNullCheck(SerializedProperty property, bool includeChildren = true)
         {
             bool  nullDetected  = false;
             Color currentColour = _originalGUIColour;
@@ -380,7 +386,82 @@ namespace SOFlow.Internal
                 }
             }
 
-            EditorGUILayout.PropertyField(property, true);
+            if(property.propertyType == SerializedPropertyType.Integer ||
+               property.propertyType == SerializedPropertyType.Float)
+            {
+                long propertyID = GetObjectLocalIDInFile(property.serializedObject.targetObject);
+
+                if(propertyID == -1)
+                {
+                    propertyID = $"{property.serializedObject.targetObject}{property.propertyPath}".GetHashCode();
+                }
+
+                NumericSliderData sliderData;
+                
+                if(!_numericSliders.TryGetValue(propertyID, out sliderData))
+                {
+                    sliderData = new NumericSliderData();
+                    _numericSliders.Add(propertyID, sliderData);
+                }
+
+                EditorGUILayout.BeginHorizontal();
+
+                EditorGUILayout.LabelField(property.displayName, GUILayout.Width(EditorGUIUtility.labelWidth - 4f));
+
+                EditorGUILayout.BeginHorizontal();
+                
+                if(sliderData.SliderActive)
+                {
+                    if(property.propertyType == SerializedPropertyType.Integer)
+                    {
+                        sliderData.SliderMinValue =
+                            EditorGUILayout.IntField((int)sliderData.SliderMinValue, SOFlowStyles.CenterTextHelpBox,
+                                                     GUILayout.MaxWidth(_numericSliderRangeWidth));
+                        
+                        property.intValue = EditorGUILayout.IntSlider(property.intValue, (int)sliderData.SliderMinValue, (int)sliderData.SliderMaxValue);
+
+                        sliderData.SliderMaxValue =
+                            EditorGUILayout.IntField((int)sliderData.SliderMaxValue, SOFlowStyles.CenterTextHelpBox,
+                                                     GUILayout.MaxWidth(_numericSliderRangeWidth));
+                    }
+                    else
+                    {
+                        sliderData.SliderMinValue =
+                            EditorGUILayout.FloatField(sliderData.SliderMinValue, SOFlowStyles.CenterTextHelpBox,
+                                                     GUILayout.MaxWidth(_numericSliderRangeWidth));
+                        
+                        property.floatValue = EditorGUILayout.Slider(property.floatValue, sliderData.SliderMinValue,
+                                               sliderData.SliderMaxValue);
+
+                        sliderData.SliderMaxValue =
+                            EditorGUILayout.FloatField(sliderData.SliderMaxValue, SOFlowStyles.CenterTextHelpBox,
+                                                       GUILayout.MaxWidth(_numericSliderRangeWidth));
+                    }
+                }
+                else
+                {
+                    if(property.propertyType == SerializedPropertyType.Integer)
+                    {
+                        property.intValue = EditorGUILayout.IntField(property.intValue);
+                    }
+                    else
+                    {
+                        property.floatValue = EditorGUILayout.FloatField(property.floatValue);
+                    }
+                }
+
+                if(DrawColourButton("S", SOFlowEditorSettings.AcceptContextColour, sliderData.SliderActive ? SOFlowStyles.PressedButton : SOFlowStyles.Button, GUILayout.MaxWidth(20f)))
+                {
+                    sliderData.SliderActive = !sliderData.SliderActive;
+                }
+                
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndHorizontal();
+            }
+            else
+            {
+                EditorGUILayout.PropertyField(property, includeChildren);
+            }
 
             if(nullDetected) GUI.color = currentColour;
         }

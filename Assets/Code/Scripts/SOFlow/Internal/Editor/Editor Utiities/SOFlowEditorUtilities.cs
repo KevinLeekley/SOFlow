@@ -1,6 +1,7 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 #if UNITY_EDITOR
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -87,6 +88,34 @@ namespace SOFlow.Internal
             GUI.backgroundColor = originalGUIColor;
 
             return result;
+        }
+
+        /// <summary>
+        /// Attempts to get the local object ID within the file the object is contained in.
+        /// Returns -1 if no ID is found.
+        /// </summary>
+        /// <param name="targetObject"></param>
+        /// <returns></returns>
+        public static long GetObjectLocalIDInFile(Object targetObject)
+        {
+            long id = -1;
+            SerializedObject serializedObject = new SerializedObject(targetObject);
+
+            PropertyInfo inspectorModeInfo = typeof(SerializedObject).GetProperty("inspectorMode", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if(inspectorModeInfo != null)
+            {
+                inspectorModeInfo.SetValue(serializedObject, InspectorMode.Debug, null);
+            }
+
+            SerializedProperty localIDProperty = serializedObject.FindProperty("m_LocalIdentfierInFile");
+
+            if(localIDProperty != null)
+            {
+                id = localIDProperty.longValue;
+            }
+
+            return id;
         }
     }
 }

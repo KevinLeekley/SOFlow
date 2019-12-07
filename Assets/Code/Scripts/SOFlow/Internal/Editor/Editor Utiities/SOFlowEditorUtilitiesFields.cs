@@ -1,11 +1,11 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
+#if UNITY_EDITOR
 using System;
 using System.Reflection;
 using SOFlow.Data.Events;
 using SOFlow.Data.Primitives;
 using Object = UnityEngine.Object;
-#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 
@@ -17,6 +17,11 @@ namespace SOFlow.Internal
         ///     The list of expanded field flags.
         /// </summary>
         private static readonly Dictionary<int, bool> _expandedFlags = new Dictionary<int, bool>();
+        
+        /// <summary>
+        /// The list of numeric slider data.
+        /// </summary>
+        private static readonly Dictionary<long, NumericSliderData> _numericSliders = new Dictionary<long, NumericSliderData>();
 
         /// <summary>
         ///     Draws the item field.
