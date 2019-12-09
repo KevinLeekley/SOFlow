@@ -1,6 +1,7 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using SOFlow.Extensions;
 using Object = UnityEngine.Object;
@@ -17,9 +18,17 @@ namespace SOFlow.Internal
         public static readonly List<Object> ObjectPickerHistoryObjects = new List<Object>();
 
         /// <summary>
-        /// Indicates whether a property is currently being edited.
+        /// The property that is currently being edited.
         /// </summary>
-        public static SerializedProperty EditingProperty = null;
+        public static SerializedProperty EditingProperty
+        {
+            get => _editingProperty;
+            set
+            {
+                _editingProperty = value;
+                UpdateObjectListing();
+            }
+        }
 
         /// <summary>
         /// Indicates whether the property is available or has been disposed.
@@ -84,6 +93,16 @@ namespace SOFlow.Internal
         /// </summary>
         private static Object _monitoredObject = null;
 
+        /// <summary>
+        /// The list of filtered history objects.
+        /// </summary>
+        private static readonly List<Object> _filteredHistoryObjects = new List<Object>();
+
+        /// <summary>
+        /// The property that is currently being edited.
+        /// </summary>
+        private static SerializedProperty _editingProperty;
+
         public void OnGUI()
         {
             DrawWindowContents();
@@ -135,7 +154,7 @@ namespace SOFlow.Internal
         /// </summary>
         private void DrawObjectList()
         {
-            foreach(Object historyObject in ObjectPickerHistoryObjects)
+            foreach(Object historyObject in _filteredHistoryObjects)
             {
                 if(historyObject != null)
                 {
@@ -168,6 +187,40 @@ namespace SOFlow.Internal
                             break;
                         }
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the object listing.
+        /// </summary>
+        private static void UpdateObjectListing()
+        {
+            ObjectPickerHistoryObjects.ValidateListEntries();
+            _filteredHistoryObjects.Clear();
+
+            if(PropertyAvailable)
+            {
+                Type propertyType =
+                    TypeExtensions.GetInstanceType(EditingProperty.type.Replace("PPtr<$", "").Replace(">", ""));
+
+                if(propertyType != null)
+                {
+                    _filteredHistoryObjects.AddRange(ObjectPickerHistoryObjects.FindAll(_object =>
+                                                                                            _object
+                                                                                               .GetType()
+                                                                                               .IsSubclassOf(propertyType) ||
+                                                                                            (propertyType
+                                                                                                .IsSubclassOf(typeof(
+                                                                                                                  Component
+                                                                                                              )) &&
+                                                                                             (_object as GameObject)
+                                                                                           ?.GetComponent(propertyType) !=
+                                                                                             null)));
+                }
+                else
+                {
+                    _filteredHistoryObjects.AddRange(ObjectPickerHistoryObjects);
                 }
             }
         }
@@ -207,6 +260,7 @@ namespace SOFlow.Internal
                 if(IsOpen)
                 {
                     Window.Repaint();
+                    UpdateObjectListing();
                 }
 
                 _monitoredObject          = null;
