@@ -1,5 +1,7 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
+using System.IO;
+using System.Text;
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
@@ -113,6 +115,11 @@ namespace SOFlow.Internal
         /// </summary>
         private static string _searchFilter = "";
 
+        /// <summary>
+        /// The history objects data file name.
+        /// </summary>
+        private static readonly string _historyObjectsFile = "History Objects.data";
+
         public void OnGUI()
         {
             DrawWindowContents();
@@ -191,8 +198,10 @@ namespace SOFlow.Internal
         /// </summary>
         private void DrawObjectList()
         {
-            foreach(Object historyObject in _filteredHistoryObjects)
+            for(int i = 0, condition = _filteredHistoryObjects.Count; i < condition; i++)
             {
+                Object historyObject = _filteredHistoryObjects[i];
+
                 if(historyObject != null)
                 {
                     Texture2D buttonIcon =
@@ -209,21 +218,27 @@ namespace SOFlow.Internal
                         buttonIcon = TextureExtensions.ResizeTexture(buttonIcon, 12, 12);
                     }
 
-                    if(GUILayout.Button(new GUIContent(historyObject.name,
-                                                       buttonIcon),
-                                        EditorStyles.objectField))
-                    {
-                        if(EditingProperty != null)
-                        {
-                            EditingProperty.objectReferenceValue =
-                                historyObject;
+                    SOFlowEditorUtilities.DrawHorizontalColourLayer(SOFlowEditorSettings.SecondaryLayerColour,
+                                                                    () =>
+                                                                    {
+                                                                        EditorGUILayout.LabelField($"{i}", SOFlowStyles.CenteredLabel, GUILayout.Width(18f));
 
-                            EditingProperty
-                               .serializedObject.ApplyModifiedProperties();
+                                                                        if(GUILayout
+                                                                           .Button(new GUIContent(historyObject.name,
+                                                                                                  buttonIcon),
+                                                                                   EditorStyles.objectField))
+                                                                        {
+                                                                            if(EditingProperty != null)
+                                                                            {
+                                                                                EditingProperty.objectReferenceValue =
+                                                                                    historyObject;
 
-                            break;
-                        }
-                    }
+                                                                                EditingProperty
+                                                                                   .serializedObject
+                                                                                   .ApplyModifiedProperties();
+                                                                            }
+                                                                        }
+                                                                    });
                 }
             }
         }
@@ -271,6 +286,8 @@ namespace SOFlow.Internal
                     }
                 }
             }
+
+            Window.Repaint();
         }
 
         /// <summary>
@@ -307,12 +324,79 @@ namespace SOFlow.Internal
 
                 if(IsOpen)
                 {
-                    Window.Repaint();
                     UpdateObjectListing();
                 }
 
                 _monitoredObject          = null;
                 _monitoringSelectedObject = false;
+                
+                SaveHistoryObjectsData();
+            }
+        }
+        
+        /// <summary>
+        /// Saves the SOFlow history objects data.
+        /// </summary>
+        public static void SaveHistoryObjectsData()
+        {
+            StringBuilder historyObjectData = new StringBuilder();
+
+            foreach(Object historyObject in ObjectPickerHistoryObjects)
+            {
+                string objectPath = AssetDatabase.GetAssetPath(historyObject);
+
+                if(!string.IsNullOrEmpty(objectPath))
+                {
+                    historyObjectData.AppendLine(objectPath);
+                }
+            }
+
+            try
+            {
+                File.WriteAllText(Path.Combine(Application.persistentDataPath, _historyObjectsFile), historyObjectData.ToString());
+            }
+            catch(Exception e)
+            {
+                Debug.LogError($"Failed to save history object data.\n\n{e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Loads the SOFlow history objects data.
+        /// </summary>
+        [UnityEditor.Callbacks.DidReloadScripts]
+        [InitializeOnLoadMethod]
+        public static void LoadHistoryObjectsData()
+        {
+            try
+            {
+                string filePath = Path.Combine(Application.persistentDataPath, _historyObjectsFile);
+
+                if(File.Exists(filePath))
+                {
+                    ObjectPickerHistoryObjects.Clear();
+                    
+                    string[] historyObjectData = File.ReadAllLines(filePath);
+
+                    foreach(string data in historyObjectData)
+                    {
+                        Object _historyObject = AssetDatabase.LoadAssetAtPath<Object>(data);
+
+                        if(_historyObject != null)
+                        {
+                            ObjectPickerHistoryObjects.Add(_historyObject);
+                        }
+                    }
+                }
+                
+                if(IsOpen)
+                {
+                    UpdateObjectListing();
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.LogError($"Failed to load history object data.\n\n{e.Message}");
             }
         }
     }

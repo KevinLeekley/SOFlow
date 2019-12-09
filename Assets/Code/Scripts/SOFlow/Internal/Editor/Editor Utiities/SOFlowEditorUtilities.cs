@@ -80,28 +80,33 @@ namespace SOFlow.Internal
         {
             try
             {
-                string[] numericSliderData = File.ReadAllLines(Path.Combine(Application.persistentDataPath, _numericSlidersFile));
+                string filePath = Path.Combine(Application.persistentDataPath, _numericSlidersFile);
 
-                foreach(string data in numericSliderData)
+                if(File.Exists(filePath))
                 {
-                    string[] splitData = data.Split(',');
+                    string[] numericSliderData = File.ReadAllLines(filePath);
 
-                    int sliderID = int.Parse(splitData[0]);
+                    foreach(string data in numericSliderData)
+                    {
+                        string[] splitData = data.Split(',');
 
-                    if(!_numericSliders.ContainsKey(sliderID))
-                    {
-                        _numericSliders.Add(sliderID, new NumericSliderData
-                                                      {
-                                                          SliderActive = bool.Parse(splitData[1]),
-                                                          SliderMinValue = float.Parse(splitData[2]),
-                                                          SliderMaxValue = float.Parse(splitData[3])
-                                                      });
-                    }
-                    else
-                    {
-                        _numericSliders[sliderID].SliderActive = bool.Parse(splitData[1]);
-                        _numericSliders[sliderID].SliderMinValue = float.Parse(splitData[2]);
-                        _numericSliders[sliderID].SliderMaxValue = float.Parse(splitData[3]);
+                        int sliderID = int.Parse(splitData[0]);
+
+                        if(!_numericSliders.ContainsKey(sliderID))
+                        {
+                            _numericSliders.Add(sliderID, new NumericSliderData
+                                                          {
+                                                              SliderActive   = bool.Parse(splitData[1]),
+                                                              SliderMinValue = float.Parse(splitData[2]),
+                                                              SliderMaxValue = float.Parse(splitData[3])
+                                                          });
+                        }
+                        else
+                        {
+                            _numericSliders[sliderID].SliderActive   = bool.Parse(splitData[1]);
+                            _numericSliders[sliderID].SliderMinValue = float.Parse(splitData[2]);
+                            _numericSliders[sliderID].SliderMaxValue = float.Parse(splitData[3]);
+                        }
                     }
                 }
             }
