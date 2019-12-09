@@ -254,7 +254,7 @@ namespace SOFlow.Internal
             if(PropertyAvailable)
             {
                 Type propertyType =
-                    TypeExtensions.GetInstanceType(EditingProperty.type.Replace("PPtr<$", "").Replace(">", ""));
+                    TypeExtensions.GetInstanceType(EditingProperty.type);
 
                 if(propertyType != null)
                 {

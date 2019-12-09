@@ -300,8 +300,7 @@ namespace SOFlow.Internal
             {
                 try
                 {
-                    Type instanceType =
-                        TypeExtensions.GetInstanceType(property.type.Replace("PPtr<$", "").Replace(">", ""));
+                    Type instanceType = TypeExtensions.GetInstanceType(property.type);
 
                     if(instanceType == _object.GetType())
                     {
@@ -617,12 +616,18 @@ namespace SOFlow.Internal
             {
                 if(propertyLabel == null)
                 {
-                    EditorGUILayout.PropertyField(property, includeChildren, layoutOptions);
+                    using(new EditorGUI.DisabledScope("m_Script" == property.propertyPath))
+                    {
+                        EditorGUILayout.PropertyField(property, includeChildren, layoutOptions);
+                    }
                 }
                 else
                 {
-                    EditorGUILayout.PropertyField(property, new GUIContent(propertyLabel), includeChildren,
-                                                  layoutOptions);
+                    using(new EditorGUI.DisabledScope("m_Script" == property.propertyPath))
+                    {
+                        EditorGUILayout.PropertyField(property, new GUIContent(propertyLabel), includeChildren,
+                                                      layoutOptions);
+                    }
                 }
             }
 
