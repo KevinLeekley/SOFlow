@@ -2,12 +2,18 @@
 
 #if UNITY_EDITOR
 using System;
+using System.Collections.Generic;
 
 namespace SOFlow.Internal
 {
 	[Serializable]
 	public class NumericSliderData
 	{
+		/// <summary>
+		/// The slider ID.
+		/// </summary>
+		public int SliderID = -1;
+		
 		/// <summary>
 		/// Indicates whether the numeric slider is active.
 		/// </summary>
@@ -22,6 +28,15 @@ namespace SOFlow.Internal
 		/// The maximum value of the slider.
 		/// </summary>
 		public float SliderMaxValue = 1f;
+	}
+
+	[Serializable]
+	public class NumericSliderList
+	{
+		/// <summary>
+		/// The slider data.
+		/// </summary>
+		public List<NumericSliderData> SliderData = new List<NumericSliderData>();
 	}
 }
 #endif

@@ -25,6 +25,11 @@ namespace SOFlow.Internal
         private static readonly float _numericSliderRangeWidth = 50f;
 
         /// <summary>
+        /// The previous mouse Y position.
+        /// </summary>
+        private static float _previousMouseY = 0f;
+
+        /// <summary>
         ///     Draws the given property for the serialized object if the property is available.
         /// </summary>
         /// <param name="serializedObject"></param>
@@ -402,7 +407,11 @@ namespace SOFlow.Internal
 
                 if(!_numericSliders.TryGetValue(propertyID, out sliderData))
                 {
-                    sliderData = new NumericSliderData();
+                    sliderData = new NumericSliderData
+                                 {
+                                     SliderID = propertyID
+                                 };
+
                     _numericSliders.Add(propertyID, sliderData);
                 }
 
@@ -499,7 +508,7 @@ namespace SOFlow.Internal
                 EditorGUILayout.BeginHorizontal();
 
                 EditorGUILayout.PropertyField(property, GUIContent.none, layoutOptions);
-                
+
                 if(DrawColourButton("H", SOFlowEditorSettings.AcceptContextColour,
                                     ObjectPickerHistoryWindow.PropertyAvailable &&
                                     ObjectPickerHistoryWindow.EditingProperty.propertyPath ==
@@ -509,6 +518,96 @@ namespace SOFlow.Internal
                 {
                     ObjectPickerHistoryWindow.EditingProperty = property;
                     ObjectPickerHistoryWindow.ShowWindow();
+                }
+
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndHorizontal();
+            }
+            else if(property.propertyType == SerializedPropertyType.String)
+            {
+                int propertyID =
+                    $"{GetObjectLocalIDInFile(property.serializedObject.targetObject)}{property.propertyPath}"
+                       .GetHashCode();
+
+                TextAreaData textAreaData;
+
+                if(!_textAreas.TryGetValue(propertyID, out textAreaData))
+                {
+                    textAreaData = new TextAreaData
+                                   {
+                                       TextAreaID = propertyID
+                                   };
+
+                    _textAreas.Add(propertyID, textAreaData);
+                }
+
+                EditorGUILayout.BeginHorizontal();
+
+                EditorGUILayout.LabelField(propertyLabel ?? property.displayName,
+                                           GUILayout.Width(EditorGUIUtility.labelWidth - 4f));
+
+                EditorGUILayout.BeginHorizontal();
+
+                bool  textAreaDataChanged = false;
+                Event currentEvent        = Event.current;
+
+                if(textAreaData.TextAreaActive)
+                {
+                    EditorGUILayout.BeginVertical();
+
+                    property.stringValue = EditorGUILayout.TextArea(property.stringValue, SOFlowStyles.TextArea,
+                                                                    GUILayout.Height(EditorGUIUtility.singleLineHeight *
+                                                                                     textAreaData.TextAreaHeight));
+
+                    EditorGUILayout.LabelField("", (GUIStyle)"WindowBottomResize");
+
+                    bool dragHandleContainsMouse = GUILayoutUtility.GetLastRect().Contains(currentEvent.mousePosition);
+
+                    if(!TextAreaData.TextAreaDragged            && dragHandleContainsMouse &&
+                       currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
+                    {
+                        TextAreaData.TextAreaDragged  = true;
+                        textAreaData.CurrentlyDragged = true;
+                        _previousMouseY               = Mathf.Abs(currentEvent.mousePosition.y);
+                    }
+                    else if(TextAreaData.TextAreaDragged && textAreaData.CurrentlyDragged &&
+                            currentEvent.type == EventType.MouseDrag)
+                    {
+                        textAreaData.TextAreaHeight +=
+                            (Mathf.Abs(currentEvent.mousePosition.y) - _previousMouseY) / 16f;
+
+                        textAreaData.TextAreaHeight = Mathf.Max(1f, textAreaData.TextAreaHeight);
+                        _previousMouseY             = Mathf.Abs(currentEvent.mousePosition.y);
+                        textAreaDataChanged         = true;
+                    }
+                    else if(TextAreaData.TextAreaDragged && currentEvent.type == EventType.MouseUp)
+                    {
+                        TextAreaData.TextAreaDragged = false;
+
+                        foreach(KeyValuePair<int, TextAreaData> data in _textAreas)
+                        {
+                            data.Value.CurrentlyDragged = false;
+                        }
+                    }
+
+                    EditorGUILayout.EndVertical();
+                }
+                else
+                {
+                    property.stringValue = EditorGUILayout.TextField(property.stringValue, layoutOptions);
+                }
+
+                if(DrawColourButton("A", SOFlowEditorSettings.AcceptContextColour,
+                                    textAreaData.TextAreaActive ? SOFlowStyles.PressedButton : SOFlowStyles.Button,
+                                    GUILayout.MaxWidth(20f)))
+                {
+                    textAreaData.TextAreaActive = !textAreaData.TextAreaActive;
+                    textAreaDataChanged         = true;
+                }
+
+                if(textAreaDataChanged)
+                {
+                    SaveTextAreaData();
                 }
 
                 EditorGUILayout.EndHorizontal();

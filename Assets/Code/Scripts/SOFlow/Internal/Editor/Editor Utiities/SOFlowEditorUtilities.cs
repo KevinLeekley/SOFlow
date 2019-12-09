@@ -54,16 +54,16 @@ namespace SOFlow.Internal
         /// </summary>
         public static void SaveNumericSliderData()
         {
-            StringBuilder numericSliderData = new StringBuilder();
+            NumericSliderList sliderData = new NumericSliderList();
 
             foreach(KeyValuePair<int, NumericSliderData> data in _numericSliders)
             {
-                numericSliderData.Append($"{data.Key},{data.Value.SliderActive},{data.Value.SliderMinValue},{data.Value.SliderMaxValue}\n");
+                sliderData.SliderData.Add(data.Value);
             }
 
             try
             {
-                File.WriteAllText(Path.Combine(Application.persistentDataPath, _numericSlidersFile), numericSliderData.ToString());
+                File.WriteAllText(Path.Combine(Application.persistentDataPath, _numericSlidersFile), EditorJsonUtility.ToJson(sliderData));
             }
             catch(Exception e)
             {
@@ -84,35 +84,73 @@ namespace SOFlow.Internal
 
                 if(File.Exists(filePath))
                 {
-                    string[] numericSliderData = File.ReadAllLines(filePath);
+                    _numericSliders.Clear();
+                    
+                    NumericSliderList sliderData = new NumericSliderList();
+                    EditorJsonUtility.FromJsonOverwrite(File.ReadAllText(filePath), sliderData);
 
-                    foreach(string data in numericSliderData)
+                    foreach(NumericSliderData data in sliderData.SliderData)
                     {
-                        string[] splitData = data.Split(',');
-
-                        int sliderID = int.Parse(splitData[0]);
-
-                        if(!_numericSliders.ContainsKey(sliderID))
-                        {
-                            _numericSliders.Add(sliderID, new NumericSliderData
-                                                          {
-                                                              SliderActive   = bool.Parse(splitData[1]),
-                                                              SliderMinValue = float.Parse(splitData[2]),
-                                                              SliderMaxValue = float.Parse(splitData[3])
-                                                          });
-                        }
-                        else
-                        {
-                            _numericSliders[sliderID].SliderActive   = bool.Parse(splitData[1]);
-                            _numericSliders[sliderID].SliderMinValue = float.Parse(splitData[2]);
-                            _numericSliders[sliderID].SliderMaxValue = float.Parse(splitData[3]);
-                        }
+                        _numericSliders.Add(data.SliderID, data);
                     }
                 }
             }
             catch(Exception e)
             {
                 Debug.LogError($"Failed to load numeric slider data.\n\n{e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Saves the SOFlow text area data.
+        /// </summary>
+        public static void SaveTextAreaData()
+        {
+            TextAreaList textAreaData = new TextAreaList();
+
+            foreach(KeyValuePair<int, TextAreaData> data in _textAreas)
+            {
+                textAreaData.TextAreaData.Add(data.Value);
+            }
+
+            try
+            {
+                File.WriteAllText(Path.Combine(Application.persistentDataPath, _textAreasFile),
+                                  EditorJsonUtility.ToJson(textAreaData));
+            }
+            catch(Exception e)
+            {
+                Debug.LogError($"Failed to save text area data.\n\n{e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Loads the SOFlow text area data.
+        /// </summary>
+        [UnityEditor.Callbacks.DidReloadScripts]
+        [InitializeOnLoadMethod]
+        public static void LoadTextAreaData()
+        {
+            try
+            {
+                string filePath = Path.Combine(Application.persistentDataPath, _textAreasFile);
+
+                if(File.Exists(filePath))
+                {
+                    _textAreas.Clear();
+
+                    TextAreaList textAreaData = new TextAreaList();
+                    EditorJsonUtility.FromJsonOverwrite(File.ReadAllText(filePath), textAreaData);
+
+                    foreach(TextAreaData data in textAreaData.TextAreaData)
+                    {
+                        _textAreas.Add(data.TextAreaID, data);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.LogError($"Failed to load text area data.\n\n{e.Message}");
             }
         }
 
