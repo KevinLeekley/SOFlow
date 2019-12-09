@@ -248,7 +248,7 @@ namespace SOFlow.Internal
         /// </summary>
         private static void UpdateObjectListing()
         {
-            ObjectPickerHistoryObjects.ValidateListEntries();
+            ObjectPickerHistoryObjects.ValidateListEntries(_object => _object);
             _filteredHistoryObjects.Clear();
 
             if(PropertyAvailable)
