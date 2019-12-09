@@ -49,6 +49,11 @@ namespace SOFlow.Internal
         }
 
         /// <summary>
+        /// The current listing type.
+        /// </summary>
+        public static string CurrentListingType;
+
+        /// <summary>
         /// Indicates whether the window is currently open.
         /// </summary>
         public static bool IsOpen
@@ -103,6 +108,11 @@ namespace SOFlow.Internal
         /// </summary>
         private static SerializedProperty _editingProperty;
 
+        /// <summary>
+        /// The search filter.
+        /// </summary>
+        private static string _searchFilter = "";
+
         public void OnGUI()
         {
             DrawWindowContents();
@@ -134,19 +144,46 @@ namespace SOFlow.Internal
         {
             SOFlowEditorUtilities.DrawPrimaryLayer(() =>
                                                    {
-                                                       SOFlowEditorUtilities.DrawTertiaryLayer(() =>
-                                                                                               {
-                                                                                                   EditorGUILayout
-                                                                                                      .LabelField("Previously Selected Objects",
-                                                                                                                  SOFlowStyles
-                                                                                                                     .BoldCenterTextHelpBox);
-                                                                                               });
+                                                       SOFlowEditorUtilities.DrawTertiaryLayer(DrawHeader);
 
                                                        SOFlowEditorUtilities
                                                           .DrawScrollViewColourLayer(SOFlowEditorSettings.SecondaryLayerColour,
                                                                                      ref _scrollPosition,
                                                                                      DrawObjectList);
                                                    });
+        }
+
+        /// <summary>
+        /// Draws the window header.
+        /// </summary>
+        private void DrawHeader()
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField($"Previously Selected {CurrentListingType}Objects", SOFlowStyles .BoldCenterTextHelpBox,
+                                       GUILayout.Height(EditorGUIUtility.singleLineHeight * 2.5f));
+
+            EditorGUILayout.BeginVertical(SOFlowStyles.CenterTextHelpBox, GUILayout.MaxWidth(200f));
+
+            EditorGUILayout.LabelField("Search", SOFlowStyles.CenteredLabel, GUILayout.MaxWidth(200f));
+
+            Color originalColor = GUI.backgroundColor;
+            GUI.backgroundColor = SOFlowEditorSettings.SecondaryLayerColour;
+
+            EditorGUI.BeginChangeCheck();
+            
+            _searchFilter = EditorGUILayout.TextField(_searchFilter, GUILayout.MaxWidth(200f)).Trim().ToLower();
+
+            if(EditorGUI.EndChangeCheck())
+            {
+                UpdateObjectListing();
+            }
+
+            GUI.backgroundColor = originalColor;
+
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.EndHorizontal();
         }
 
         /// <summary>
@@ -206,6 +243,8 @@ namespace SOFlow.Internal
 
                 if(propertyType != null)
                 {
+                    CurrentListingType = $"{propertyType.Name} ";
+                    
                     _filteredHistoryObjects.AddRange(ObjectPickerHistoryObjects.FindAll(_object =>
                                                                                             _object
                                                                                                .GetType()
@@ -220,7 +259,16 @@ namespace SOFlow.Internal
                 }
                 else
                 {
+                    CurrentListingType = "";
                     _filteredHistoryObjects.AddRange(ObjectPickerHistoryObjects);
+                }
+
+                for(int i = _filteredHistoryObjects.Count - 1; i >= 0; i--)
+                {
+                    if(!_filteredHistoryObjects[i].name.ToLower().Contains(_searchFilter.ToLower()))
+                    {
+                        _filteredHistoryObjects.RemoveAt(i);
+                    }
                 }
             }
         }
