@@ -286,6 +286,11 @@ namespace SOFlow.Internal
                     }
                 }
             }
+            else
+            {
+                CurrentListingType = "";
+                _filteredHistoryObjects.AddRange(ObjectPickerHistoryObjects);
+            }
 
             Window.Repaint();
         }
