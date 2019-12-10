@@ -120,6 +120,11 @@ namespace SOFlow.Internal
         /// </summary>
         private static readonly string _historyObjectsFile = "History Objects.data";
 
+        /// <summary>
+        /// Indicates whether the current cycle is a script reload.
+        /// </summary>
+        private static bool _scriptReload = false;
+
         public void OnGUI()
         {
             DrawWindowContents();
@@ -292,6 +297,13 @@ namespace SOFlow.Internal
                 _filteredHistoryObjects.AddRange(ObjectPickerHistoryObjects);
             }
 
+            if(_scriptReload)
+            {
+                _scriptReload = false;
+
+                return;
+            }
+
             Window.Repaint();
         }
 
@@ -396,6 +408,7 @@ namespace SOFlow.Internal
                 
                 if(IsOpen)
                 {
+                    _scriptReload = true;
                     UpdateObjectListing();
                 }
             }
