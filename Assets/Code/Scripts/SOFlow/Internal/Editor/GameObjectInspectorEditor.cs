@@ -22,8 +22,14 @@ namespace SOFlow.Internal
         /// </summary>
         private readonly MethodInfo _gameObjectInspectorOnHeaderGUI;
         
+        /// <summary>
+        /// The event button content.
+        /// </summary>
         private GUIContent _eventButtonContent = new GUIContent();
         
+        /// <summary>
+        /// The logo content.
+        /// </summary>
         private GUIContent _logoContent = new GUIContent();
 
         public GameObjectInspectorEditor()
@@ -35,7 +41,7 @@ namespace SOFlow.Internal
                                                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         }
 
-        private void OnEnable()
+        private void Awake()
         {
             _eventButtonContent.image = Resources.Load<Texture2D>("Game Event Icon");
             _logoContent.image        = Resources.Load<Texture2D>("SOFlow Logo");
@@ -58,14 +64,12 @@ namespace SOFlow.Internal
             
             GUILayout.FlexibleSpace();
 
-            
-
             if(SOFlowEditorUtilities.DrawColourButton(_eventButtonContent, SOFlowEditorSettings.AcceptContextColour, SOFlowStyles.HeaderButton,
                                                       GUILayout.MaxWidth(20f), GUILayout.MaxHeight(16f)))
             {
                 if(Selection.activeGameObject != null)
                 {
-                    Selection.activeGameObject.AddComponent<SimpleGameEventListener>();
+                    Undo.AddComponent<SimpleGameEventListener>(Selection.activeGameObject);
                 }
             }
         }
