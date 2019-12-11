@@ -148,6 +148,7 @@ namespace SOFlow.Internal
                                                                                 new[]
                                                                                 {
                                                                                     typeof(GameEventListener),
+                                                                                    typeof(SimpleGameEventListener),
                                                                                     typeof(GameEventRaiser),
                                                                                     typeof(GameEventReactorSet),
                                                                                     typeof(PhysicsGameEventReactor)
