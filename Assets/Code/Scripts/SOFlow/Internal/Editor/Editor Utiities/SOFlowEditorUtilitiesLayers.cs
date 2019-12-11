@@ -81,6 +81,24 @@ namespace SOFlow.Internal
         }
 
         /// <summary>
+        /// Draws a custom header colour layer.
+        /// </summary>
+        /// <param name="colour"></param>
+        /// <param name="action"></param>
+        /// <param name="options"></param>
+        public static void DrawHeaderColourLayer(Color colour, Action action, params GUILayoutOption[] options)
+        {
+            Color originalGUIColor = GUI.backgroundColor;
+            GUI.backgroundColor = colour;
+
+            EditorGUILayout.BeginHorizontal(SOFlowStyles.HeaderHelpBox, options);
+            GUI.backgroundColor = originalGUIColor;
+
+            action?.Invoke();
+            EditorGUILayout.EndHorizontal();
+        }
+
+        /// <summary>
         ///     Draws a custom scroll view colour layer.
         /// </summary>
         /// <param name="colour"></param>

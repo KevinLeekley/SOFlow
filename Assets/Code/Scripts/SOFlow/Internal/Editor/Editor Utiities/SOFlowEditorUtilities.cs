@@ -18,6 +18,11 @@ namespace SOFlow.Internal
         ///     The original GUI colour.
         /// </summary>
         private static Color _originalGUIColour;
+        
+        /// <summary>
+        /// The cached button GUIContent.
+        /// </summary>
+        private static GUIContent _buttonContent = new GUIContent();
 
         /// <summary>
         ///     Saves the given colour to the given key in the EditorPrefs.
@@ -188,12 +193,27 @@ namespace SOFlow.Internal
         public static bool DrawColourButton(string                   text, Color? colour = null, GUIStyle style = null,
                                             params GUILayoutOption[] layoutOptions)
         {
+            _buttonContent.text = text;
+            return DrawColourButton(_buttonContent, colour, style, layoutOptions);
+        }
+
+        /// <summary>
+        ///     Draws a custom coloured button.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="colour"></param>
+        /// <param name="style"></param>
+        /// <param name="layoutOptions"></param>
+        /// <returns></returns>
+        public static bool DrawColourButton(GUIContent content, Color? colour = null, GUIStyle style = null,
+                                            params GUILayoutOption[] layoutOptions)
+        {
             Color originalGUIColor = GUI.backgroundColor;
             GUI.backgroundColor = colour ?? Color.white;
 
             bool result = style == null
-                              ? GUILayout.Button(text, SOFlowStyles.Button, layoutOptions)
-                              : GUILayout.Button(text, style,           layoutOptions);
+                              ? GUILayout.Button(content, SOFlowStyles.Button, layoutOptions)
+                              : GUILayout.Button(content, style,               layoutOptions);
 
             GUI.backgroundColor = originalGUIColor;
 
