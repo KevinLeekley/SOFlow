@@ -1,9 +1,9 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
-using UnityEditor;
 #if UNITY_EDITOR
 using System;
 using UnityEngine;
+using UnityEditor;
 
 namespace SOFlow.Internal
 {
