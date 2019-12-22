@@ -8,17 +8,17 @@ namespace SOFlow.ScriptableObjects
 {
 	public class DropdownScriptableObject : ScriptableObject
 	{
-		protected void OnValidate()
+		public virtual void OnValidate()
 		{
 			RegisterDropdownEntry();
 		}
 
-		protected void Awake()
+		public virtual void Awake()
 		{
 			RegisterDropdownEntry();
 		}
 
-		protected void OnEnable()
+		public virtual void OnEnable()
 		{
 			RegisterDropdownEntry();
 		}
