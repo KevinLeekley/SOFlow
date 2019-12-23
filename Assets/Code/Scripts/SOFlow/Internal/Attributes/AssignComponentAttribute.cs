@@ -13,6 +13,11 @@ namespace SOFlow.Internal
 		/// </summary>
 		public Type AssigningType = null;
 
+		/// <summary>
+		/// Indicates whether components should be searched for in child objects.
+		/// </summary>
+		public bool SearchChildren = false;
+
 		public AssignComponentAttribute()
 		{
 		}
@@ -20,6 +25,17 @@ namespace SOFlow.Internal
 		public AssignComponentAttribute(Type type)
 		{
 			AssigningType = type;
+		}
+
+		public AssignComponentAttribute(bool searchChildren)
+		{
+			SearchChildren = searchChildren;
+		}
+
+		public AssignComponentAttribute(Type type, bool searchChildren)
+		{
+			AssigningType = type;
+			SearchChildren = searchChildren;
 		}
 	}
 }

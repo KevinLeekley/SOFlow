@@ -24,6 +24,11 @@ namespace SOFlow.Internal
 		/// The component type to assign to the field value. 
 		/// </summary>
 		private Type _assigningType = null;
+
+		/// <summary>
+		/// Indicates whether components should be searched for in child objects.
+		/// </summary>
+		private bool _searchChildren = false;
 		
 		/// <inheritdoc />
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -31,6 +36,8 @@ namespace SOFlow.Internal
 			if(!_initialized)
 			{
 				AssignComponentAttribute assignAttribute = attribute as AssignComponentAttribute;
+
+				_searchChildren = assignAttribute.SearchChildren;
 				
 				if(assignAttribute.AssigningType != null)
 				{
@@ -54,9 +61,17 @@ namespace SOFlow.Internal
 			if(_fieldAssignable)
 			{
 				Component componentReference = property.serializedObject.targetObject as Component;
+				Component attachedComponent = null;
 
-				Component attachedComponent = componentReference.gameObject.GetComponent(_assigningType);
-				
+				if(_searchChildren)
+				{
+					attachedComponent = componentReference.gameObject.GetComponentInChildren(_assigningType);
+				}
+				else
+				{
+					attachedComponent = componentReference.gameObject.GetComponent(_assigningType);
+				}
+
 				if(attachedComponent)
 				{
 					ApplyComponentReference(componentReference, attachedComponent);
