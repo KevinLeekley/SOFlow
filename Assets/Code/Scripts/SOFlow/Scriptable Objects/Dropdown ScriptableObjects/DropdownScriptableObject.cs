@@ -28,9 +28,10 @@ namespace SOFlow.ScriptableObjects
 		/// </summary>
 		public void RegisterDropdownEntry()
 		{
+#if UNITY_EDITOR
 			List<ScriptableObject> dropdowns;
 			Type                   type = GetType();
-
+			
 			if(!DropdownScriptableObjectAttributeDrawer.AvailableDropdowns.TryGetValue(type, out dropdowns))
 			{
 				dropdowns = new List<ScriptableObject>
@@ -60,6 +61,7 @@ namespace SOFlow.ScriptableObjects
 					}
 				}
 			}
+#endif
 		}
 	}
 }
