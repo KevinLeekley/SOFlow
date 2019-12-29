@@ -92,8 +92,8 @@ namespace SOFlow.Internal
             
             GUILayout.FlexibleSpace();
 
-            if(SOFlowEditorUtilities.DrawColourButton(_eventButtonContent, SOFlowEditorSettings.AcceptContextColour, SOFlowStyles.HeaderButton,
-                                                      GUILayout.MaxWidth(20f), GUILayout.MaxHeight(16f)))
+            if(SOFlowEditorUtilities.DrawColourButton(_eventButtonContent, SOFlowEditorSettings.AcceptContextColour, SOFlowStyles.IconButton,
+                                                      SOFlowEditorUtilities.StandardButtonSettings))
             {
                 if(Selection.activeGameObject != null)
                 {

@@ -480,9 +480,10 @@ namespace SOFlow.Internal
                     }
                 }
 
-                if(DrawColourButton("S", SOFlowEditorSettings.AcceptContextColour,
-                                    sliderData.SliderActive ? SOFlowStyles.PressedButton : SOFlowStyles.Button,
-                                    GUILayout.MaxWidth(20f)))
+                if(DrawColourButton(_numericSliderButtonContent,
+                                    sliderData.SliderActive ? SOFlowEditorSettings.TertiaryLayerColour : SOFlowEditorSettings.AcceptContextColour,
+                                    sliderData.SliderActive ? SOFlowStyles.PressedIconButton : SOFlowStyles.IconButton,
+                                    StandardButtonSettings))
                 {
                     sliderData.SliderActive = !sliderData.SliderActive;
                     sliderDatachanged       = true;
@@ -508,12 +509,13 @@ namespace SOFlow.Internal
 
                 EditorGUILayout.PropertyField(property, GUIContent.none, layoutOptions);
 
-                if(DrawColourButton("H", SOFlowEditorSettings.AcceptContextColour,
-                                    ObjectPickerHistoryWindow.PropertyAvailable &&
-                                    ObjectPickerHistoryWindow.EditingProperty.propertyPath ==
-                                    property.propertyPath
-                                        ? SOFlowStyles.PressedButton
-                                        : SOFlowStyles.Button, GUILayout.MaxWidth(20f)))
+                bool propertyAvailable = ObjectPickerHistoryWindow.PropertyAvailable &&
+                                         ObjectPickerHistoryWindow.EditingProperty.propertyPath ==
+                                         property.propertyPath;
+                
+                if(DrawColourButton(_objectHistoryButtonContent,
+                                    propertyAvailable ? SOFlowEditorSettings.TertiaryLayerColour : SOFlowEditorSettings.AcceptContextColour,
+                                    propertyAvailable ? SOFlowStyles.PressedIconButton : SOFlowStyles.IconButton, StandardButtonSettings))
                 {
                     ObjectPickerHistoryWindow.EditingProperty = property;
                     ObjectPickerHistoryWindow.ShowWindow();
@@ -596,9 +598,10 @@ namespace SOFlow.Internal
                     property.stringValue = EditorGUILayout.TextField(property.stringValue, layoutOptions);
                 }
 
-                if(DrawColourButton("A", SOFlowEditorSettings.AcceptContextColour,
-                                    textAreaData.TextAreaActive ? SOFlowStyles.PressedButton : SOFlowStyles.Button,
-                                    GUILayout.MaxWidth(20f)))
+                if(DrawColourButton(_textAreaButtonContent,
+                                    textAreaData.TextAreaActive ? SOFlowEditorSettings.TertiaryLayerColour : SOFlowEditorSettings.AcceptContextColour,
+                                    textAreaData.TextAreaActive ? SOFlowStyles.PressedIconButton : SOFlowStyles.IconButton,
+                                    StandardButtonSettings))
                 {
                     textAreaData.TextAreaActive = !textAreaData.TextAreaActive;
                     textAreaDataChanged         = true;

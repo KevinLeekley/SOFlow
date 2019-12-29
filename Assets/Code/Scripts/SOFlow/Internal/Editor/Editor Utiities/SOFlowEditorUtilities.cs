@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,6 +13,13 @@ namespace SOFlow.Internal
 {
     public static partial class SOFlowEditorUtilities
     {
+        /// <summary>
+        /// The standard GUI button settings.
+        /// </summary>
+        public static GUILayoutOption[] StandardButtonSettings = {
+                                                                     GUILayout.MaxWidth(20f), GUILayout.MaxHeight(16f)
+                                                                 };
+        
         /// <summary>
         ///     The original GUI colour.
         /// </summary>
@@ -23,6 +29,33 @@ namespace SOFlow.Internal
         /// The cached button GUIContent.
         /// </summary>
         private static GUIContent _buttonContent = new GUIContent();
+        
+        /// <summary>
+        /// The cached text area button GUIContent.
+        /// </summary>
+        private static GUIContent _textAreaButtonContent = new GUIContent();
+        
+        /// <summary>
+        /// The cached object history button GUIContent.
+        /// </summary>
+        private static GUIContent _objectHistoryButtonContent = new GUIContent();
+        
+        /// <summary>
+        /// The cached numeric slider button GUIContent.
+        /// </summary>
+        private static GUIContent _numericSliderButtonContent = new GUIContent();
+
+        /// <summary>
+        /// Loads all cached GUIContent data.
+        /// </summary>
+        [UnityEditor.Callbacks.DidReloadScripts]
+        [InitializeOnLoadMethod]
+        public static void LoadCachedContent()
+        {
+            _textAreaButtonContent.image = Resources.Load<Texture2D>("Text Area Icon");
+            _objectHistoryButtonContent.image = Resources.Load<Texture2D>("Object History Icon");
+            _numericSliderButtonContent.image = Resources.Load<Texture2D>("Numeric Slider Icon");
+        }
 
         /// <summary>
         ///     Saves the given colour to the given key in the EditorPrefs.
