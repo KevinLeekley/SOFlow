@@ -20,6 +20,11 @@ namespace SOFlow.Internal
         private static Type _gameObjectInspector;
 
         /// <summary>
+        /// The Game Object Inspector editor reference.
+        /// </summary>
+        private static Editor _gameObjectInspectorEditor;
+
+        /// <summary>
         /// The Game Object Inspector OnHeaderGUI method reference.
         /// </summary>
         private readonly MethodInfo _gameObjectInspectorOnHeaderGUI;
@@ -56,8 +61,8 @@ namespace SOFlow.Internal
 
         protected override void OnHeaderGUI()
         {
-            Editor gameObjectInspectorEditor = CreateEditor(target, _gameObjectInspector);
-            _gameObjectInspectorOnHeaderGUI.Invoke(gameObjectInspectorEditor, null);
+            _gameObjectInspectorEditor = CreateEditor(target, _gameObjectInspector);
+            _gameObjectInspectorOnHeaderGUI.Invoke(_gameObjectInspectorEditor, null);
 
             if(!_originalInspectorPatched)
             {
@@ -65,7 +70,7 @@ namespace SOFlow.Internal
 
                 HarmonyInstance harmonyInstance = HarmonyInstance.Create(Application.identifier);
 
-                harmonyInstance.Patch(AccessTools.Method(gameObjectInspectorEditor.GetType(), "ClearPreviewCache"),
+                harmonyInstance.Patch(AccessTools.Method(_gameObjectInspectorEditor.GetType(), "ClearPreviewCache"),
                                       new HarmonyMethod(typeof(GameObjectInspectorEditor).GetMethod(nameof(
                                                                                                         PreClearPreviewCache
                                                                                                     ),
@@ -107,13 +112,13 @@ namespace SOFlow.Internal
         /// <param name="__instance"></param>
         public static void PreClearPreviewCache(object __instance)
         {
-            FieldInfo                previewCache      = AccessTools.Field(_gameObjectInspector, "m_PreviewCache");
+            FieldInfo                previewCache      = AccessTools.Field(_gameObjectInspectorEditor.GetType(), "m_PreviewCache");
             Dictionary<int, Texture> previewCacheValue = (Dictionary<int, Texture>)previewCache.GetValue(__instance);
 
-            if(previewCacheValue == null && previewCacheValue.Equals(null))
+            if(previewCacheValue == null || previewCacheValue.Equals(null))
             {
                 previewCacheValue = new Dictionary<int, Texture>();
-                previewCache.SetValue(_gameObjectInspector, previewCacheValue);
+                previewCache.SetValue(_gameObjectInspectorEditor, previewCacheValue);
             }
         }
     }
