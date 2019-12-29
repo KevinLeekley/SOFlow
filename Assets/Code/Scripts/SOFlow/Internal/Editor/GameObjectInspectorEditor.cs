@@ -1,8 +1,10 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using System;
 using System.Reflection;
+using Harmony;
 using SOFlow.Data.Events;
 using UnityEditor;
 using UnityEngine;
@@ -15,13 +17,13 @@ namespace SOFlow.Internal
         /// <summary>
         /// The Game Object Inspector type.
         /// </summary>
-        private readonly Type _gameObjectInspector;
+        private static Type _gameObjectInspector;
 
         /// <summary>
         /// The Game Object Inspector OnHeaderGUI method reference.
         /// </summary>
         private readonly MethodInfo _gameObjectInspectorOnHeaderGUI;
-        
+
         /// <summary>
         /// The event button content.
         /// </summary>
@@ -31,6 +33,11 @@ namespace SOFlow.Internal
         /// The logo content.
         /// </summary>
         private GUIContent _logoContent = new GUIContent();
+
+        /// <summary>
+        /// Indicates whether the original Game Object inspector has been patched.
+        /// </summary>
+        private bool _originalInspectorPatched = false;
 
         public GameObjectInspectorEditor()
         {
@@ -51,6 +58,22 @@ namespace SOFlow.Internal
         {
             Editor gameObjectInspectorEditor = CreateEditor(target, _gameObjectInspector);
             _gameObjectInspectorOnHeaderGUI.Invoke(gameObjectInspectorEditor, null);
+
+            if(!_originalInspectorPatched)
+            {
+                _originalInspectorPatched = true;
+
+                HarmonyInstance harmonyInstance = HarmonyInstance.Create(Application.identifier);
+
+                harmonyInstance.Patch(AccessTools.Method(gameObjectInspectorEditor.GetType(), "ClearPreviewCache"),
+                                      new HarmonyMethod(typeof(GameObjectInspectorEditor).GetMethod(nameof(
+                                                                                                        PreClearPreviewCache
+                                                                                                    ),
+                                                                                                    BindingFlags
+                                                                                                       .Static |
+                                                                                                    BindingFlags
+                                                                                                       .Public)));
+            }
 
             SOFlowEditorUtilities.DrawHeaderColourLayer(SOFlowEditorSettings.PrimaryLayerColour, DrawHeaderItems);
         }
@@ -76,6 +99,22 @@ namespace SOFlow.Internal
 
         public override void OnInspectorGUI()
         {
+        }
+
+        /// <summary>
+        /// PATCH - Ensures the internal preview cache for the original Game Object inspector has been initialized before being accessed.
+        /// </summary>
+        /// <param name="__instance"></param>
+        public static void PreClearPreviewCache(object __instance)
+        {
+            FieldInfo                previewCache      = AccessTools.Field(_gameObjectInspector, "m_PreviewCache");
+            Dictionary<int, Texture> previewCacheValue = (Dictionary<int, Texture>)previewCache.GetValue(__instance);
+
+            if(previewCacheValue == null && previewCacheValue.Equals(null))
+            {
+                previewCacheValue = new Dictionary<int, Texture>();
+                previewCache.SetValue(_gameObjectInspector, previewCacheValue);
+            }
         }
     }
 }
