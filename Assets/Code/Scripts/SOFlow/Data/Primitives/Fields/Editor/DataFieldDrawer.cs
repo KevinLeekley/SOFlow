@@ -46,7 +46,10 @@ namespace SOFlow.Data.Primitives.Editor
                 SerializedProperty useConstant  = property.FindPropertyRelative("UseConstant");
                 Event              currentEvent = Event.current;
 
-                if(position.Contains(currentEvent.mousePosition))
+                Rect mouseDragArea =
+                    new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+
+                if(mouseDragArea.Contains(currentEvent.mousePosition))
                 {
                     if(currentEvent.type == EventType.DragUpdated)
                     {
@@ -111,7 +114,10 @@ namespace SOFlow.Data.Primitives.Editor
                         property.FindPropertyRelative("OnConstantValueChanged._PersistentCalls");
 
                     Color originalColour = GUI.backgroundColor;
-                    GUI.backgroundColor = persistentCalls.arraySize > 0 ? SOFlowEditorSettings.AcceptContextColour : SOFlowEditorSettings.DeclineContextColour;
+
+                    GUI.backgroundColor = persistentCalls.arraySize > 0
+                                              ? SOFlowEditorSettings.AcceptContextColour
+                                              : SOFlowEditorSettings.DeclineContextColour;
 
                     if(GUI.Button(buttonsRect, $"E{persistentCalls.arraySize}", SOFlowStyles.ButtonSmallText))
                     {
@@ -188,7 +194,7 @@ namespace SOFlow.Data.Primitives.Editor
                     }
                 }
 
-                if(_displayValueChangedEvent)
+                if(_displayValueChangedEvent && _isConstant)
                 {
                     _currentPosition.x     =  position.x;
                     _currentPosition.y     += EditorGUIUtility.singleLineHeight;
@@ -212,11 +218,12 @@ namespace SOFlow.Data.Primitives.Editor
         {
             float eventLineHeight = 0f;
 
-            if(_displayValueChangedEvent)
+            if(_displayValueChangedEvent && _isConstant)
             {
                 int persistentArgumentsCount = 0;
 
-                SerializedProperty persistentCalls = property.FindPropertyRelative("OnConstantValueChanged._PersistentCalls");
+                SerializedProperty persistentCalls =
+                    property.FindPropertyRelative("OnConstantValueChanged._PersistentCalls");
 
                 for(int i = 0, condition = persistentCalls.arraySize; i < condition; i++)
                 {
@@ -237,7 +244,7 @@ namespace SOFlow.Data.Primitives.Editor
 
                 SerializedProperty events = property.FindPropertyRelative("OnConstantValueChanged");
 
-                eventLineHeight = eventDrawer.GetHeight() - 
+                eventLineHeight = eventDrawer.GetHeight() -
                                   (events.isExpanded
                                        ? 0f
                                        : EditorGUIUtility.singleLineHeight * Mathf.Max(1, eventDrawer.count) *
