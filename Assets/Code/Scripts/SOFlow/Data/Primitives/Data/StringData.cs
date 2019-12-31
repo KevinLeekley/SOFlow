@@ -1,6 +1,5 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
-using SOFlow.Data.Events;
 using SOFlow.Utilities;
 using UnityEngine;
 
@@ -12,13 +11,13 @@ namespace SOFlow.Data.Primitives
         /// <summary>
         ///     Event raised when this primitive data has changed.
         /// </summary>
-        public DynamicEvent OnDataChanged;
+        public StringEvent OnDataChanged = new StringEvent();
 
         /// <summary>
         ///     Event raised when an update occurs on this primitive data.
         ///     The data does not necessarily change when this event is called.
         /// </summary>
-        public DynamicEvent OnDataUpdated;
+        public StringEvent OnDataUpdated = new StringEvent();
 
         /// <summary>
         ///     Determines whether the true asset value should retain
@@ -63,10 +62,7 @@ namespace SOFlow.Data.Primitives
                     {
                         _playModeValue = value;
 
-                        OnDataChanged.Invoke(new SOFlowDynamic
-                                             {
-                                                 Value = GetValue()
-                                             });
+                        OnDataChanged.Invoke(GetValue());
 
                         if(PersistInPlayMode)
                             // If desired, the true asset value can maintain
@@ -80,10 +76,7 @@ namespace SOFlow.Data.Primitives
                     {
                         AssetValue = value;
 
-                        OnDataChanged.Invoke(new SOFlowDynamic
-                                             {
-                                                 Value = GetValue()
-                                             });
+                        OnDataChanged.Invoke(GetValue());
                     }
                 }
 #else
@@ -91,16 +84,10 @@ namespace SOFlow.Data.Primitives
                 {
                     AssetValue = value;
                     
-                    OnDataChanged.Invoke(new SOFlowDynamic
-                                         {
-                                             Value = GetValue()
-                                         });
+                    OnDataChanged.Invoke(GetValue());
                 }
 #endif
-                OnDataUpdated.Invoke(new SOFlowDynamic
-                                     {
-                                         Value = GetValue()
-                                     });
+                OnDataUpdated.Invoke(GetValue());
             }
         }
 
