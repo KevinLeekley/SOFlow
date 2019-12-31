@@ -33,7 +33,7 @@ namespace SOFlow.Internal
         /// The event button content.
         /// </summary>
         private GUIContent _eventButtonContent = new GUIContent();
-        
+
         /// <summary>
         /// The logo content.
         /// </summary>
@@ -55,8 +55,9 @@ namespace SOFlow.Internal
 
         private void Awake()
         {
-            _eventButtonContent.image = Resources.Load<Texture2D>("Game Event Icon");
-            _logoContent.image        = Resources.Load<Texture2D>("SOFlow Logo");
+            _eventButtonContent.image   = Resources.Load<Texture2D>("Game Event Icon");
+            _eventButtonContent.tooltip = "Add Simple Game Event Listener Component";
+            _logoContent.image          = Resources.Load<Texture2D>("SOFlow Logo");
         }
 
         protected override void OnHeaderGUI()
@@ -89,10 +90,11 @@ namespace SOFlow.Internal
         private void DrawHeaderItems()
         {
             EditorGUILayout.LabelField(_logoContent);
-            
+
             GUILayout.FlexibleSpace();
 
-            if(SOFlowEditorUtilities.DrawColourButton(_eventButtonContent, SOFlowEditorSettings.AcceptContextColour, SOFlowStyles.IconButton,
+            if(SOFlowEditorUtilities.DrawColourButton(_eventButtonContent, SOFlowEditorSettings.AcceptContextColour,
+                                                      SOFlowStyles.IconButton,
                                                       SOFlowEditorUtilities.StandardButtonSettings))
             {
                 if(Selection.activeGameObject != null)
@@ -112,7 +114,9 @@ namespace SOFlow.Internal
         /// <param name="__instance"></param>
         public static void PreClearPreviewCache(object __instance)
         {
-            FieldInfo                previewCache      = AccessTools.Field(_gameObjectInspectorEditor.GetType(), "m_PreviewCache");
+            FieldInfo previewCache =
+                AccessTools.Field(_gameObjectInspectorEditor.GetType(), "m_PreviewCache");
+
             Dictionary<int, Texture> previewCacheValue = (Dictionary<int, Texture>)previewCache.GetValue(__instance);
 
             if(previewCacheValue == null || previewCacheValue.Equals(null))
