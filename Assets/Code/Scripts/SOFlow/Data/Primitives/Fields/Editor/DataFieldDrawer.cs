@@ -1,6 +1,7 @@
 // Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 #if UNITY_EDITOR
+using UnityEditorInternal;
 using Object = UnityEngine.Object;
 using System;
 using System.Reflection;
@@ -15,14 +16,13 @@ namespace SOFlow.Data.Primitives.Editor
     [CustomPropertyDrawer(typeof(DataField), true)]
     public class DataFieldDrawer : PropertyDrawer
     {
-        private Rect   _currentPosition;
-        private bool   _isConstant;
-        private float  _lineHeight;
+        private Rect  _currentPosition;
+        private bool  _isConstant;
+        private bool  _displayValueChangedEvent;
+        private float _lineHeight;
 
         private float _positionWidth;
-
-        // Property values.
-        private SerializedProperty _useConstant;
+        private float _buttonWidth = 18f;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -43,8 +43,8 @@ namespace SOFlow.Data.Primitives.Editor
             }
             else
             {
-                _useConstant = property.FindPropertyRelative("UseConstant");
-                Event currentEvent = Event.current;
+                SerializedProperty useConstant  = property.FindPropertyRelative("UseConstant");
+                Event              currentEvent = Event.current;
 
                 if(position.Contains(currentEvent.mousePosition))
                 {
@@ -62,7 +62,7 @@ namespace SOFlow.Data.Primitives.Editor
                         if(draggedObject.GetType().IsAssignableFrom(variableType))
                         {
                             referenceProperty.objectReferenceValue = draggedObject;
-                            _useConstant.boolValue                 = false;
+                            useConstant.boolValue                  = false;
                             property.serializedObject.ApplyModifiedProperties();
                         }
 
@@ -72,18 +72,22 @@ namespace SOFlow.Data.Primitives.Editor
                     }
                 }
 
-                _isConstant             = _useConstant.boolValue;
-                label                   = EditorGUI.BeginProperty(position, label, property);
-                _currentPosition        = EditorGUI.PrefixLabel(position, label);
-                _positionWidth          = _currentPosition.width;
-                _currentPosition.width  = _positionWidth * 0.2f;
-                _currentPosition.height = EditorGUIUtility.singleLineHeight;
+                SerializedProperty displayValueChangedProperty =
+                    property.FindPropertyRelative("_displayValueChangedEvent");
+
+                _displayValueChangedEvent = displayValueChangedProperty.boolValue;
+                _isConstant               = useConstant.boolValue;
+                label                     = EditorGUI.BeginProperty(position, label, property);
+                _currentPosition          = EditorGUI.PrefixLabel(position, label);
+                _positionWidth            = _currentPosition.width;
+                _currentPosition.width    = _positionWidth * 0.2f;
+                _currentPosition.height   = EditorGUIUtility.singleLineHeight;
 
                 EditorGUI.LabelField(position, label);
 
                 Rect buttonsRect = new Rect(_currentPosition)
                                    {
-                                       width = 25f
+                                       width = _buttonWidth
                                    };
 
                 if(GUI.Button(buttonsRect, "R", _isConstant ? SOFlowStyles.Button : SOFlowStyles.PressedButton))
@@ -91,15 +95,34 @@ namespace SOFlow.Data.Primitives.Editor
                     _isConstant = false;
                 }
 
-                buttonsRect.x += 25f;
+                buttonsRect.x += _buttonWidth;
 
                 if(GUI.Button(buttonsRect, "V", _isConstant ? SOFlowStyles.PressedButton : SOFlowStyles.Button))
                 {
                     _isConstant = true;
                 }
 
-                _currentPosition.x     += _positionWidth * 0.22f;
-                _currentPosition.width =  _positionWidth * 0.78f;
+                if(_isConstant)
+                {
+                    buttonsRect.x     += _buttonWidth;
+                    buttonsRect.width += 6f;
+
+                    SerializedProperty persistentCalls =
+                        property.FindPropertyRelative("OnConstantValueChanged._PersistentCalls");
+
+                    Color originalColour = GUI.backgroundColor;
+                    GUI.backgroundColor = persistentCalls.arraySize > 0 ? SOFlowEditorSettings.AcceptContextColour : SOFlowEditorSettings.DeclineContextColour;
+
+                    if(GUI.Button(buttonsRect, $"E{persistentCalls.arraySize}", SOFlowStyles.ButtonSmallText))
+                    {
+                        _displayValueChangedEvent = !_displayValueChangedEvent;
+                    }
+
+                    GUI.backgroundColor = originalColour;
+                }
+
+                _currentPosition.x     += _positionWidth * 0.28f;
+                _currentPosition.width =  _positionWidth * 0.72f;
 
                 bool propertyIsArray = property.propertyPath.Contains("Array");
 
@@ -165,11 +188,20 @@ namespace SOFlow.Data.Primitives.Editor
                     }
                 }
 
+                if(_displayValueChangedEvent)
+                {
+                    _currentPosition.x     =  position.x;
+                    _currentPosition.y     += EditorGUIUtility.singleLineHeight;
+                    _currentPosition.width =  position.width;
+                    EditorGUI.PropertyField(_currentPosition, property.FindPropertyRelative("OnConstantValueChanged"));
+                }
+
                 EditorGUI.EndProperty();
 
                 if(GUI.changed)
                 {
-                    _useConstant.boolValue = _isConstant;
+                    useConstant.boolValue                 = _isConstant;
+                    displayValueChangedProperty.boolValue = _displayValueChangedEvent;
                     property.serializedObject.ApplyModifiedProperties();
                 }
             }
@@ -178,7 +210,45 @@ namespace SOFlow.Data.Primitives.Editor
         /// <inheritdoc />
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return base.GetPropertyHeight(property, label) + _lineHeight;
+            float eventLineHeight = 0f;
+
+            if(_displayValueChangedEvent)
+            {
+                int persistentArgumentsCount = 0;
+
+                SerializedProperty persistentCalls = property.FindPropertyRelative("OnConstantValueChanged._PersistentCalls");
+
+                for(int i = 0, condition = persistentCalls.arraySize; i < condition; i++)
+                {
+                    SerializedProperty persistentCall = persistentCalls.GetArrayElementAtIndex(i);
+
+                    SerializedProperty persistentArguments =
+                        persistentCall.FindPropertyRelative("_PersistentArguments");
+
+                    persistentArgumentsCount += persistentArguments.arraySize;
+                }
+
+                ReorderableList eventDrawer = new ReorderableList(property.serializedObject, persistentCalls)
+                                              {
+                                                  elementHeight =
+                                                      EditorGUIUtility.singleLineHeight * 1.45f,
+                                                  headerHeight = 0f
+                                              };
+
+                SerializedProperty events = property.FindPropertyRelative("OnConstantValueChanged");
+
+                eventLineHeight = eventDrawer.GetHeight() - 
+                                  (events.isExpanded
+                                       ? 0f
+                                       : EditorGUIUtility.singleLineHeight * Mathf.Max(1, eventDrawer.count) *
+                                         1.45f
+                                  ) +
+                                  (events.isExpanded
+                                       ? EditorGUIUtility.singleLineHeight * 1.125f * persistentArgumentsCount
+                                       : 0f);
+            }
+
+            return base.GetPropertyHeight(property, label) + _lineHeight + eventLineHeight;
         }
     }
 }

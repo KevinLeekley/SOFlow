@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using SOFlow.Utilities;
 using UnityEngine;
 
 namespace SOFlow.Data.Primitives
@@ -22,6 +23,12 @@ namespace SOFlow.Data.Primitives
         public FloatData VariableType;
 
         /// <summary>
+        /// Event raised when the constant value of this field changes.
+        /// </summary>
+        [HideInInspector]
+        public FloatEvent OnConstantValueChanged = new FloatEvent();
+
+        /// <summary>
         ///     The value of this field.
         /// </summary>
         public float Value
@@ -38,7 +45,12 @@ namespace SOFlow.Data.Primitives
             {
                 if(UseConstant)
                 {
-                    ConstantValue = value;
+                    if(!ConstantValue.Equals(value))
+                    {
+                        ConstantValue = value;
+
+                        OnConstantValueChanged.Invoke(ConstantValue);
+                    }
                 }
                 else
                 {
@@ -64,6 +76,14 @@ namespace SOFlow.Data.Primitives
             get => VariableType;
             set => VariableType = value;
         }
+
+        /// <summary>
+        /// Indicates whether the value changed event should be displayed.
+        /// </summary>
+#pragma warning disable 0414
+        [SerializeField, HideInInspector]
+        private bool _displayValueChangedEvent = false;
+#pragma warning restore 0414
 
         /// <inheritdoc />
         public override string ToString()
