@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using SOFlow.Utilities;
 using UltEvents;
 using UnityEngine;
 
@@ -140,7 +141,7 @@ namespace SOFlow.Fading
 
             if(!OnlyFade)
             {
-                yield return new WaitForSeconds(WaitBetweenFades);
+                yield return WaitCache.Get(WaitBetweenFades);
 
                 StartCoroutine(nameof(Unfade));
             }

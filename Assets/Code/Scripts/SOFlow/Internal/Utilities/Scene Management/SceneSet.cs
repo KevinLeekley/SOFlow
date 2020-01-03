@@ -51,7 +51,6 @@ namespace SOFlow.Internal.SceneManagement
         public IEnumerator LoadSceneSetAsync(bool additive, float artificialWait, Action<SceneField, int> onSceneLoaded)
         {
             bool           firstScene = !additive;
-            WaitForSeconds wait       = new WaitForSeconds(artificialWait);
 
             for(int i = 0, condition = SetScenes.Count; i < condition; i++)
             {
@@ -76,7 +75,7 @@ namespace SOFlow.Internal.SceneManagement
 
                 onSceneLoaded.Invoke(scene, i + 1);
 
-                yield return wait;
+                yield return WaitCache.Get(artificialWait);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 using System.Collections;
+using SOFlow.Utilities;
 using UnityEngine;
 
 namespace SOFlow.Data.Events
@@ -28,16 +29,6 @@ namespace SOFlow.Data.Events
         public bool RepeatEvent = false;
 
         /// <summary>
-        /// A cached version of the delay used before executing the event.
-        /// </summary>
-        private WaitForSeconds _cachedEventDelay;
-
-        /// <summary>
-        /// Keeps track of the previous delay time to determine when _cachedEventDelay needs to be updated.
-        /// </summary>
-        private float _previousDelayTime = -1f;
-
-        /// <summary>
         /// Indicates whether the event has been scheduled for cancellation.
         /// </summary>
         private bool _cancelEventScheduled = false;
@@ -62,13 +53,7 @@ namespace SOFlow.Data.Events
         {
             if(EventWaitTime > 0f)
             {
-                if(Mathf.Abs(EventWaitTime - _previousDelayTime) > Mathf.Epsilon)
-                {
-                    _cachedEventDelay  = new WaitForSeconds(EventWaitTime);
-                    _previousDelayTime = EventWaitTime;
-                }
-
-                yield return _cachedEventDelay;
+                yield return WaitCache.Get(EventWaitTime);
             }
 
             if(_cancelEventScheduled)

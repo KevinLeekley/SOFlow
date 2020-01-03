@@ -148,7 +148,7 @@ namespace SOFlow.Data.Events
         /// <returns></returns>
         private IEnumerator RegisterEvent()
         {
-            yield return new WaitForSeconds(EventListenerOrder);
+            yield return WaitCache.Get(EventListenerOrder);
 
             foreach(GameEvent @event in Events)
             {
