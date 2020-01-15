@@ -23,12 +23,20 @@ namespace SOFlow.ScriptableObjects
 		/// </summary>
 		private readonly GUIContent _noneOption = new GUIContent("None");
 
+		/// <summary>
+		/// The cached object type.
+		/// </summary>
+		private Type _objectType = null;
+
 		/// <inheritdoc />
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			Type objectType = TypeExtensions.GetInstanceType(property.type);
+			if(_objectType == null)
+			{
+				_objectType = TypeExtensions.GetInstanceType(property.type);
+			}
 
-			if(objectType == null || SOFlowEditorSettings.DrawDefaultProperties)
+			if(_objectType == null || SOFlowEditorSettings.DrawDefaultProperties)
 			{
 				EditorGUI.PropertyField(position, property, label);
 			}
@@ -36,9 +44,9 @@ namespace SOFlow.ScriptableObjects
 			{
 				List<ScriptableObject> dropdowns;
 
-				if(!AvailableDropdowns.TryGetValue(objectType, out dropdowns))
+				if(!AvailableDropdowns.TryGetValue(_objectType, out dropdowns))
 				{
-					AvailableDropdowns.Add(objectType, new List<ScriptableObject>());
+					AvailableDropdowns.Add(_objectType, new List<ScriptableObject>());
 				}
 				else
 				{
