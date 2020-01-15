@@ -10,6 +10,7 @@ using SOFlow.Extensions;
 using SOFlow.Internal;
 using UnityEditor;
 using UnityEngine;
+using Selection = UnityEditor.Selection;
 
 namespace SOFlow.Data.Primitives.Editor
 {
@@ -184,9 +185,19 @@ namespace SOFlow.Data.Primitives.Editor
                     {
                         _currentPosition.y += EditorGUIUtility.singleLineHeight;
                         _lineHeight        =  EditorGUIUtility.singleLineHeight;
+                        _currentPosition.width -= 24f;
 
                         EditorGUI.LabelField(_currentPosition, dataValue.GetVariable().GetValueData().ToString(),
                                              EditorStyles.toolbarButton);
+
+                        _currentPosition.x += _currentPosition.width + 2;
+                        _currentPosition.width = 22f;
+
+                        if(GUI.Button(_currentPosition, "→", SOFlowStyles.Button))
+                        {
+                            Selection.activeObject = dataValue.GetVariable();
+                            EditorGUIUtility.PingObject(dataValue.GetVariable());
+                        }
                     }
                     else
                     {
