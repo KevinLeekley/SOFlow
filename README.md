@@ -4,6 +4,12 @@
 
 # Releases
 
+**[SOFlow v1.3 - Major Update](https://github.com/BLUDRAG/SOFlow/releases/tag/1.3)**
+
+[SOFlow v1.2](https://github.com/BLUDRAG/SOFlow/releases/tag/v1.2)
+
+[SOFlow v1.1](https://github.com/BLUDRAG/SOFlow/releases/tag/v1.1)
+
 [SOFlow v1](https://github.com/BLUDRAG/SOFlow/releases/tag/v1)
 
 # Requirements
