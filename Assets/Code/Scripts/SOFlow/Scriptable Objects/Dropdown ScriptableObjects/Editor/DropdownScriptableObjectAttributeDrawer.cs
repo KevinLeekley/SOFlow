@@ -69,6 +69,13 @@ namespace SOFlow.ScriptableObjects
 						options[i] = new GUIContent($"{dropdowns[i - 1].name} ({dropdowns[i - 1].GetType().Name})", AssetDatabase.GetCachedIcon(AssetDatabase.GetAssetPath(dropdowns[i - 1])));
 					}
 
+					UnityEngine.Object objectReference = property.objectReferenceValue;
+
+					if(objectReference != null)
+					{
+						position.width -= 24f;
+					}
+
 					EditorGUI.BeginChangeCheck();
 					
 					selection = EditorGUI.Popup(position, label, selection, options);
@@ -77,6 +84,18 @@ namespace SOFlow.ScriptableObjects
 					{
 						property.objectReferenceValue = selection < 1 ? null : dropdowns[selection - 1];
 						property.serializedObject.ApplyModifiedProperties();
+					}
+
+					if(objectReference != null)
+					{
+						position.x     += position.width + 2f;
+						position.width =  22f;
+
+						if(GUI.Button(position, "→", SOFlowStyles.Button))
+						{
+							Selection.activeObject = objectReference;
+							EditorGUIUtility.PingObject(objectReference);
+						}
 					}
 				}
 			}
