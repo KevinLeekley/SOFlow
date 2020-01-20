@@ -1,11 +1,12 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
+using SOFlow.ScriptableObjects;
 using UnityEngine;
 
 namespace SOFlow.CameraUtilities
 {
     [CreateAssetMenu(menuName = "SOFlow/Utilities/Camera Reference")]
-    public class CameraReference : ScriptableObject
+    public class CameraReference : DropdownScriptableObject
     {
         /// <summary>
         ///     The camera reference.
