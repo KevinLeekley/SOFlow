@@ -11,6 +11,7 @@ using SOFlow.Data.Collections;
 using SOFlow.Data.Evaluations;
 using SOFlow.Data.Events;
 using SOFlow.Data.Primitives;
+using SOFlow.Extensions;
 using SOFlow.Fading;
 using SOFlow.Internal.SceneManagement;
 using SOFlow.ManagedComponents.Components;
@@ -405,6 +406,8 @@ namespace SOFlow.Internal
                                               Path.Combine(_lastFolderPath, $"New {formattedName}.asset"));
 
                     Selection.activeObject = newObject;
+                    
+                    FocusWindowIfItsOpen(TypeExtensions.GetInstanceType("ProjectBrowser"));
                 }
             }
         }
@@ -481,6 +484,8 @@ namespace SOFlow.Internal
                         GameObject newObject = new GameObject($"New {formattedName}", type);
 
                         Selection.activeObject = newObject;
+
+                        FocusWindowIfItsOpen(TypeExtensions.GetInstanceType("SceneHierarchyWindow"));
                     }
                 }
             }
