@@ -84,6 +84,15 @@ namespace SOFlow.Data.Primitives
         private bool _displayValueChangedEvent = false;
 #pragma warning restore 0414
 
+        public StringField()
+        {
+        }
+
+        public StringField(string value)
+        {
+            Value = value;
+        }
+
         /// <inheritdoc />
         public override string ToString()
         {

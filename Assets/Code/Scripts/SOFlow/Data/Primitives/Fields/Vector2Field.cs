@@ -84,6 +84,15 @@ namespace SOFlow.Data.Primitives
         private bool _displayValueChangedEvent = false;
 #pragma warning restore 0414
 
+        public Vector2Field()
+        {
+        }
+
+        public Vector2Field(Vector2 value)
+        {
+            Value = value;
+        }
+
         /// <inheritdoc />
         public override string ToString()
         {
