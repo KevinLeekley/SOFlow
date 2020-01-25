@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -177,7 +178,7 @@ namespace UltEvents
         /************************************************************************************************************************/
 
         /// <summary>Invokes all <see cref="PersistentCallsList"/> registered to this event.</summary>
-        protected void InvokePersistentCalls()
+        protected async void InvokePersistentCalls()
         {
             var originalParameterOffset = _ParameterOffset;
             var originalReturnValueOffset = _ReturnValueOffset;
@@ -188,6 +189,8 @@ namespace UltEvents
                 {
                     for (int i = 0; i < _PersistentCalls.Count; i++)
                     {
+                        await Task.Delay((int)(_PersistentCalls[i].MethodDelay * 1000f));
+                        
                         var result = _PersistentCalls[i].Invoke();
                         LinkedValueCache.Add(result);
                         _ParameterOffset = originalParameterOffset;

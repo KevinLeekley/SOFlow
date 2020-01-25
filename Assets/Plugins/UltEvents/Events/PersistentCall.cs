@@ -41,6 +41,8 @@ namespace UltEvents
             get { return _MethodName; }
         }
 
+        public float MethodDelay = 0;
+
         /************************************************************************************************************************/
 
         [SerializeField]

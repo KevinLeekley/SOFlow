@@ -199,6 +199,20 @@ namespace UltEvents.Editor
             area.width -= AddButtonWidth + AddButtonPadding + countLabelWidth;
             GUI.Label(area, EventLabel, labelStyle);
 
+            float originalAreaWidth = area.width;
+            float originalAreaX = area.x;
+            float timerIconWidth = 30f;
+
+            area.x += area.width - timerIconWidth;
+            area.width = timerIconWidth;
+
+            GUIContent timerIconContent = EditorGUIUtility.IconContent("d_SpeedScale");
+
+            GUI.Label(area, timerIconContent);
+
+            area.x = originalAreaX;
+            area.width = originalAreaWidth;
+            
             area.x += area.width;
             area.width = countLabelWidth;
             GUI.Label(area, CountLabel, labelStyle);
@@ -292,9 +306,26 @@ namespace UltEvents.Editor
             area.y += Border;
             area.height -= Border * 2;
 
+            float originalAreaX = area.x;
+            float originalAreaWidth = area.width;
+            float originalAreaHeight = area.height;
+            float delayPropertyWidth = 44f;
+            
+            area.width -= delayPropertyWidth;
+            area.height = EditorGUIUtility.singleLineHeight;
+
             PersistentCallDrawer.includeRemoveButton = true;
 
             EditorGUI.PropertyField(area, callProperty);
+
+            area.x += area.width - 15f;
+            area.width = delayPropertyWidth - 18f;
+
+            EditorGUI.PropertyField(area, callProperty.FindPropertyRelative("MethodDelay"), GUIContent.none);
+
+            area.x = originalAreaX;
+            area.width = originalAreaWidth;
+            area.height = originalAreaHeight;
 
             if (PersistentCallDrawer.DoRemoveButtonGUI(area))
                 DelayedRemoveCall(index);
