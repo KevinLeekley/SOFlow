@@ -85,27 +85,22 @@ namespace SOFlow.Internal
                                                                new SectionEntry("Primitive Data",
                                                                                 new[]
                                                                                 {
-                                                                                    typeof(
-                                                                                        PrimitiveData
-                                                                                    ),
-                                                                                    typeof(BoolData), typeof(IntData),
-                                                                                    typeof(FloatData), typeof(StringData
-                                                                                    ),
-                                                                                    typeof(Vector2Data
-                                                                                    ),
-                                                                                    typeof(Vector3Data
-                                                                                    ),
-                                                                                    typeof(ColorData)
+                                                                                    typeof(BoolData),
+                                                                                    typeof(IntData),
+                                                                                    typeof(FloatData),
+                                                                                    typeof(StringData),
+                                                                                    typeof(Vector2Data),
+                                                                                    typeof(Vector3Data),
+                                                                                    typeof(Vector2IntData),
+                                                                                    typeof(Vector3IntData),
+                                                                                    typeof(ColorData),
+                                                                                    typeof(PrimitiveData)
                                                                                 }),
                                                                new SectionEntry("Collection Data",
                                                                                 new[]
                                                                                 {
-                                                                                    typeof(
-                                                                                        UnityRuntimeSet
-                                                                                    ),
-                                                                                    typeof(
-                                                                                        DataRuntimeSet
-                                                                                    )
+                                                                                    typeof(UnityRuntimeSet),
+                                                                                    typeof(DataRuntimeSet)
                                                                                 }),
                                                                new SectionEntry("Scene Management",
                                                                                 new[]
@@ -115,16 +110,12 @@ namespace SOFlow.Internal
                                                                new SectionEntry("Managed Components",
                                                                                 new[]
                                                                                 {
-                                                                                    typeof(
-                                                                                        BehaviourComponentManager
-                                                                                    )
+                                                                                    typeof(BehaviourComponentManager)
                                                                                 }),
                                                                new SectionEntry("Object Pooling",
                                                                                 new[]
                                                                                 {
-                                                                                    typeof(
-                                                                                        PoolObjectListReference
-                                                                                    )
+                                                                                    typeof(PoolObjectListReference)
                                                                                 }),
                                                                new SectionEntry("Audio",
                                                                                 new[]
@@ -134,8 +125,7 @@ namespace SOFlow.Internal
                                                                new SectionEntry("Utilities",
                                                                                 new[]
                                                                                 {
-                                                                                    typeof(CameraReference
-                                                                                    ),
+                                                                                    typeof(CameraReference),
                                                                                     typeof(ResolutionState)
                                                                                 })
                                                            };
@@ -406,7 +396,7 @@ namespace SOFlow.Internal
                                               Path.Combine(_lastFolderPath, $"New {formattedName}.asset"));
 
                     Selection.activeObject = newObject;
-                    
+
                     FocusWindowIfItsOpen(TypeExtensions.GetInstanceType("ProjectBrowser"));
                 }
             }
