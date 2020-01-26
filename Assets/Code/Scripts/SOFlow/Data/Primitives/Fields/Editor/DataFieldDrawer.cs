@@ -8,6 +8,7 @@ using System.Reflection;
 using Pather.CSharp;
 using SOFlow.Extensions;
 using SOFlow.Internal;
+using UltEvents;
 using UnityEditor;
 using UnityEngine;
 using Selection = UnityEditor.Selection;
@@ -24,6 +25,7 @@ namespace SOFlow.Data.Primitives.Editor
 
         private float _positionWidth;
         private float _buttonWidth = 18f;
+        private bool _invokeChangeEvent = false;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -135,8 +137,15 @@ namespace SOFlow.Data.Primitives.Editor
 
                 if(_isConstant)
                 {
+                    EditorGUI.BeginChangeCheck();
+                    
                     EditorGUI.PropertyField(_currentPosition, property.FindPropertyRelative("ConstantValueType"),
                                             GUIContent.none);
+
+                    if(EditorGUI.EndChangeCheck())
+                    {
+                        _invokeChangeEvent = true;
+                    }
 
                     _lineHeight = propertyIsArray ? _lineHeight : 0f;
                 }
@@ -220,6 +229,15 @@ namespace SOFlow.Data.Primitives.Editor
                     useConstant.boolValue                 = _isConstant;
                     displayValueChangedProperty.boolValue = _displayValueChangedEvent;
                     property.serializedObject.ApplyModifiedProperties();
+
+                    if(_invokeChangeEvent)
+                    {
+                        object dataField = fieldInfo.GetValue(property.serializedObject.targetObject);
+                        object _event = dataField.GetType().GetField("OnConstantValueChanged").GetValue(dataField);
+
+                        MethodInfo invokeMethod = _event.GetType().GetMethod("Invoke");
+                        invokeMethod.Invoke(_event, new []{dataField.GetType().GetField("ConstantValueType").GetValue(dataField)});
+                    }
                 }
             }
         }
