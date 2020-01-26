@@ -42,6 +42,8 @@ namespace UltEvents
         }
 
         public float MethodDelay = 0;
+        public UltEventBase EventReference;
+        public int InvocationIndex = 0;
 
         /************************************************************************************************************************/
 
@@ -229,8 +231,10 @@ namespace UltEvents
             {
                 var array = new PersistentArgument[length];
 
-                for (int i = 0; i < length; i++)
+                for(int i = 0; i < length; i++)
+                {
                     array[i] = new PersistentArgument();
+                }
 
                 return array;
             }
@@ -255,12 +259,12 @@ namespace UltEvents
                 parameters = ArrayCache<object>.GetTempArray(_PersistentArguments.Length);
                 for (int i = 0; i < parameters.Length; i++)
                 {
+                    _PersistentArguments[i].EventReference = EventReference;
+                    _PersistentArguments[i].InvocationIndex = InvocationIndex;
                     parameters[i] = _PersistentArguments[i].Value;
                 }
             }
             else parameters = null;
-
-            UltEventBase.UpdateLinkedValueOffsets();
 
 #if UNITY_EDITOR
             // Somehow Unity ends up getting a UnityEngine.Object which pretends to be null.
@@ -289,6 +293,11 @@ namespace UltEvents
         {
             PersistentArguments[0].Value = argument0;
             PersistentArguments[1].Value = argument1;
+
+            PersistentArguments[0].EventReference = EventReference;
+            PersistentArguments[0].InvocationIndex = InvocationIndex;
+            PersistentArguments[1].EventReference  = EventReference;
+            PersistentArguments[1].InvocationIndex = InvocationIndex;
         }
 
         /// <summary>Sets the value of the first, second, and third persistent arguments.</summary>
@@ -297,6 +306,13 @@ namespace UltEvents
             PersistentArguments[0].Value = argument0;
             PersistentArguments[1].Value = argument1;
             PersistentArguments[2].Value = argument2;
+
+            PersistentArguments[0].EventReference  = EventReference;
+            PersistentArguments[0].InvocationIndex = InvocationIndex;
+            PersistentArguments[1].EventReference  = EventReference;
+            PersistentArguments[1].InvocationIndex = InvocationIndex;
+            PersistentArguments[2].EventReference  = EventReference;
+            PersistentArguments[2].InvocationIndex = InvocationIndex;
         }
 
         /// <summary>Sets the value of the first, second, third, and fourth persistent arguments.</summary>
@@ -306,6 +322,15 @@ namespace UltEvents
             PersistentArguments[1].Value = argument1;
             PersistentArguments[2].Value = argument2;
             PersistentArguments[3].Value = argument3;
+
+            PersistentArguments[0].EventReference  = EventReference;
+            PersistentArguments[0].InvocationIndex = InvocationIndex;
+            PersistentArguments[1].EventReference  = EventReference;
+            PersistentArguments[1].InvocationIndex = InvocationIndex;
+            PersistentArguments[2].EventReference  = EventReference;
+            PersistentArguments[2].InvocationIndex = InvocationIndex;
+            PersistentArguments[3].EventReference  = EventReference;
+            PersistentArguments[3].InvocationIndex = InvocationIndex;
         }
 
         /************************************************************************************************************************/

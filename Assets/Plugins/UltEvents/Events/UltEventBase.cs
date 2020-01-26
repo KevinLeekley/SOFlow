@@ -145,11 +145,12 @@ namespace UltEvents
         /// Add the specified 'method to the persistent call list.
         /// </summary>
         public PersistentCall AddPersistentCall(Delegate method)
-        {
+        { 
             if (_PersistentCalls == null)
                 _PersistentCalls = new List<PersistentCall>(4);
 
             var call = new PersistentCall(method);
+            call.EventReference = this;
             _PersistentCalls.Add(call);
             return call;
         }
@@ -180,8 +181,8 @@ namespace UltEvents
         /// <summary>Invokes all <see cref="PersistentCallsList"/> registered to this event.</summary>
         protected async void InvokePersistentCalls()
         {
-            var originalParameterOffset = _ParameterOffset;
-            var originalReturnValueOffset = _ReturnValueOffset;
+            int currentInvocationIndex = _invocationIndex;
+            _invocationIndex++;
 
             try
             {
@@ -190,18 +191,19 @@ namespace UltEvents
                     for (int i = 0; i < _PersistentCalls.Count; i++)
                     {
                         await Task.Delay((int)(_PersistentCalls[i].MethodDelay * 1000f));
+
+                        _PersistentCalls[i].InvocationIndex = currentInvocationIndex;
+                        _PersistentCalls[i].EventReference = this;
                         
                         var result = _PersistentCalls[i].Invoke();
-                        LinkedValueCache.Add(result);
-                        _ParameterOffset = originalParameterOffset;
-                        _ReturnValueOffset = originalReturnValueOffset;
+                        
+                        LinkedValueDictionary[currentInvocationIndex].Add(result);
                     }
                 }
             }
             finally
             {
-                LinkedValueCache.RemoveRange(originalParameterOffset, LinkedValueCache.Count - originalParameterOffset);
-                _ParameterOffset = _ReturnValueOffset = originalParameterOffset;
+                LinkedValueDictionary[currentInvocationIndex].Clear();
             }
         }
 
@@ -209,44 +211,37 @@ namespace UltEvents
         #region Linked Value Cache (Parameters and Returned Values)
         /************************************************************************************************************************/
 
-        private static readonly List<object> LinkedValueCache = new List<object>();
-        private static int _ParameterOffset, _ReturnValueOffset;
+        private Dictionary<int, List<object>> LinkedValueDictionary = new Dictionary<int, List<object>>();
+        private Dictionary<int, int> ReturnValueIndices = new Dictionary<int, int>();
+        private int _invocationIndex = 0;
 
-        /************************************************************************************************************************/
-
-        internal static void UpdateLinkedValueOffsets()
+        public void CacheParameter(object value)
         {
-            _ParameterOffset = _ReturnValueOffset = LinkedValueCache.Count;
+            if(!LinkedValueDictionary.ContainsKey(_invocationIndex))
+            {
+                LinkedValueDictionary.Add(_invocationIndex, new List<object>());
+            }
+            
+            LinkedValueDictionary[_invocationIndex].Add(value);
+
+            if(!ReturnValueIndices.ContainsKey(_invocationIndex))
+            {
+                ReturnValueIndices.Add(_invocationIndex, LinkedValueDictionary[_invocationIndex].Count);
+            }
+            else
+            {
+                ReturnValueIndices[_invocationIndex] = LinkedValueDictionary[_invocationIndex].Count;
+            }
         }
 
-        /************************************************************************************************************************/
-
-        /// <summary>
-        /// Sets the number of parameters passed to this event.
-        /// </summary>
-        protected static void CacheParameter(object value)
+        public object GetParameter(int index, int invocationIndex)
         {
-            LinkedValueCache.Add(value);
-            _ReturnValueOffset = LinkedValueCache.Count;
+            return LinkedValueDictionary[invocationIndex][index];
         }
 
-        /************************************************************************************************************************/
-
-        internal static int ReturnedValueCount
+        public object GetReturnValue(int index, int invocationIndex)
         {
-            get { return LinkedValueCache.Count - _ReturnValueOffset; }
-        }
-
-        /************************************************************************************************************************/
-
-        internal static object GetParameterValue(int index)
-        {
-            return LinkedValueCache[_ParameterOffset + index];
-        }
-
-        internal static object GetReturnedValue(int index)
-        {
-            return LinkedValueCache[_ReturnValueOffset + index];
+            return LinkedValueDictionary[invocationIndex][ReturnValueIndices[invocationIndex] + index];
         }
 
         /************************************************************************************************************************/

@@ -113,6 +113,9 @@ namespace UltEvents
         [NonSerialized]
         private object _Value;
 
+        public UltEventBase EventReference;
+        public int InvocationIndex;
+
         /************************************************************************************************************************/
 
         /// <summary>Constructs a new <see cref="PersistentArgument"/> with default values.</summary>
@@ -446,7 +449,7 @@ namespace UltEvents
             get
             {
                 AssertType(PersistentArgumentType.Parameter);
-                return UltEventBase.GetParameterValue(_Int);
+                return EventReference.GetParameter(_Int, InvocationIndex);
             }
         }
 
@@ -474,7 +477,7 @@ namespace UltEvents
             get
             {
                 AssertType(PersistentArgumentType.ReturnValue);
-                return UltEventBase.GetReturnedValue(_Int);
+                return EventReference.GetReturnValue(_Int, InvocationIndex);
             }
         }
 
