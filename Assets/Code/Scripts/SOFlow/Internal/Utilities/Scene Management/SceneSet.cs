@@ -1,9 +1,9 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using SOFlow.Utilities;
+using UnityAsync;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -48,9 +48,9 @@ namespace SOFlow.Internal.SceneManagement
                 }
         }
 
-        public IEnumerator LoadSceneSetAsync(bool additive, float artificialWait, Action<SceneField, int> onSceneLoaded)
+        public async void LoadSceneSetAsync(bool additive, float artificialWait, Action<SceneField, int> onSceneLoaded)
         {
-            bool           firstScene = !additive;
+            bool firstScene = !additive;
 
             for(int i = 0, condition = SetScenes.Count; i < condition; i++)
             {
@@ -60,22 +60,19 @@ namespace SOFlow.Internal.SceneManagement
                 {
 #if UNITY_EDITOR
                     if(Application.isPlaying)
-                        yield return SceneManager.LoadSceneAsync(scene,
-                                                                 firstScene
-                                                                     ? LoadSceneMode.Single
-                                                                     : LoadSceneMode.Additive);
+                        await SceneManager.LoadSceneAsync(scene, firstScene ? LoadSceneMode.Single : LoadSceneMode.Additive);
                     else
                         EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(scene.SceneAsset),
                                                      firstScene ? OpenSceneMode.Single : OpenSceneMode.Additive);
 #else
-                    yield return SceneManager.LoadSceneAsync(scene, firstScene ? LoadSceneMode.Single : LoadSceneMode.Additive);
+                    await SceneManager.LoadSceneAsync(scene, firstScene ? LoadSceneMode.Single : LoadSceneMode.Additive);
 #endif
                     firstScene = false;
                 }
 
                 onSceneLoaded.Invoke(scene, i + 1);
 
-                yield return WaitCache.Get(artificialWait);
+                await Await.Seconds(artificialWait);
             }
         }
 

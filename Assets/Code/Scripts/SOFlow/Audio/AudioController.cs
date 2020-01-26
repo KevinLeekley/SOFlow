@@ -1,6 +1,6 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
-using System.Collections;
+using UnityAsync;
 using UnityEngine;
 
 namespace SOFlow.Audio
@@ -42,29 +42,24 @@ namespace SOFlow.Audio
 	    /// <param name="audioSource"></param>
 	    /// <param name="targetVolume"></param>
 	    /// <param name="fadeTime"></param>
-	    public void FadeAudio(AudioSource audioSource, float targetVolume, float fadeTime)
+	    public async void FadeAudio(AudioSource audioSource, float targetVolume, float fadeTime)
         {
-            StartCoroutine(FadeAudioOverTime(audioSource, targetVolume, fadeTime));
-        }
+	        float startingVolume = audioSource.volume;
 
-        private IEnumerator FadeAudioOverTime(AudioSource audioSource, float targetVolume, float fadeTime)
-        {
-            float startingVolume = audioSource.volume;
+	        float startTime = Time.realtimeSinceStartup;
+	        float endTime   = startTime + fadeTime;
 
-            float startTime = Time.realtimeSinceStartup;
-            float endTime   = startTime + fadeTime;
+	        while(Time.realtimeSinceStartup < endTime)
+	        {
+		        float percentage = (Time.realtimeSinceStartup - startTime) /
+		                           (endTime                   - startTime);
 
-            while(Time.realtimeSinceStartup < endTime)
-            {
-                float percentage = (Time.realtimeSinceStartup - startTime) /
-                                   (endTime                   - startTime);
+		        audioSource.volume = Mathf.Lerp(startingVolume, targetVolume, percentage);
 
-                audioSource.volume = Mathf.Lerp(startingVolume, targetVolume, percentage);
+		        await Await.NextUpdate();
+	        }
 
-                yield return null;
-            }
-
-            audioSource.volume = targetVolume;
+	        audioSource.volume = targetVolume;
         }
 
 #if UNITY_EDITOR

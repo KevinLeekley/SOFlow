@@ -11,6 +11,16 @@ namespace SOFlow.Audio
     public class AudioLink : ScriptableObject
     {
 	    /// <summary>
+	    ///     The audio source.
+	    /// </summary>
+	    public AudioSource AudioSource;
+
+	    /// <summary>
+	    ///     The maximum amount of allowed concurrent audio clips.
+	    /// </summary>
+	    public IntField MaximumConcurrentClips;
+
+	    /// <summary>
 	    ///     The audio clip cache.
 	    /// </summary>
 	    private readonly Dictionary<AudioClip, int> _clipCached = new Dictionary<AudioClip, int>();
@@ -21,14 +31,14 @@ namespace SOFlow.Audio
 	    private bool _clipPresent;
 
 	    /// <summary>
-	    ///     The audio source.
+	    /// Indicates whether the audio source has been created.
 	    /// </summary>
-	    public AudioSource AudioSource;
+	    protected bool _audioSourceGenerated = false;
 
-	    /// <summary>
-	    ///     The maximum amount of allowed concurrent audio clips.
-	    /// </summary>
-	    public IntField MaximumConcurrentClips;
+	    private void OnValidate()
+	    {
+		    _audioSourceGenerated = false;
+	    }
 
 	    /// <summary>
 	    ///     Plays the given audio clip.
@@ -56,6 +66,28 @@ namespace SOFlow.Audio
         }
 
 	    /// <summary>
+	    /// Plays the given audio data.
+	    /// </summary>
+	    /// <param name="data"></param>
+	    public void PlayAudio(AudioData data)
+	    {
+		    if(!_audioSourceGenerated)
+		    {
+			    AudioSource = new GameObject(name).AddComponent<AudioSource>();
+			    AudioSource.loop = false;
+			    AudioSource.playOnAwake = false;
+
+			    _audioSourceGenerated = true;
+		    }
+
+		    AudioSource.clip = data.AudioClip;
+		    AudioSource.volume = data.Volume;
+		    AudioSource.pitch = data.Pitch;
+		    
+		    AudioSource.Play();
+	    }
+
+	    /// <summary>
 	    ///     Clears the clip cache.
 	    /// </summary>
 	    public void ClearClipCache()
@@ -67,5 +99,13 @@ namespace SOFlow.Audio
                 _clipPresent = false;
             }
         }
+
+	    /// <summary>
+	    /// Stops the currently playing audio.
+	    /// </summary>
+	    public void StopAudio()
+	    {
+		    AudioSource.Stop();
+	    }
     }
 }

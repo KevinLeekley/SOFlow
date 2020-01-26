@@ -32,7 +32,7 @@ namespace SOFlow.CameraUtilities
         /// </summary>
         public void Start()
         {
-            if(!_hasRegisteredGameCamera)
+            if(!_hasRegisteredGameCamera || !GameCameraReference.Camera)
             {
                 GameCameraReference.Camera = SceneCameraReference;
                 DontDestroyOnLoad(gameObject);

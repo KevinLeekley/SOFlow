@@ -1,9 +1,8 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
-using System.Collections;
 using System.Collections.Generic;
-using SOFlow.Utilities;
 using UltEvents;
+using UnityAsync;
 using UnityEngine;
 
 namespace SOFlow.Fading
@@ -106,57 +105,53 @@ namespace SOFlow.Fading
         /// <summary>
         ///     Initiates the fade.
         /// </summary>
-        public void Fade()
+        public async void Fade()
         {
             if(!Fading && gameObject.activeInHierarchy)
             {
                 Fading = true;
-                StartCoroutine(nameof(FadeRoutine));
+
+                CacheCanvasRenderers();
+                List<CanvasRenderer> canvasRenderers;
+
+                if(!_cachedRenderers.TryGetValue(FadeTarget, out canvasRenderers)) return;
+
+                float startTime = Time.realtimeSinceStartup;
+                float endTime   = startTime + FadeTime;
+
+                while(Time.realtimeSinceStartup < endTime)
+                {
+                    UpdateCanvasRendererColours(canvasRenderers,
+                                                Color.Lerp(UnfadedColour, FadedColour,
+                                                           (Time.realtimeSinceStartup - startTime) /
+                                                           (endTime                   - startTime)));
+
+                    await Await.NextUpdate();
+                }
+
+                UpdateCanvasRendererColours(canvasRenderers, FadedColour);
+
+                OnFadeWait.Invoke();
+
+                if(!OnlyFade)
+                {
+                    await Await.Seconds(WaitBetweenFades);
+
+                    Unfade();
+                }
+                else
+                {
+                    Fading = false;
+                }
             }
         }
 
-        private IEnumerator FadeRoutine()
+        private async void Unfade()
         {
             CacheCanvasRenderers();
             List<CanvasRenderer> canvasRenderers;
 
-            if(!_cachedRenderers.TryGetValue(FadeTarget, out canvasRenderers)) yield break;
-
-            float startTime = Time.realtimeSinceStartup;
-            float endTime   = startTime + FadeTime;
-
-            while(Time.realtimeSinceStartup < endTime)
-            {
-                UpdateCanvasRendererColours(canvasRenderers,
-                                            Color.Lerp(UnfadedColour, FadedColour,
-                                                       (Time.realtimeSinceStartup - startTime) /
-                                                       (endTime                   - startTime)));
-
-                yield return null;
-            }
-
-            UpdateCanvasRendererColours(canvasRenderers, FadedColour);
-
-            OnFadeWait.Invoke();
-
-            if(!OnlyFade)
-            {
-                yield return WaitCache.Get(WaitBetweenFades);
-
-                StartCoroutine(nameof(Unfade));
-            }
-            else
-            {
-                Fading = false;
-            }
-        }
-
-        private IEnumerator Unfade()
-        {
-            CacheCanvasRenderers();
-            List<CanvasRenderer> canvasRenderers;
-
-            if(!_cachedRenderers.TryGetValue(FadeTarget, out canvasRenderers)) yield break;
+            if(!_cachedRenderers.TryGetValue(FadeTarget, out canvasRenderers)) return;
 
             float startTime = Time.realtimeSinceStartup;
             float endTime   = startTime + UnfadeTime;
@@ -168,7 +163,7 @@ namespace SOFlow.Fading
                                                        (Time.realtimeSinceStartup - startTime) /
                                                        (endTime                   - startTime)));
 
-                yield return null;
+                await Await.NextUpdate();
             }
 
             UpdateCanvasRendererColours(canvasRenderers, UnfadedColour);

@@ -1,7 +1,10 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
-using System.Collections;
-using SOFlow.Utilities;
+using System;
+using System.Threading;
+using SOFlow.Data.Primitives;
+using UltEvents;
+using UnityAsync;
 using UnityEngine;
 
 namespace SOFlow.Data.Events
@@ -11,12 +14,12 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     The game event to raise.
         /// </summary>
-        public DynamicEvent Event;
+        public UltEvent Event;
 
         /// <summary>
         ///     The time before the event is raised in seconds.
         /// </summary>
-        public float EventWaitTime;
+        public FloatField EventWaitTime;
 
         /// <summary>
         ///     Indicates whether the event should be raised automatically when Start is called.
@@ -29,9 +32,9 @@ namespace SOFlow.Data.Events
         public bool RepeatEvent = false;
 
         /// <summary>
-        /// Indicates whether the event has been scheduled for cancellation.
+        /// The cancellation token source.
         /// </summary>
-        private bool _cancelEventScheduled = false;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         private void Start()
         {
@@ -41,33 +44,27 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     Raises this event after the specified period of time has passed.
         /// </summary>
-        public void RaiseEvent()
+        public async void RaiseEvent()
         {
-            // Nullify any cancellation schedules as a new event has been invoked.
-            _cancelEventScheduled = false;
-            
-            StartCoroutine(nameof(RaiseEventOverTime));
-        }
-
-        private IEnumerator RaiseEventOverTime()
-        {
-            if(EventWaitTime > 0f)
+            try
             {
-                yield return WaitCache.Get(EventWaitTime);
-            }
-
-            if(_cancelEventScheduled)
-            {
-                _cancelEventScheduled = false;
+                // Nullify any cancellation schedules as a new event has been invoked.
+                _cancellationTokenSource.Dispose();
+                _cancellationTokenSource = new CancellationTokenSource();
+                Event.CancellationToken = _cancellationTokenSource.Token;
                 
-                yield break;
+                await Await.Seconds(EventWaitTime).ConfigureAwait(_cancellationTokenSource.Token);
+                
+                Event.Invoke();
+
+                if(RepeatEvent)
+                {
+                    RaiseEvent();
+                }
             }
-
-            Event.Invoke(null);
-
-            if(RepeatEvent)
+            catch(OperationCanceledException)
             {
-                RaiseEvent();
+                // Ignore a cancellation event.
             }
         }
 
@@ -76,7 +73,7 @@ namespace SOFlow.Data.Events
         /// </summary>
         public void CancelEvent()
         {
-            _cancelEventScheduled = true;
+            _cancellationTokenSource.Cancel();
         }
 
 #if UNITY_EDITOR

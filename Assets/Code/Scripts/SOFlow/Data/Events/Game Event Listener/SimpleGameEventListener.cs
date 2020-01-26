@@ -2,13 +2,20 @@
 
 using System;
 using System.Collections.Generic;
+using SOFlow.Data.Primitives;
 using SOFlow.Utilities;
+using UnityAsync;
 using UnityEngine;
 
 namespace SOFlow.Data.Events
 {
     public class SimpleGameEventListener : MonoBehaviour, IEventListener
     {
+        /// <summary>
+        /// The delay before the event response is invoked.
+        /// </summary>
+        public FloatField ResponseDelay = new FloatField();
+        
         /// <summary>
         /// The game event to listen for.
         /// </summary>
@@ -30,8 +37,13 @@ namespace SOFlow.Data.Events
         private readonly List<GameEvent> _eventListCache = new List<GameEvent>();
 
         /// <inheritdoc />
-        public void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent)
+        public async void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent)
         {
+            if(ResponseDelay.Value > 0f)
+            {
+                await Await.Seconds(ResponseDelay);
+            }
+
             Response.Invoke(value);
         }
 
@@ -68,5 +80,23 @@ namespace SOFlow.Data.Events
         {
             Event.DeregisterListener(this);
         }
+        
+#if UNITY_EDITOR
+        /// <summary>
+        ///     Adds a Simple Game Event Listener to the scene.
+        /// </summary>
+        [UnityEditor.MenuItem("GameObject/SOFlow/Events/Add Simple Game Event Listener", false, 10)]
+        public static void AddComponentToScene()
+        {
+            GameObject _gameObject = new GameObject("Simple Game Event Listener", typeof(SimpleGameEventListener));
+
+            if(UnityEditor.Selection.activeTransform != null)
+            {
+                _gameObject.transform.SetParent(UnityEditor.Selection.activeTransform);
+            }
+
+            UnityEditor.Selection.activeGameObject = _gameObject;
+        }
+#endif
     }
 }

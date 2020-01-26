@@ -2,7 +2,9 @@
 
 using System.Collections;
 using SOFlow.ManagedComponents.Managers;
+using UnityAsync;
 using UnityEngine;
+using WaitUntil = UnityEngine.WaitUntil;
 
 namespace SOFlow.ManagedComponents.Components
 {
@@ -15,17 +17,17 @@ namespace SOFlow.ManagedComponents.Components
 
         protected virtual void Awake()
         {
-            StartCoroutine(nameof(RegisterToManager));
+            RegisterToManager();
         }
 
         /// <summary>
         ///     Registers this component to its associated manager.
         /// </summary>
-        public virtual IEnumerator RegisterToManager()
+        public async void RegisterToManager()
         {
             if(Manager)
             {
-                yield return new WaitUntil(() => Manager.Initialized);
+                await Await.Until(() => Manager.Initialized);
 
                 Manager.RegisterEntity(this);
             }

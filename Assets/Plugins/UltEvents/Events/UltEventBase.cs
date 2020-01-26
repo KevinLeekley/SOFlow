@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using UnityAsync;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -39,6 +41,8 @@ namespace UltEvents
         #region Fields and Properties
         /************************************************************************************************************************/
 
+        public CancellationToken CancellationToken;
+        
         [SerializeField]
         internal List<PersistentCall> _PersistentCalls;
 
@@ -190,13 +194,36 @@ namespace UltEvents
                 {
                     for (int i = 0; i < _PersistentCalls.Count; i++)
                     {
-                        await Task.Delay((int)(_PersistentCalls[i].MethodDelay * 1000f));
+                        if(Application.isPlaying)
+                        {
+                            try
+                            {
+                                await Await.Seconds(_PersistentCalls[i].MethodDelay).ConfigureAwait(CancellationToken);
+                            }
+                            catch(OperationCanceledException)
+                            {
+                                LinkedValueDictionary[currentInvocationIndex] = null;
+                                LinkedValueDictionary.Remove(currentInvocationIndex);
+                                ReturnValueIndices.Remove(currentInvocationIndex);
+                                
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            await Task.Delay((int)(_PersistentCalls[i].MethodDelay * 1000f), CancellationToken);
+                        }
 
                         _PersistentCalls[i].InvocationIndex = currentInvocationIndex;
                         _PersistentCalls[i].EventReference = this;
                         
                         var result = _PersistentCalls[i].Invoke();
-                        
+
+                        if(!LinkedValueDictionary.ContainsKey(currentInvocationIndex))
+                        {
+                            LinkedValueDictionary.Add(currentInvocationIndex, new List<object>());
+                        }
+
                         LinkedValueDictionary[currentInvocationIndex].Add(result);
                     }
                 }

@@ -1,16 +1,22 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using SOFlow.Data.Primitives;
 using SOFlow.Extensions;
 using SOFlow.Utilities;
+using UnityAsync;
 using UnityEngine;
 
 namespace SOFlow.Data.Events
 {
     public partial class GameEventListener : MonoBehaviour, IEventListener
     {
+        /// <summary>
+        /// The delay before the event response is invoked.
+        /// </summary>
+        public FloatField ResponseDelay = new FloatField();
+        
         /// <summary>
         ///     The game event to listen for.
         /// </summary>
@@ -52,7 +58,7 @@ namespace SOFlow.Data.Events
         private GameObject _gameObjectReference;
 
         /// <inheritdoc />
-        public void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent)
+        public async void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent)
         {
             bool conditionsMet = true;
 
@@ -66,6 +72,11 @@ namespace SOFlow.Data.Events
 
             if(conditionsMet)
             {
+                if(ResponseDelay.Value > 0f)
+                {
+                    await Await.Seconds(ResponseDelay);
+                }
+
                 Response.Invoke(value);
 
                 if(Debug) UnityEngine.Debug.Log($"|Game Event Listener| Responding to event : \n{raisedEvent.name}");
@@ -111,11 +122,27 @@ namespace SOFlow.Data.Events
                 }
         }
 
-        private void OnEnable()
+        private async void OnEnable()
         {
             if(!Application.isPlaying) return;
 
-            if(!RegisterOnAwake) StartCoroutine(RegisterEvent());
+            if(!RegisterOnAwake)
+            {
+                await Await.Seconds(EventListenerOrder);
+
+                foreach(GameEvent @event in Events)
+                {
+                    if(@event == null)
+                    {
+                        UnityEngine.Debug
+                                   .LogWarning($"[Game Event Listener Set] No event supplied for listener at : \n{transform.GetPath()}");
+
+                        continue;
+                    }
+
+                    @event.RegisterListener(this, RegisterLast);
+                }
+            }
         }
 
         private void OnDisable()
@@ -139,28 +166,6 @@ namespace SOFlow.Data.Events
                 StopAllCoroutines();
 
                 foreach(GameEvent @event in Events) @event.DeregisterListener(this);
-            }
-        }
-
-        /// <summary>
-        ///     Registers the event.
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator RegisterEvent()
-        {
-            yield return WaitCache.Get(EventListenerOrder);
-
-            foreach(GameEvent @event in Events)
-            {
-                if(@event == null)
-                {
-                    UnityEngine.Debug
-                               .LogWarning($"[Game Event Listener Set] No event supplied for listener at : \n{transform.GetPath()}");
-
-                    continue;
-                }
-
-                @event.RegisterListener(this, RegisterLast);
             }
         }
     }

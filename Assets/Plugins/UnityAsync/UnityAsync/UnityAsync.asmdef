@@ -1,8 +1,7 @@
 {
-    "name": "UltEvents",
-    "references": [
-        "GUID:3a4e935828f104039b90d535bc856a32"
-    ],
+    "name": "UnityAsync",
+    "references": [],
+    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

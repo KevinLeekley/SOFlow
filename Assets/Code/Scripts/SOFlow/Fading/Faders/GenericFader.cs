@@ -1,9 +1,8 @@
 // Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
-using System.Collections;
 using System.Collections.Generic;
-using SOFlow.Utilities;
 using UltEvents;
+using UnityAsync;
 using UnityEngine;
 
 namespace SOFlow.Fading
@@ -82,51 +81,47 @@ namespace SOFlow.Fading
         /// <summary>
         ///     Initiates the fade.
         /// </summary>
-        public void Fade()
+        public async void Fade()
         {
             if(!Fading && gameObject.activeInHierarchy)
             {
                 OnFadeStart.Invoke();
                 Fading = true;
-                StartCoroutine(nameof(FadeRoutine));
+
+                float startTime = Time.realtimeSinceStartup;
+                float endTime   = startTime + FadeTime;
+
+                while(Time.realtimeSinceStartup < endTime)
+                {
+                    float percentage = (Time.realtimeSinceStartup - startTime) /
+                                       (endTime                   - startTime);
+
+                    foreach(Fadable fadable in FadeTargets)
+                        fadable.OnUpdateColour(Color.Lerp(UnfadedColour, FadedColour, FadeCurve.Evaluate(percentage)),
+                                               percentage);
+
+                    await Await.NextUpdate();
+                }
+
+                foreach(Fadable fadable in FadeTargets) fadable.OnUpdateColour(FadedColour, 1f);
+
+                if(!OnlyFade)
+                {
+                    OnFadeWait.Invoke();
+
+                    await Await.Seconds(WaitBetweenFades);
+
+                    Unfade();
+                }
+                else
+                {
+                    Fading = false;
+                    OnFadeComplete.Invoke();
+                }
             }
         }
 
-        private IEnumerator FadeRoutine()
-        {
-            float startTime = Time.realtimeSinceStartup;
-            float endTime   = startTime + FadeTime;
-
-            while(Time.realtimeSinceStartup < endTime)
-            {
-                float percentage = (Time.realtimeSinceStartup - startTime) /
-                                   (endTime                   - startTime);
-
-                foreach(Fadable fadable in FadeTargets)
-                    fadable.OnUpdateColour(Color.Lerp(UnfadedColour, FadedColour, FadeCurve.Evaluate(percentage)),
-                                           percentage);
-
-                yield return null;
-            }
-
-            foreach(Fadable fadable in FadeTargets) fadable.OnUpdateColour(FadedColour, 1f);
-
-            if(!OnlyFade)
-            {
-                OnFadeWait.Invoke();
-
-                yield return WaitCache.Get(WaitBetweenFades);
-
-                StartCoroutine(nameof(Unfade));
-            }
-            else
-            {
-                Fading = false;
-                OnFadeComplete.Invoke();
-            }
-        }
-
-        private IEnumerator Unfade()
+        private async void Unfade()
         {
             float startTime = Time.realtimeSinceStartup;
             float endTime   = startTime + UnfadeTime;
@@ -140,7 +135,7 @@ namespace SOFlow.Fading
                     fadable.OnUpdateColour(Color.Lerp(FadedColour, UnfadedColour, UnfadeCurve.Evaluate(percentage)),
                                            percentage);
 
-                yield return null;
+                await Await.NextUpdate();
             }
 
             foreach(Fadable fadable in FadeTargets) fadable.OnUpdateColour(UnfadedColour, 0f);
