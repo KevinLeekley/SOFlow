@@ -203,7 +203,9 @@ namespace UltEvents
             }
             finally
             {
-                LinkedValueDictionary[currentInvocationIndex].Clear();
+                LinkedValueDictionary[currentInvocationIndex] = null;
+                LinkedValueDictionary.Remove(currentInvocationIndex);
+                ReturnValueIndices.Remove(currentInvocationIndex);
             }
         }
 
