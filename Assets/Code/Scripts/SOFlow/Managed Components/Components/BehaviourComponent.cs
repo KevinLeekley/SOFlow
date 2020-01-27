@@ -1,10 +1,8 @@
 // Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
-using System.Collections;
 using SOFlow.ManagedComponents.Managers;
 using UnityAsync;
 using UnityEngine;
-using WaitUntil = UnityEngine.WaitUntil;
 
 namespace SOFlow.ManagedComponents.Components
 {

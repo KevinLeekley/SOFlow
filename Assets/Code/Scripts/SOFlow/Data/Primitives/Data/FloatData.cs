@@ -118,24 +118,6 @@ namespace SOFlow.Data.Primitives
         ///     Attempts to set the value of this data to the supplied value.
         /// </summary>
         /// <param name="value"></param>
-        public void SetValue(SOFlowDynamic value)
-        {
-            if(value.Value is float ||
-               value.Value is byte  || value.Value is sbyte  ||
-               value.Value is short || value.Value is ushort ||
-               value.Value is int   || value.Value is uint   ||
-               value.Value is long  || value.Value is ulong)
-                Value = (float)value.Value;
-            else if(value.Value is FloatData)
-                Value = ((FloatData)value.Value).Value;
-            else
-                Debug.LogWarning($"[FloatData] Supplied value is not a supported data type.\n{name}");
-        }
-
-        /// <summary>
-        ///     Attempts to set the value of this data to the supplied value.
-        /// </summary>
-        /// <param name="value"></param>
         public void SetValue(FloatData value)
         {
             Value = value.Value;

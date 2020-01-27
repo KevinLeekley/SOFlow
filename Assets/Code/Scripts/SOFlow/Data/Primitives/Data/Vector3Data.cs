@@ -118,20 +118,6 @@ namespace SOFlow.Data.Primitives
         ///     Attempts to set the value of this data to the supplied value.
         /// </summary>
         /// <param name="value"></param>
-        public void SetValue(SOFlowDynamic value)
-        {
-            if(value.Value is Vector3)
-                Value = (Vector3)value.Value;
-            else if(value.Value is Vector3Data)
-                Value = ((Vector3Data)value.Value).Value;
-            else
-                Debug.LogWarning($"[Vector3Data] Supplied value is not a supported data type.\n{name}");
-        }
-
-        /// <summary>
-        ///     Attempts to set the value of this data to the supplied value.
-        /// </summary>
-        /// <param name="value"></param>
         public void SetValue(Vector3Data value)
         {
             Value = value.Value;

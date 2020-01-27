@@ -2,7 +2,7 @@
 
 using System;
 using SOFlow.Data.Events;
-using SOFlow.Utilities;
+using UltEvents;
 using XNode;
 
 namespace SOFlow.Data.Graphs
@@ -11,11 +11,6 @@ namespace SOFlow.Data.Graphs
     [SupportedNodes(typeof(BranchNode), typeof(EventNode))]
     public abstract class TraversableGraph : NodeGraph
     {
-	    /// <summary>
-	    ///     The parameter cache for events.
-	    /// </summary>
-	    private readonly SOFlowDynamic _parameterCache = new SOFlowDynamic();
-
 	    /// <summary>
 	    ///     The current node.
 	    /// </summary>
@@ -34,7 +29,7 @@ namespace SOFlow.Data.Graphs
 	    /// <summary>
 	    ///     Event raised when a node is triggered within this graph.
 	    /// </summary>
-	    public DynamicEvent OnNodeTriggered;
+	    public UltEvent OnNodeTriggered;
 
 	    /// <summary>
 	    ///     Begins traversal of this graph.
@@ -60,8 +55,7 @@ namespace SOFlow.Data.Graphs
 	    /// </summary>
 	    public virtual void SignalNodeTriggered()
         {
-            _parameterCache.Value = CurrentNode;
-            OnNodeTriggered.Invoke(_parameterCache);
+            OnNodeTriggered.Invoke();
         }
 
 	    /// <summary>
@@ -69,7 +63,7 @@ namespace SOFlow.Data.Graphs
 	    /// </summary>
 	    public virtual void SignalEndReached()
         {
-            OnGraphEndReached.Raise(CurrentNode);
+            OnGraphEndReached.Raise();
         }
 
         /// <inheritdoc />

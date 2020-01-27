@@ -118,22 +118,6 @@ namespace SOFlow.Data.Primitives
         ///     Attempts to set the value of this data to the supplied value.
         /// </summary>
         /// <param name="value"></param>
-        public void SetValue(SOFlowDynamic value)
-        {
-            if(value.Value is int   ||
-               value.Value is byte  || value.Value is sbyte ||
-               value.Value is short || value.Value is ushort)
-                Value = (int)value.Value;
-            else if(value.Value is IntData)
-                Value = ((IntData)value.Value).Value;
-            else
-                Debug.LogWarning($"[IntData] Supplied value is not a supported data type.\n{name}");
-        }
-
-        /// <summary>
-        ///     Attempts to set the value of this data to the supplied value.
-        /// </summary>
-        /// <param name="value"></param>
         public void SetValue(IntData value)
         {
             Value = value.Value;
@@ -180,15 +164,6 @@ namespace SOFlow.Data.Primitives
         #endregion
 
         #region Data Modifiers
-
-        /// <summary>
-        ///     Adds an amount to the data value.
-        /// </summary>
-        /// <param name="value"></param>
-        public void AddTo(SOFlowDynamic value)
-        {
-            Value += (int)value.Value;
-        }
 
         /// <summary>
         ///     Adds an amount to the data value.

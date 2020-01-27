@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using SOFlow.Utilities;
 using UnityEngine;
 
 namespace SOFlow.Data.Events
@@ -11,10 +10,9 @@ namespace SOFlow.Data.Events
     {
         /// <summary>
         ///     Invokes the response when the associated game event is raised.
-        /// </summary>
         /// <param name="value"></param>
         /// <param name="raisedEvent"></param>
-        void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent);
+        void OnEventRaised(GameEvent raisedEvent);
 
         /// <summary>
         ///     Returns the game object associated with this listener.

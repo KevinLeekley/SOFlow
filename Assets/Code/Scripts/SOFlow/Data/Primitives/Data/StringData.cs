@@ -118,20 +118,6 @@ namespace SOFlow.Data.Primitives
         ///     Attempts to set the value of this data to the supplied value.
         /// </summary>
         /// <param name="value"></param>
-        public void SetValue(SOFlowDynamic value)
-        {
-            if(value.Value is string || value.Value is char)
-                Value = value.Value.ToString();
-            else if(value.Value is StringData)
-                Value = ((StringData)value.Value).Value;
-            else
-                Debug.LogWarning($"[StringData] Supplied value is not a supported data type.\n{name}");
-        }
-
-        /// <summary>
-        ///     Attempts to set the value of this data to the supplied value.
-        /// </summary>
-        /// <param name="value"></param>
         public void SetValue(StringData value)
         {
             Value = value.Value;

@@ -3,10 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using SOFlow.Utilities;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
-using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 using SOFlow.Data.Events.Editor;
@@ -17,11 +15,6 @@ namespace SOFlow.Data.Events
     [CreateAssetMenu(menuName = "SOFlow/Events/Game Event")]
     public partial class GameEvent : ScriptableObject
     {
-        /// <summary>
-        ///     The dynamic parameter for this game event.
-        /// </summary>
-        public SOFlowDynamic EventParameter = new SOFlowDynamic();
-
         /// <summary>
         ///     All listeners registered to this game event.
         /// </summary>
@@ -45,7 +38,7 @@ namespace SOFlow.Data.Events
 #endif
                 try
                 {
-                    Listeners[i].OnEventRaised(EventParameter, this);
+                    Listeners[i].OnEventRaised(this);
 
 #if UNITY_EDITOR
                     log.IsError.Add(false);
@@ -85,43 +78,6 @@ namespace SOFlow.Data.Events
 #endif
                 }
             }
-        }
-
-        /// <summary>
-        ///     Notifies all registered listeners to invoke their events.
-        /// </summary>
-        /// <param name="eventParameter"></param>
-        public void Raise(object eventParameter)
-        {
-            if(eventParameter != null)
-            {
-                EventParameter = new SOFlowDynamic
-                                 {
-                                     Value = eventParameter
-                                 };
-            }
-
-            Raise();
-        }
-
-        /// <summary>
-        ///     Sets the event parameter to the specified value.
-        ///     Usable with Unity.Object types only. Usable within the inspector.
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetEventParameterUnity(Object value)
-        {
-            EventParameter.Value = value;
-        }
-
-        /// <summary>
-        ///     Sets the event parameter to the specified value.
-        ///     Usable with all data types. Unusable within the inspector.
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetEventParameter(object value)
-        {
-            EventParameter.Value = value;
         }
 
         /// <summary>

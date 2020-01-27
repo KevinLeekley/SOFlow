@@ -3,10 +3,10 @@
 #if UNITY_EDITOR
 using System;
 using System.Reflection;
-using SOFlow.Data.Events;
 using SOFlow.Data.Primitives;
 using Object = UnityEngine.Object;
 using System.Collections.Generic;
+using UltEvents;
 using UnityEditor;
 
 namespace SOFlow.Internal
@@ -107,8 +107,8 @@ namespace SOFlow.Internal
                 {
                     Type valueType = value.GetType();
 
-                    if(!(value is Object)       && !(value is string)       &&
-                       !(value is DataField)    && !(value is DynamicEvent) &&
+                    if(!(value is Object)       && !(value is string)   &&
+                       !(value is DataField)    && !(value is UltEvent) &&
                        !valueType.IsGenericType &&
                        valueType.IsClass        && !valueType.IsArray)
                         DrawItemField(valueType.Name, value);

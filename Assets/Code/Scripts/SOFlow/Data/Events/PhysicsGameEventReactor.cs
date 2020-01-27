@@ -1,5 +1,6 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
+using UltEvents;
 using UnityEngine;
 
 namespace SOFlow.Data.Events
@@ -39,61 +40,61 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     The OnCollisionEnter game event.
         /// </summary>
-        public DynamicEvent OnCollisionEnterEvent;
+        public UltEvent OnCollisionEnterEvent;
 
         /// <summary>
         ///     The OnCollisionExit game event.
         /// </summary>
-        public DynamicEvent OnCollisionExitEvent;
+        public UltEvent OnCollisionExitEvent;
 
         /// <summary>
         ///     The OnCollisionStay game event.
         /// </summary>
-        public DynamicEvent OnCollisionStayEvent;
+        public UltEvent OnCollisionStayEvent;
 
         /// <summary>
         ///     The OnTriggerEnter game event.
         /// </summary>
-        public DynamicEvent OnTriggerEnterEvent;
+        public UltEvent OnTriggerEnterEvent;
 
         /// <summary>
         ///     The OnTriggerExit game event.
         /// </summary>
-        public DynamicEvent OnTriggerExitEvent;
+        public UltEvent OnTriggerExitEvent;
 
         /// <summary>
         ///     The OnTriggerStay game event.
         /// </summary>
-        public DynamicEvent OnTriggerStayEvent;
+        public UltEvent OnTriggerStayEvent;
 
         private void OnTriggerEnter(Collider other)
         {
-            if(ListenForTriggerEnter) OnTriggerEnterEvent.Invoke(null);
+            if(ListenForTriggerEnter) OnTriggerEnterEvent.Invoke();
         }
 
         private void OnTriggerStay(Collider other)
         {
-            if(ListenForTriggerStay) OnTriggerStayEvent.Invoke(null);
+            if(ListenForTriggerStay) OnTriggerStayEvent.Invoke();
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if(ListenForTriggerExit) OnTriggerExitEvent.Invoke(null);
+            if(ListenForTriggerExit) OnTriggerExitEvent.Invoke();
         }
 
         private void OnCollisionEnter(Collision other)
         {
-            if(ListenForCollisionEnter) OnCollisionEnterEvent.Invoke(null);
+            if(ListenForCollisionEnter) OnCollisionEnterEvent.Invoke();
         }
 
         private void OnCollisionStay(Collision other)
         {
-            if(ListenForCollisionStay) OnCollisionStayEvent.Invoke(null);
+            if(ListenForCollisionStay) OnCollisionStayEvent.Invoke();
         }
 
         private void OnCollisionExit(Collision other)
         {
-            if(ListenForCollisionExit) OnCollisionExitEvent.Invoke(null);
+            if(ListenForCollisionExit) OnCollisionExitEvent.Invoke();
         }
 
 #if UNITY_EDITOR

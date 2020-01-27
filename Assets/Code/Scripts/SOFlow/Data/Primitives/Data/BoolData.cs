@@ -118,20 +118,6 @@ namespace SOFlow.Data.Primitives
         ///     Attempts to set the value of this data to the supplied value.
         /// </summary>
         /// <param name="value"></param>
-        public void SetValue(SOFlowDynamic value)
-        {
-            if(value.Value is bool)
-                Value = (bool)value.Value;
-            else if(value.Value is BoolData)
-                Value = ((BoolData)value.Value).Value;
-            else
-                Debug.LogWarning($"[BoolData] Supplied value is not a supported data type.\n{name}");
-        }
-
-        /// <summary>
-        ///     Attempts to set the value of this data to the supplied value.
-        /// </summary>
-        /// <param name="value"></param>
         public void SetValue(BoolData value)
         {
             Value = value.Value;

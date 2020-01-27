@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using SOFlow.Extensions;
-using SOFlow.Utilities;
+using UltEvents;
 using UnityEngine;
 
 namespace SOFlow.Data.Events
@@ -25,12 +25,12 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     The response to the game event.
         /// </summary>
-        public DynamicEvent Response;
+        public UltEvent Response;
 
         /// <inheritdoc />
-        public void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent)
+        public void OnEventRaised(GameEvent raisedEvent)
         {
-            Response.Invoke(value);
+            Response.Invoke();
         }
 
         /// <inheritdoc />

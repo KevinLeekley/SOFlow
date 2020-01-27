@@ -118,20 +118,6 @@ namespace SOFlow.Data.Primitives
         ///     Attempts to set the value of this data to the supplied value.
         /// </summary>
         /// <param name="value"></param>
-        public void SetValue(SOFlowDynamic value)
-        {
-            if(value.Value is Vector2Int)
-                Value = (Vector2Int)value.Value;
-            else if(value.Value is Vector2IntData)
-                Value = ((Vector2IntData)value.Value).Value;
-            else
-                Debug.LogWarning($"[Vector2Data] Supplied value is not a supported data type.\n{name}");
-        }
-
-        /// <summary>
-        ///     Attempts to set the value of this data to the supplied value.
-        /// </summary>
-        /// <param name="value"></param>
         public void SetValue(Vector2IntData value)
         {
             Value = value.Value;

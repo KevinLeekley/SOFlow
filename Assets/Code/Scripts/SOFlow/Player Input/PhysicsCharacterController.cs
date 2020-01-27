@@ -1,6 +1,7 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 using SOFlow.Data.Events;
+using UltEvents;
 using UnityEngine;
 
 namespace SOFlow.PlayerInput
@@ -52,22 +53,22 @@ namespace SOFlow.PlayerInput
         ///     Event raised when the character starts moving.
         /// </summary>
         [Header("Events")]
-        public DynamicEvent OnCharacterStartMoving;
+        public UltEvent OnCharacterStartMoving;
 
         /// <summary>
         ///     Event raised when the character starts rotating.
         /// </summary>
-        public DynamicEvent OnCharacterStartRotating;
+        public UltEvent OnCharacterStartRotating;
 
         /// <summary>
         ///     Event raised when the character stops moving.
         /// </summary>
-        public DynamicEvent onCharacterStopMoving;
+        public UltEvent onCharacterStopMoving;
 
         /// <summary>
         ///     Event raised when the character stops rotating.
         /// </summary>
-        public DynamicEvent OnCharacterStopRotating;
+        public UltEvent OnCharacterStopRotating;
 
         /// <summary>
         ///     The clamped velocity.
@@ -143,7 +144,7 @@ namespace SOFlow.PlayerInput
                     if(!CharacterMoving)
                     {
                         CharacterMoving = true;
-                        OnCharacterStartMoving.Invoke(null);
+                        OnCharacterStartMoving.Invoke();
                     }
                 }
                 else
@@ -151,7 +152,7 @@ namespace SOFlow.PlayerInput
                     if(CharacterMoving)
                     {
                         CharacterMoving = false;
-                        onCharacterStopMoving.Invoke(null);
+                        onCharacterStopMoving.Invoke();
                     }
                 }
 

@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using SOFlow.Data.Primitives;
-using SOFlow.Utilities;
+using UltEvents;
 using UnityAsync;
 using UnityEngine;
 
@@ -24,7 +24,7 @@ namespace SOFlow.Data.Events
         /// <summary>
         /// The response to the game event.
         /// </summary>
-        public DynamicEvent Response;
+        public UltEvent Response;
 
         /// <summary>
         ///     The game object reference.
@@ -37,14 +37,14 @@ namespace SOFlow.Data.Events
         private readonly List<GameEvent> _eventListCache = new List<GameEvent>();
 
         /// <inheritdoc />
-        public async void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent)
+        public async void OnEventRaised(GameEvent raisedEvent)
         {
             if(ResponseDelay.Value > 0f)
             {
                 await Await.Seconds(ResponseDelay);
             }
 
-            Response.Invoke(value);
+            Response.Invoke();
         }
 
         /// <inheritdoc />

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using SOFlow.Data.Primitives;
 using UnityEngine;
 
 namespace SOFlow.ScriptableObjects
@@ -48,6 +49,17 @@ namespace SOFlow.ScriptableObjects
 					dropdowns.Add(this);
 					DropdownScriptableObjectAttributeDrawer.AvailableDropdowns[type] = dropdowns;
 				}
+			}
+
+			// Explicitly add the PrimitiveData to the dropdown listing.
+			if(type.IsSubclassOf(typeof(PrimitiveData)) && !DropdownScriptableObjectAttributeDrawer.AvailableDropdowns.ContainsKey(typeof(PrimitiveData)))
+			{
+				dropdowns = new List<ScriptableObject>
+				            {
+					            this
+				            };
+
+				DropdownScriptableObjectAttributeDrawer.AvailableDropdowns.Add(typeof(PrimitiveData), dropdowns);
 			}
 
 			foreach(KeyValuePair<Type, List<ScriptableObject>> dropdownData in DropdownScriptableObjectAttributeDrawer

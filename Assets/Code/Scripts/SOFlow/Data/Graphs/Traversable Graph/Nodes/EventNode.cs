@@ -1,7 +1,6 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
-using SOFlow.Data.Events;
-using SOFlow.Utilities;
+using UltEvents;
 
 namespace SOFlow.Data.Graphs
 {
@@ -10,26 +9,16 @@ namespace SOFlow.Data.Graphs
     public class EventNode : TraversableNode
     {
         /// <summary>
-        ///     The parameter cache for this event.
-        /// </summary>
-        private readonly SOFlowDynamic _parameterCache = new SOFlowDynamic();
-
-        /// <summary>
         ///     The event raised by this node.
         /// </summary>
-        public DynamicEvent Event;
-
-        private void OnValidate()
-        {
-            _parameterCache.Value = this;
-        }
+        public UltEvent Event;
 
         /// <inheritdoc />
         public override void TriggerNode()
         {
             base.TriggerNode();
 
-            Event.Invoke(_parameterCache);
+            Event.Invoke();
 
             TraverseToNextNode();
         }

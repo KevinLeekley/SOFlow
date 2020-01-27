@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using SOFlow.Data.Primitives;
 using SOFlow.Extensions;
-using SOFlow.Utilities;
+using UltEvents;
 using UnityAsync;
 using UnityEngine;
 
@@ -50,7 +50,7 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     The response to the game event.
         /// </summary>
-        public DynamicEvent Response;
+        public UltEvent Response;
 
         /// <summary>
         ///     The game object reference.
@@ -58,7 +58,7 @@ namespace SOFlow.Data.Events
         private GameObject _gameObjectReference;
 
         /// <inheritdoc />
-        public async void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent)
+        public async void OnEventRaised(GameEvent raisedEvent)
         {
             bool conditionsMet = true;
 
@@ -77,7 +77,7 @@ namespace SOFlow.Data.Events
                     await Await.Seconds(ResponseDelay);
                 }
 
-                Response.Invoke(value);
+                Response.Invoke();
 
                 if(Debug) UnityEngine.Debug.Log($"|Game Event Listener| Responding to event : \n{raisedEvent.name}");
             }

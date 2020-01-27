@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using SOFlow.Extensions;
 using SOFlow.Data.Events;
 using SOFlow.Data.Primitives;
-using SOFlow.Utilities;
 using UltEvents;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -126,7 +125,7 @@ namespace SOFlow.Data.Evaluations
         public GameEvent Trigger;
 
         /// <inheritdoc />
-        public void OnEventRaised(SOFlowDynamic value, GameEvent raisedEvent)
+        public void OnEventRaised(GameEvent raisedEvent)
         {
             Evaluate();
         }

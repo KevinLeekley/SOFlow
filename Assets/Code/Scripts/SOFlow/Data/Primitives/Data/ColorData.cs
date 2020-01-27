@@ -118,20 +118,6 @@ namespace SOFlow.Data.Primitives
         ///     Attempts to set the value of this data to the supplied value.
         /// </summary>
         /// <param name="value"></param>
-        public void SetValue(SOFlowDynamic value)
-        {
-            if(value.Value is Color)
-                Value = (Color)value.Value;
-            else if(value.Value is ColorData)
-                Value = ((ColorData)value.Value).Value;
-            else
-                Debug.LogWarning($"[ColorData] Supplied value is not a supported data type.\n{name}");
-        }
-
-        /// <summary>
-        ///     Attempts to set the value of this data to the supplied value.
-        /// </summary>
-        /// <param name="value"></param>
         public void SetValue(ColorData value)
         {
             Value = value.Value;
