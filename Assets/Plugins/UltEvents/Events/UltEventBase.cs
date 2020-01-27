@@ -211,6 +211,7 @@ namespace UltEvents
                         }
                         else
                         {
+                            CancellationToken.ThrowIfCancellationRequested();
                             await Task.Delay((int)(_PersistentCalls[i].MethodDelay * 1000f), CancellationToken);
                         }
 
@@ -270,7 +271,14 @@ namespace UltEvents
 
         public object GetReturnValue(int index, int invocationIndex)
         {
-            return LinkedValueDictionary[invocationIndex][ReturnValueIndices[invocationIndex] + index];
+            if(ReturnValueIndices.Count == 0)
+            {
+                return LinkedValueDictionary[invocationIndex][index];
+            }
+            else
+            {
+                return LinkedValueDictionary[invocationIndex][ReturnValueIndices[invocationIndex] + index];
+            }
         }
 
         /************************************************************************************************************************/
