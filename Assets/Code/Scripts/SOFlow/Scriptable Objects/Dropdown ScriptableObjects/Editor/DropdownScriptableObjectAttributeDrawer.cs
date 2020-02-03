@@ -24,6 +24,11 @@ namespace SOFlow.ScriptableObjects
 		private readonly GUIContent _noneOption = new GUIContent("None");
 
 		/// <summary>
+		/// The create new dropdown option.
+		/// </summary>
+		private readonly GUIContent _createNewOption = new GUIContent("--- Create New ---");
+		
+		/// <summary>
 		/// The cached object type.
 		/// </summary>
 		private Type _objectType = null;
@@ -54,19 +59,20 @@ namespace SOFlow.ScriptableObjects
 					SortDropdownEntries();
 					
 					int selection = 0;
-					int optionLength = dropdowns.Count + 1;
+					int optionLength = dropdowns.Count + 2;
 					
 					GUIContent[] options = new GUIContent[optionLength];
 					options[0] = _noneOption;
+					options[1] = _createNewOption;
 
-					for(int i = 1; i < optionLength; i++)
+					for(int i = 2; i < optionLength; i++)
 					{
-						if(dropdowns[i - 1] == property.objectReferenceValue)
+						if(dropdowns[i - 2] == property.objectReferenceValue)
 						{
 							selection = i;
 						}
 
-						options[i] = new GUIContent($"{dropdowns[i - 1].name} ({dropdowns[i - 1].GetType().Name})", AssetDatabase.GetCachedIcon(AssetDatabase.GetAssetPath(dropdowns[i - 1])));
+						options[i] = new GUIContent($"{dropdowns[i - 2].name} ({dropdowns[i - 2].GetType().Name})", AssetDatabase.GetCachedIcon(AssetDatabase.GetAssetPath(dropdowns[i - 2])));
 					}
 
 					UnityEngine.Object objectReference = property.objectReferenceValue;
@@ -82,7 +88,35 @@ namespace SOFlow.ScriptableObjects
 
 					if(EditorGUI.EndChangeCheck())
 					{
-						property.objectReferenceValue = selection < 1 ? null : dropdowns[selection - 1];
+						if(selection == 0)
+						{
+							property.objectReferenceValue = null;
+						}
+						else if(selection == 1)
+						{
+							Type objectType = TypeExtensions.GetInstanceType(property.type);
+							
+							string objectPath = EditorUtility.SaveFilePanelInProject($"Create New {objectType?.Name}",
+							                                                         $"New {objectType?.Name}",
+							                                                         "asset",
+							                                                         $"Create new {objectType?.Name} dropdown item.");
+
+							if(!string.IsNullOrEmpty(objectPath) && objectType != null)
+							{
+								ScriptableObject newObject = ScriptableObject.CreateInstance(objectType);
+								
+								AssetDatabase.CreateAsset(newObject, objectPath);
+								AssetDatabase.Refresh();
+								
+								SortDropdownEntries();
+								property.objectReferenceValue = newObject;
+							}
+						}
+						else
+						{
+							property.objectReferenceValue = dropdowns[selection - 2];
+						}
+						
 						property.serializedObject.ApplyModifiedProperties();
 					}
 
