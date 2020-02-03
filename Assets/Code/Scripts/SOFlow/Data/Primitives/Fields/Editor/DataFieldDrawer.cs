@@ -90,7 +90,7 @@ namespace SOFlow.Data.Primitives.Editor
 
                 if(_labelContent == null)
                 {
-                    _labelContent = new GUIContent(label.text);
+                    _labelContent = new GUIContent(label.text, label.image, label.tooltip);
                 }
 
                 SerializedProperty displayValueChangedProperty = property.FindPropertyRelative("_displayValueChangedEvent");
