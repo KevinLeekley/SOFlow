@@ -18,14 +18,22 @@ namespace SOFlow.Data.Primitives.Editor
     [CustomPropertyDrawer(typeof(DataField), true)]
     public class DataFieldDrawer : PropertyDrawer
     {
-        private Rect  _currentPosition;
         private bool  _isConstant;
         private bool  _displayValueChangedEvent;
-        private float _lineHeight;
+        private bool _invokeChangeEvent = false;
 
         private float _positionWidth;
         private float _buttonWidth = 18f;
-        private bool _invokeChangeEvent = false;
+        private float _lineHeight;
+        
+        private GUIContent _labelContent = null;
+        
+        private Rect  _currentPosition;
+        private Rect _mouseDragArea = new Rect();
+        private Rect _buttonsRect = new Rect();
+
+        private Resolver _resolver = new Resolver();
+        private DataField _dataValue = null;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -49,10 +57,12 @@ namespace SOFlow.Data.Primitives.Editor
                 SerializedProperty useConstant  = property.FindPropertyRelative("UseConstant");
                 Event              currentEvent = Event.current;
 
-                Rect mouseDragArea =
-                    new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+                _mouseDragArea.x = position.x;
+                _mouseDragArea.y = position.y;
+                _mouseDragArea.width = position.width;
+                _mouseDragArea.height = EditorGUIUtility.singleLineHeight;
 
-                if(mouseDragArea.Contains(currentEvent.mousePosition))
+                if(_mouseDragArea.Contains(currentEvent.mousePosition))
                 {
                     if(currentEvent.type == EventType.DragUpdated)
                     {
@@ -78,40 +88,44 @@ namespace SOFlow.Data.Primitives.Editor
                     }
                 }
 
-                SerializedProperty displayValueChangedProperty =
-                    property.FindPropertyRelative("_displayValueChangedEvent");
+                if(_labelContent == null)
+                {
+                    _labelContent = new GUIContent(label.text);
+                }
+
+                SerializedProperty displayValueChangedProperty = property.FindPropertyRelative("_displayValueChangedEvent");
 
                 _displayValueChangedEvent = displayValueChangedProperty.boolValue;
                 _isConstant               = useConstant.boolValue;
-                label                     = EditorGUI.BeginProperty(position, label, property);
-                _currentPosition          = EditorGUI.PrefixLabel(position, label);
+                label                     = EditorGUI.BeginProperty(position, GUIContent.none, property);
+                _currentPosition          = EditorGUI.PrefixLabel(position, _labelContent);
                 _positionWidth            = _currentPosition.width;
                 _currentPosition.width    = _positionWidth * 0.2f;
                 _currentPosition.height   = EditorGUIUtility.singleLineHeight;
 
                 EditorGUI.LabelField(position, label);
 
-                Rect buttonsRect = new Rect(_currentPosition)
-                                   {
-                                       width = _buttonWidth
-                                   };
+                _buttonsRect.x = _currentPosition.x;
+                _buttonsRect.y = _currentPosition.y;
+                _buttonsRect.width = _buttonWidth;
+                _buttonsRect.height = _currentPosition.height;
 
-                if(GUI.Button(buttonsRect, "R", _isConstant ? SOFlowStyles.Button : SOFlowStyles.PressedButton))
+                if(GUI.Button(_buttonsRect, "R", _isConstant ? SOFlowStyles.Button : SOFlowStyles.PressedButton))
                 {
                     _isConstant = false;
                 }
 
-                buttonsRect.x += _buttonWidth;
+                _buttonsRect.x += _buttonWidth;
 
-                if(GUI.Button(buttonsRect, "V", _isConstant ? SOFlowStyles.PressedButton : SOFlowStyles.Button))
+                if(GUI.Button(_buttonsRect, "V", _isConstant ? SOFlowStyles.PressedButton : SOFlowStyles.Button))
                 {
                     _isConstant = true;
                 }
 
                 if(_isConstant)
                 {
-                    buttonsRect.x     += _buttonWidth;
-                    buttonsRect.width += 6f;
+                    _buttonsRect.x     += _buttonWidth;
+                    _buttonsRect.width += 6f;
 
                     SerializedProperty persistentCalls =
                         property.FindPropertyRelative("OnConstantValueChanged._PersistentCalls");
@@ -122,7 +136,7 @@ namespace SOFlow.Data.Primitives.Editor
                                               ? SOFlowEditorSettings.AcceptContextColour
                                               : SOFlowEditorSettings.DeclineContextColour;
 
-                    if(GUI.Button(buttonsRect, $"E{persistentCalls.arraySize}", SOFlowStyles.ButtonSmallText))
+                    if(GUI.Button(_buttonsRect, $"E{persistentCalls.arraySize}", SOFlowStyles.ButtonSmallText))
                     {
                         _displayValueChangedEvent = !_displayValueChangedEvent;
                     }
@@ -172,31 +186,30 @@ namespace SOFlow.Data.Primitives.Editor
 
                     if(nullDetected) GUI.color = currentColour;
 
-                    DataField dataValue = null;
-
                     if(!propertyIsArray)
                     {
                         Type      dataType  = property.serializedObject.targetObject.GetType();
                         FieldInfo fieldData = dataType.GetField(property.propertyPath);
 
                         if(fieldData != null)
-                            dataValue = (DataField)fieldData.GetValue(property.serializedObject.targetObject);
+                            _dataValue = (DataField)fieldData.GetValue(property.serializedObject.targetObject);
                     }
                     else
                     {
-                        Resolver resolver = new Resolver();
-
-                        dataValue = (DataField)resolver.Resolve(property.serializedObject.targetObject,
-                                                                property.propertyPath.Replace(".Array.data", ""));
+                        _dataValue = (DataField)_resolver.Resolve(property.serializedObject.targetObject,
+                                                                  property.propertyPath.Replace(".Array.data", ""));
                     }
 
-                    if(dataValue != null && dataValue.GetVariable()?.GetValueData() != null)
+                    PrimitiveData valueVariable = _dataValue?.GetVariable();
+                    object valueData = valueVariable != null ? valueVariable.GetValueData() : null;
+
+                    if(valueData != null)
                     {
                         _currentPosition.y += EditorGUIUtility.singleLineHeight;
                         _lineHeight        =  EditorGUIUtility.singleLineHeight;
                         _currentPosition.width -= 24f;
 
-                        EditorGUI.LabelField(_currentPosition, dataValue.GetVariable().GetValueData().ToString(),
+                        EditorGUI.LabelField(_currentPosition, valueData.ToString(),
                                              EditorStyles.toolbarButton);
 
                         _currentPosition.x += _currentPosition.width + 2;
@@ -204,8 +217,8 @@ namespace SOFlow.Data.Primitives.Editor
 
                         if(GUI.Button(_currentPosition, "→", SOFlowStyles.Button))
                         {
-                            Selection.activeObject = dataValue.GetVariable();
-                            EditorGUIUtility.PingObject(dataValue.GetVariable());
+                            Selection.activeObject = valueVariable;
+                            EditorGUIUtility.PingObject(valueVariable);
                         }
                     }
                     else
