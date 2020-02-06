@@ -20,11 +20,6 @@ namespace SOFlow.Internal
         /// </summary>
         protected ScriptableObject _scriptableObjectTarget;
 
-        /// <summary>
-        /// The Unity Project Browser window type. 
-        /// </summary>
-        private Type _projectBrowserType = typeof(Editor).Assembly.GetType("UnityEditor.ProjectBrowser");
-
         protected void Awake()
         {
             if(_isScriptableObject && !_scriptableObjectTarget)
@@ -68,8 +63,8 @@ namespace SOFlow.Internal
                 if(GUI.changed)
                 {
                     serializedObject.ApplyModifiedProperties();
-
-                    EditorWindow.GetWindow(_projectBrowserType)?.Repaint();
+                    
+                    EditorApplication.RepaintProjectWindow();
                 }
             }
         }
