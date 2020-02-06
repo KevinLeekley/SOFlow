@@ -25,7 +25,7 @@ namespace SOFlow.ManagedComponents.Managers
         /// <summary>
         ///     Indicates whether the game is currently active.
         /// </summary>
-        public BoolField GameActive;
+        public BoolField GameActive = new BoolField();
 
         /// <summary>
         ///     The list of managers managed by the Game Manager.

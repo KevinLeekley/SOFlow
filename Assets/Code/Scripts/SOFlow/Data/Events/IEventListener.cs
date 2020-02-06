@@ -10,7 +10,7 @@ namespace SOFlow.Data.Events
     {
         /// <summary>
         ///     Invokes the response when the associated game event is raised.
-        /// <param name="value"></param>
+        /// </summary>
         /// <param name="raisedEvent"></param>
         void OnEventRaised(GameEvent raisedEvent);
 

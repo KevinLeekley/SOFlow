@@ -46,7 +46,7 @@ namespace SOFlow.Internal
                         EditorUtility.SetDirty(property.serializedObject.targetObject);
                 }
 
-                _infoSpace = EditorStyles.boldLabel.CalcSize(new GUIContent("   ")).x;
+                _infoSpace = SOFlowStyles.HelpBox.CalcSize(new GUIContent("   ")).x;
 
                 _infoButtonContent = new GUIContent
                                      {
@@ -54,7 +54,7 @@ namespace SOFlow.Internal
                                      };
 
                 _infoLabel   = $"[{label.text} INFO]\n{infoAttribute.Info}";
-                _infoBoxSize = EditorStyles.boldLabel.CalcSize(new GUIContent(_infoLabel));
+                _infoBoxSize = SOFlowStyles.HelpBox.CalcSize(new GUIContent(_infoLabel));
 
                 position.width  -= _infoSpace;
                 position.height =  EditorGUIUtility.singleLineHeight;

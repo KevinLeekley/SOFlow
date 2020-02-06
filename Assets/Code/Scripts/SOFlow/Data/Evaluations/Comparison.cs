@@ -72,29 +72,29 @@ namespace SOFlow.Data.Evaluations
         public DataOperators DataOperator;
 
         // The bool values.
-        public BoolField FirstBool;
+        public BoolField FirstBool = new BoolField();
 
         // The data values.
         public ScriptableObject FirstData;
 
         // The float values.
-        public FloatField FirstFloat;
+        public FloatField FirstFloat = new FloatField();
 
         // The int values.
-        public IntField FirstInt;
+        public IntField FirstInt = new IntField();
 
         // The string values.
-        public StringField FirstString;
+        public StringField FirstString = new StringField();
 
         /// <summary>
         ///     The list of action responses that occur when this comparison fails.
         /// </summary>
-        public UltEvent OnComparisonFail;
+        public UltEvent OnComparisonFail = new UltEvent();
 
         /// <summary>
         ///     The list of action responses that occur when this comparison succeeds.
         /// </summary>
-        public UltEvent OnComparisonSuccess;
+        public UltEvent OnComparisonSuccess = new UltEvent();
 
         /// <summary>
         ///     The primitive operator to use for this comparison.
@@ -104,20 +104,20 @@ namespace SOFlow.Data.Evaluations
         /// <summary>
         ///  The conditional event.
         /// </summary>
-        public ConditionalEvent ConditionalEvent;
+        public ConditionalEvent ConditionalEvent = new ConditionalEvent();
 
         /// <summary>
         ///     An override used for invoking responses during edit time.
         /// </summary>
         public bool RespondInEditor;
 
-        public BoolField        SecondBool;
+        public BoolField        SecondBool = new BoolField();
         public ScriptableObject SecondData;
-        public FloatField       SecondFloat;
-        public IntField         SecondInt;
-        public StringField      SecondString;
-        public FloatField       ThirdFloat;
-        public IntField         ThirdInt;
+        public FloatField       SecondFloat = new FloatField();
+        public IntField         SecondInt = new IntField();
+        public StringField      SecondString = new StringField();
+        public FloatField       ThirdFloat = new FloatField();
+        public IntField         ThirdInt = new IntField();
 
         /// <summary>
         ///     The event that will trigger this comparison.

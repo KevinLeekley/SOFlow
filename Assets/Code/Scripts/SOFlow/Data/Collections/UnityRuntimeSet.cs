@@ -13,22 +13,22 @@ namespace SOFlow.Data.Collections
         /// <summary>
         ///     Event raised when data is added to the list.
         /// </summary>
-        public UltEvent OnDataAddedToList;
+        public UltEvent OnDataAddedToList = new UltEvent();
 
         /// <summary>
         ///     Event raised when data is removed from the list.
         /// </summary>
-        public UltEvent OnDataRemovedFromList;
+        public UltEvent OnDataRemovedFromList = new UltEvent();
 
         /// <summary>
         ///     Event raised when the list has changed.
         /// </summary>
-        public UltEvent OnListChanged;
+        public UltEvent OnListChanged = new UltEvent();
 
         /// <summary>
         ///     Event raised when this set becomes empty.
         /// </summary>
-        public UltEvent OnListEmpty;
+        public UltEvent OnListEmpty = new UltEvent();
 
         /// <summary>
         ///     The list of items within this set.

@@ -25,7 +25,7 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     The response to the game event.
         /// </summary>
-        public UltEvent Response;
+        public UltEvent Response = new UltEvent();
 
         /// <inheritdoc />
         public void OnEventRaised(GameEvent raisedEvent)

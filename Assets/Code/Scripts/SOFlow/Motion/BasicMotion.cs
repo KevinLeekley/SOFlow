@@ -46,63 +46,59 @@ namespace SOFlow.Motion
 	    /// <summary>
 	    ///     The active duration time.
 	    /// </summary>
-	    public FloatField ActiveDuration;
+	    public FloatField ActiveDuration = new FloatField();
 
 	    /// <summary>
 	    ///     The forward velocity.
 	    /// </summary>
-	    public AnimationCurve ForwardVelocity;
+	    public AnimationCurve ForwardVelocity = new AnimationCurve();
 
 	    /// <summary>
 	    ///     The horizontal velocity.
 	    /// </summary>
-	    public AnimationCurve HorizontalVelocity;
+	    public AnimationCurve HorizontalVelocity = new AnimationCurve();
 
 	    /// <summary>
 	    ///     Enable to invert forward velocity.
 	    /// </summary>
-	    public bool InvertForwardVelocity;
+	    public BoolField InvertForwardVelocity = new BoolField();
 
 	    /// <summary>
 	    ///     Enable to invert horizontal velocity.
 	    /// </summary>
-	    public bool InvertHorizontalVelocity;
+	    public BoolField InvertHorizontalVelocity = new BoolField();
 
 	    /// <summary>
 	    ///     Enable to invert vertical velocity.
 	    /// </summary>
-	    public bool InvertVerticalVelocity;
+	    public BoolField InvertVerticalVelocity = new BoolField();
 
 	    /// <summary>
 	    ///     Enable to keep motion active for a set duration after initial activation.
 	    ///     Useful for creating simple jumping mechanics.
 	    /// </summary>
-	    [Info("Enable to keep motion active for a set duration after initial activation.\n\n" +
-              "Useful for creating simple jumping mechanics.")]
-        public bool StayActiveForSetDuration;
+        public BoolField StayActiveForSetDuration = new BoolField();
 
 	    /// <summary>
 	    ///     Enable to use forward velocity during motion.
 	    /// </summary>
-	    public bool UseForwardVelocity;
+	    public BoolField UseForwardVelocity = new BoolField();
 
 	    /// <summary>
 	    ///     Enable to use horizontal velocity.
 	    /// </summary>
-	    public bool UseHorizontalVelocity;
+	    public BoolField UseHorizontalVelocity = new BoolField();
 
 	    /// <summary>
 	    ///     Enable to use local position instead of world position.
 	    ///     Local position has better performance than world position.
 	    /// </summary>
-	    [Info("Enable to use local position instead of world position.\n\n" +
-              "Local position has better performance than world position.")]
-        public bool UseLocalPosition;
+        public BoolField UseLocalPosition = new BoolField();
 
 	    /// <summary>
 	    ///     Enable to use vertical velocity.
 	    /// </summary>
-	    public bool UseVerticalVelocity;
+	    public BoolField UseVerticalVelocity = new BoolField();
 
 	    /// <summary>
 	    ///     The velocity multiplier.
@@ -115,7 +111,7 @@ namespace SOFlow.Motion
 	    /// <summary>
 	    ///     The vertical velocity.
 	    /// </summary>
-	    public AnimationCurve VerticalVelocity;
+	    public AnimationCurve VerticalVelocity = new AnimationCurve();
 
         private void Update()
         {

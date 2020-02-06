@@ -1,6 +1,7 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 using System.Collections.Generic;
+using SOFlow.Data.Primitives;
 using SOFlow.Extensions;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace SOFlow.Data.Evaluations
 	    /// <summary>
 	    ///     Enable for any single comparison to succeed this evaluator.
 	    /// </summary>
-	    public bool Any;
+	    public BoolField Any = new BoolField();
 
 	    /// <summary>
 	    ///     The comparisons to resolve by this evaluator.

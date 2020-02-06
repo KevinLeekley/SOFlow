@@ -10,12 +10,12 @@ namespace SOFlow.Fading
 	    /// <summary>
 	    ///     The float data to fade.
 	    /// </summary>
-	    public FloatField FloatData;
+	    public FloatField FloatData = new FloatField();
 
 	    /// <summary>
 	    ///     The fade range.
 	    /// </summary>
-	    public Vector2Field FadeRange;
+	    public Vector2Field FadeRange = new Vector2Field();
 
         /// <inheritdoc />
         protected override Color GetColour()

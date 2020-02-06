@@ -11,17 +11,17 @@ namespace SOFlow.ManagedComponents.Managers
 	    /// <summary>
 	    ///     Reference to the game active state.
 	    /// </summary>
-	    public BoolField GameActive;
+	    public BoolField GameActive = new BoolField();
 
 	    /// <summary>
 	    ///     Reference to the game paused state.
 	    /// </summary>
-	    public BoolField GamePaused;
+	    public BoolField GamePaused = new BoolField();
 
 	    /// <summary>
 	    ///     The current game speed.
 	    /// </summary>
-	    public FloatField GameSpeed;
+	    public FloatField GameSpeed = new FloatField();
 
         /// <inheritdoc />
         public override void EntityUpdateTick(float deltaTime, float time)

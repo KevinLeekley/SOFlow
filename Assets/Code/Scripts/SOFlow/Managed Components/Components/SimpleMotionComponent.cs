@@ -26,12 +26,12 @@ namespace SOFlow.ManagedComponents.Components
 	    /// <summary>
 	    ///     The motion velocity.
 	    /// </summary>
-	    public Vector3Field MotionVelocity;
+	    public Vector3Field MotionVelocity = new Vector3Field();
 
 	    /// <summary>
 	    ///     The motion speed modifier.
 	    /// </summary>
-	    public FloatField SpeedModifier;
+	    public FloatField SpeedModifier = new FloatField();
 
         /// <inheritdoc />
         public override void UpdateBehaviour(float deltaTime, float time)

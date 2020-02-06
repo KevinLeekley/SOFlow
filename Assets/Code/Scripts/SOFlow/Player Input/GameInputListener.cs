@@ -1,6 +1,7 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 using System.Collections.Generic;
+using SOFlow.Data.Primitives;
 using UnityEngine;
 
 namespace SOFlow.PlayerInput
@@ -10,7 +11,7 @@ namespace SOFlow.PlayerInput
         /// <summary>
         ///     Enable to automatically check all game input on this listener.
         /// </summary>
-        public bool AutoCheckGameInput = true;
+        public BoolField AutoCheckGameInput = new BoolField(true);
 
         /// <summary>
         ///     The input this component is listening for.

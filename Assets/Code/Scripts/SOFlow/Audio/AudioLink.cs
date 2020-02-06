@@ -18,7 +18,7 @@ namespace SOFlow.Audio
 	    /// <summary>
 	    ///     The maximum amount of allowed concurrent audio clips.
 	    /// </summary>
-	    public IntField MaximumConcurrentClips;
+	    public IntField MaximumConcurrentClips = new IntField();
 
 	    /// <summary>
 	    ///     The audio clip cache.

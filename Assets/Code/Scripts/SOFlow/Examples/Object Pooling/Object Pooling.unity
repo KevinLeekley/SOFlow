@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -176,9 +177,13 @@ MonoBehaviour:
     _PersistentCalls:
     - _Target: {fileID: 11400000, guid: a06f83d47a8e0fc40aa8f298615b5997, type: 2}
       _MethodName: PopLast
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments: []
     - _Target: {fileID: 11400000, guid: 1cb4d9bcf5398fa4c92b2bee76b8f66a, type: 2}
       _MethodName: ReturnObjectToPool
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 15
         _Int: 0
@@ -189,8 +194,28 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
-  EventWaitTime: 0
-  RaiseOnStart: 0
+        InvocationIndex: 0
+  EventWaitTime:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RaiseOnStart:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RepeatEvent:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
 --- !u!114 &96521198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,8 +270,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &96521199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,8 +288,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -423,40 +444,49 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 'The SOFlow Object Pooling system utilizes a ScriptableObject
 
-    as a reference to the object pool. Once initialized, the pool
+    as a
+    reference to the object pool. Once initialized, the pool
 
-    will be available to retrieve pooled objects from. Typically,
+    will be available
+    to retrieve pooled objects from. Typically,
 
-    the object pool would be initialized by a Start event.
+    the object pool would be initialized
+    by a Start event.
 
 
-    The pool will automatically add additional objects when too
+    The pool will automatically add additional objects when
+    too
 
     many objects are requested from it. A single object can be
 
-    requested from the pool, or an arbitrary amount.
+    requested
+    from the pool, or an arbitrary amount.
 
 
-    Objects requested from the pool can be stored manually
+    Objects requested from the pool
+    can be stored manually
 
     through custom code. SOFlow comes with a built-in
 
-    solution to also store requested objects within the
+    solution
+    to also store requested objects within the
 
-    Pool Object List Reference ScriptableObject found under
+    Pool Object List Reference ScriptableObject
+    found under
 
     Create -> SOFlow -> Object Pooling -> Pool Object List Reference.
 
 
-    Taking advantage of the Pool Object List Reference allows
+    Taking
+    advantage of the Pool Object List Reference allows
 
-    for flexible use of object pools. In this example, the example
+    for flexible use of object
+    pools. In this example, the example
 
-    object pool demonstrates full usage of the object pool purely
+    object pool demonstrates full usage
+    of the object pool purely
 
     through events within the scene.'
   m_isRightToLeft: 0
@@ -613,8 +643,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Get 1 Object From Pool
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -836,8 +864,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Return Last Object To Pool
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1024,9 +1050,13 @@ MonoBehaviour:
     _PersistentCalls:
     - _Target: {fileID: 11400000, guid: a06f83d47a8e0fc40aa8f298615b5997, type: 2}
       _MethodName: PopAll
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments: []
     - _Target: {fileID: 11400000, guid: 1cb4d9bcf5398fa4c92b2bee76b8f66a, type: 2}
       _MethodName: ReturnObjectsToPool
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 15
         _Int: 0
@@ -1038,8 +1068,28 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
-  EventWaitTime: 0
-  RaiseOnStart: 0
+        InvocationIndex: 0
+  EventWaitTime:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RaiseOnStart:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RepeatEvent:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
 --- !u!114 &1013556983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1094,8 +1144,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &1013556984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1114,8 +1162,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -1189,8 +1235,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Get 3 Object From Pool
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1347,6 +1391,8 @@ MonoBehaviour:
     _PersistentCalls:
     - _Target: {fileID: 11400000, guid: 1cb4d9bcf5398fa4c92b2bee76b8f66a, type: 2}
       _MethodName: GetObjectsFromPool
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 13
         _Int: 0
@@ -1358,6 +1404,7 @@ MonoBehaviour:
         _W: 0
         _Object: {fileID: 1835230473377043867, guid: d0d5cd48129607f4eb21b7db820ea5ae,
           type: 3}
+        InvocationIndex: 0
       - _Type: 3
         _Int: 3
         _String: 
@@ -1366,8 +1413,11 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
+        InvocationIndex: 0
     - _Target: {fileID: 11400000, guid: a06f83d47a8e0fc40aa8f298615b5997, type: 2}
       _MethodName: Add
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 15
         _Int: 0
@@ -1379,8 +1429,28 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
-  EventWaitTime: 0
-  RaiseOnStart: 0
+        InvocationIndex: 0
+  EventWaitTime:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RaiseOnStart:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RepeatEvent:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
 --- !u!114 &1674942176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1435,8 +1505,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &1674942177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1455,8 +1523,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -1530,8 +1596,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Return All Objects To Pool
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1688,6 +1752,8 @@ MonoBehaviour:
     _PersistentCalls:
     - _Target: {fileID: 11400000, guid: 1cb4d9bcf5398fa4c92b2bee76b8f66a, type: 2}
       _MethodName: GetObjectFromPool
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 13
         _Int: 0
@@ -1699,8 +1765,11 @@ MonoBehaviour:
         _W: 0
         _Object: {fileID: 1835230473377043867, guid: d0d5cd48129607f4eb21b7db820ea5ae,
           type: 3}
+        InvocationIndex: 0
     - _Target: {fileID: 11400000, guid: a06f83d47a8e0fc40aa8f298615b5997, type: 2}
       _MethodName: Add
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 15
         _Int: 0
@@ -1711,8 +1780,28 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
-  EventWaitTime: 0
-  RaiseOnStart: 0
+        InvocationIndex: 0
+  EventWaitTime:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RaiseOnStart:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RepeatEvent:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
 --- !u!114 &1961411557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1767,8 +1856,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &1961411558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1787,8 +1874,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -1943,18 +2028,40 @@ MonoBehaviour:
     _PersistentCalls:
     - _Target: {fileID: 11400000, guid: 1cb4d9bcf5398fa4c92b2bee76b8f66a, type: 2}
       _MethodName: InitializePool
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 13
         _Int: 0
-        _String: UnityEngine.Transform, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
+        _String: UnityEngine.Transform, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
         _W: 0
         _Object: {fileID: 785723982}
-  EventWaitTime: 0
-  RaiseOnStart: 1
+        InvocationIndex: 0
+  EventWaitTime:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RaiseOnStart:
+    UseConstant: 1
+    ConstantValueType: 1
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  RepeatEvent:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
 --- !u!4 &2143591480
 Transform:
   m_ObjectHideFlags: 0

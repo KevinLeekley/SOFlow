@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e27f6e6a712e0f43a0298069b24daeb, type: 3}
   m_Name: Example Motion Active Duration
   m_EditorClassIdentifier: 
+  Description: 
   OnDataChanged:
     _PersistentCalls: []
   OnDataUpdated:
     _PersistentCalls: []
   PersistInPlayMode: 0
-  AssetValue: 0.3
-  _playModeValue: 0.3
+  AssetValue: 0.2
+  _playModeValue: 0.2

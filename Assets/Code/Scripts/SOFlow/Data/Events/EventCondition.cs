@@ -1,6 +1,7 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 using System;
+using SOFlow.Data.Primitives;
 
 namespace SOFlow.Data.Events
 {
@@ -10,12 +11,12 @@ namespace SOFlow.Data.Events
 	    /// <summary>
 	    ///     The condition to test against.
 	    /// </summary>
-	    public ConditionalEvent Condition;
+	    public ConditionalEvent Condition = new ConditionalEvent();
 
 	    /// <summary>
 	    ///     Indicates whether this condition should be inverted.
 	    /// </summary>
-	    public bool InvertCondition;
+	    public BoolField InvertCondition = new BoolField();
 
 	    /// <summary>
 	    ///     Evaluates the event condition.

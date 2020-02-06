@@ -1,6 +1,5 @@
 // Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using SOFlow.Data.Primitives;
@@ -46,12 +45,12 @@ namespace SOFlow.ObjectPooling
         /// <summary>
         ///     The initial object pool size per object ID.
         /// </summary>
-        public IntField InitialPoolSizePerObject;
+        public IntField InitialPoolSizePerObject = new IntField();
 
         /// <summary>
         ///     The amount of object to instantiate when the pool runs out.
         /// </summary>
-        public IntField PoolSizeExtensionAmount;
+        public IntField PoolSizeExtensionAmount = new IntField();
 
         /// <summary>
         /// The pool container.

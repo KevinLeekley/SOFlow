@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -175,29 +176,33 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 'The Game Input Listener component can be
 
-    added by right clicking in the scene and selecting
+    added by right clicking
+    in the scene and selecting
 
     SOFlow -> Input -> Add Game Input Listener
 
 
-    The Game Input Listener allows for quick and easy
+    The
+    Game Input Listener allows for quick and easy
 
-    setup of key input to perform events. A set of keys
+    setup of key input to perform
+    events. A set of keys
 
     can be added per event.
 
 
-    In this example, the [SPACE BAR] and [F] keys
+    In this example, the
+    [SPACE BAR] and [F] keys
 
     has been added to a Game Event Listener as a single
 
-    set. When both the [SPACE BAR] and [F] keys are
+    set.
+    When both the [SPACE BAR] and [F] keys are
 
-    pressed, the image to the left will fade.'
+    pressed, the image to the left
+    will fade.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -332,28 +337,44 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValueType: 0
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   FirstData: {fileID: 0}
   FirstFloat:
     UseConstant: 1
     ConstantValueType: 0
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   FirstInt:
     UseConstant: 1
     ConstantValueType: 0
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   FirstString:
     UseConstant: 1
     ConstantValueType: 
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   OnComparisonFail:
     _PersistentCalls:
     - _Target: {fileID: 406150358}
       _MethodName: Fade
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments: []
   OnComparisonSuccess:
     _PersistentCalls:
     - _Target: {fileID: 1782899521}
       _MethodName: SetText
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 2
         _Int: 0
@@ -363,6 +384,7 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
+        InvocationIndex: 0
   PrimitiveOperator: 0
   ConditionalEvent:
     _target: {fileID: 406150358}
@@ -377,27 +399,45 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValueType: 0
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   SecondData: {fileID: 0}
   SecondFloat:
     UseConstant: 1
     ConstantValueType: 0
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   SecondInt:
     UseConstant: 1
     ConstantValueType: 0
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   SecondString:
     UseConstant: 1
     ConstantValueType: 
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   ThirdFloat:
     UseConstant: 1
     ConstantValueType: 0
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   ThirdInt:
     UseConstant: 1
     ConstantValueType: 0
     VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   Trigger: {fileID: 0}
 --- !u!4 &219767159
 Transform:
@@ -466,14 +506,28 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  FadedColour: {r: 1, g: 1, b: 1, a: 0}
+  FadedColour:
+    UseConstant: 1
+    ConstantValueType: {r: 1, g: 1, b: 1, a: 0}
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   FadeTargets:
   - {fileID: 1827092194}
-  FadeTime: 1
+  FadeTime:
+    UseConstant: 1
+    ConstantValueType: 1
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   OnFadeComplete:
     _PersistentCalls:
     - _Target: {fileID: 1782899521}
       _MethodName: SetText
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 2
         _Int: 0
@@ -483,11 +537,18 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
+        InvocationIndex: 0
   OnFadeStart:
     _PersistentCalls: []
   OnFadeWait:
     _PersistentCalls: []
-  OnlyFade: 0
+  OnlyFade:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   UnfadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -512,9 +573,27 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  UnfadedColour: {r: 1, g: 1, b: 1, a: 1}
-  UnfadeTime: 1
-  WaitBetweenFades: 0.3
+  UnfadedColour:
+    UseConstant: 1
+    ConstantValueType: {r: 1, g: 1, b: 1, a: 1}
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  UnfadeTime:
+    UseConstant: 1
+    ConstantValueType: 0.5
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  WaitBetweenFades:
+    UseConstant: 1
+    ConstantValueType: 1
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
 --- !u!4 &406150359
 Transform:
   m_ObjectHideFlags: 0
@@ -660,12 +739,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cdda4841db01fa4e881045e51c1ea8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AutoCheckGameInput: 1
+  AutoCheckGameInput:
+    UseConstant: 1
+    ConstantValueType: 1
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   Input:
   - Event:
       _PersistentCalls:
       - _Target: {fileID: 219767158}
         _MethodName: Evaluate
+        MethodDelay: 0
+        InvocationIndex: 0
         _PersistentArguments: []
     Keys:
     - InputType: 2
@@ -741,8 +828,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Press SPACE BAR + F To Fade Image
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -962,8 +1047,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Ready To Fade
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1114,9 +1197,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15a83fb65c78f33428160640c1159e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AlphaOnly: 1
-  InvertAlpha: 0
-  InvertPercentage: 0
+  AlphaOnly:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  InvertAlpha:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
+  InvertPercentage:
+    UseConstant: 1
+    ConstantValueType: 0
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   UIElement: {fileID: 1827092195}
 --- !u!222 &1827092195
 CanvasRenderer:
@@ -1144,8 +1245,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0

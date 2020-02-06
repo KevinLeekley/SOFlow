@@ -14,22 +14,22 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     The game event to raise.
         /// </summary>
-        public UltEvent Event;
+        public UltEvent Event = new UltEvent();
 
         /// <summary>
         ///     The time before the event is raised in seconds.
         /// </summary>
-        public FloatField EventWaitTime;
+        public FloatField EventWaitTime = new FloatField();
 
         /// <summary>
         ///     Indicates whether the event should be raised automatically when Start is called.
         /// </summary>
-        public bool RaiseOnStart = true;
+        public BoolField RaiseOnStart = new BoolField(true);
 
         /// <summary>
         /// Indicates whether the event should be repeated.
         /// </summary>
-        public bool RepeatEvent = false;
+        public BoolField RepeatEvent = new BoolField(false);
 
         /// <summary>
         /// The cancellation token source.

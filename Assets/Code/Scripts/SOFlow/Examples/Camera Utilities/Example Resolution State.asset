@@ -12,11 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438cb0c5853b0ed4e88daded5c9ffc21, type: 3}
   m_Name: Example Resolution State
   m_EditorClassIdentifier: 
-  DesignedScreenResolution: {x: 1920, y: 1080}
+  DesignedScreenResolution:
+    UseConstant: 1
+    ConstantValueType: {x: 1920, y: 1080}
+    VariableType: {fileID: 0}
+    OnConstantValueChanged:
+      _PersistentCalls: []
+    _displayValueChangedEvent: 0
   OnScreenResolutionChanged:
     _PersistentCalls:
     - _Target: {fileID: 11400000, guid: 9e8c8757541779c44afc35a8a47b8742, type: 2}
       _MethodName: AddTo
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments:
       - _Type: 3
         _Int: 1
@@ -26,6 +34,9 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
+        InvocationIndex: 0
     - _Target: {fileID: 11400000, guid: 4629b2df357ad9844beb105f9755cdcb, type: 2}
       _MethodName: Raise
+      MethodDelay: 0
+      InvocationIndex: 0
       _PersistentArguments: []

@@ -25,22 +25,22 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     The event listener order.
         /// </summary>
-        public float EventListenerOrder;
+        public FloatField EventListenerOrder = new FloatField();
 
         /// <summary>
         ///     Indicates whether this listener should be prioritized after other listeners when events are raised.
         /// </summary>
-        public bool RegisterLast;
+        public BoolField RegisterLast = new BoolField();
 
         /// <summary>
         ///     Indicates whether the event listener should register to the given event on Awake.
         /// </summary>
-        public bool RegisterOnAwake;
+        public BoolField RegisterOnAwake = new BoolField();
 
         /// <summary>
         ///     Indicates whether this event should be debugged.
         /// </summary>
-        public bool Debug;
+        public BoolField Debug = new BoolField();
 
         /// <summary>
         ///     The list of conditions for this event.
@@ -50,7 +50,7 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     The response to the game event.
         /// </summary>
-        public UltEvent Response;
+        public UltEvent Response = new UltEvent();
 
         /// <summary>
         ///     The game object reference.

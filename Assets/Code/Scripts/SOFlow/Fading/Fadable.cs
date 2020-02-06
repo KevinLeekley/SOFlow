@@ -3,7 +3,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+using SOFlow.Data.Primitives;
 using UnityEngine;
 
 namespace SOFlow.Fading
@@ -13,17 +13,17 @@ namespace SOFlow.Fading
         /// <summary>
         ///     Indicates whether only the alpha value of the provided colour should be used.
         /// </summary>
-        public bool AlphaOnly;
+        public BoolField AlphaOnly = new BoolField();
 
         /// <summary>
         ///     Indicates whether the alpha should be inverted.
         /// </summary>
-        public bool InvertAlpha;
+        public BoolField InvertAlpha = new BoolField();
 
         /// <summary>
         ///     Indicates whether the provided fade percentage should be inverted.
         /// </summary>
-        public bool InvertPercentage;
+        public BoolField InvertPercentage = new BoolField();
 
         /// <summary>
         ///     Returns the colour component of this fadable.

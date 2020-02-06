@@ -15,12 +15,12 @@ namespace SOFlow.Data.Evaluations
         /// <summary>
         ///     The value to feed into the curve.
         /// </summary>
-        public FloatField CurveValue;
+        public FloatField CurveValue = new FloatField();
 
         /// <summary>
         ///     The resulting value after the growth curve has been applied.
         /// </summary>
-        public FloatField EvaluatedValue;
+        public FloatField EvaluatedValue = new FloatField();
 
         /// <summary>
         ///     The multiplier to apply to the growth curve.

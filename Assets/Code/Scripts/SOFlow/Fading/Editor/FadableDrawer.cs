@@ -45,17 +45,17 @@ namespace SOFlow.Fading
 
                         position.width /= 3f;
 
-                        fadable.AlphaOnly = EditorGUI.ToggleLeft(position, "Alpha Only", fadable.AlphaOnly,
+                        fadable.AlphaOnly.Value = EditorGUI.ToggleLeft(position, "Alpha Only", fadable.AlphaOnly,
                                                                  SOFlowStyles.CenteredLabel);
 
                         position.x += position.width;
 
-                        fadable.InvertAlpha = EditorGUI.ToggleLeft(position, "Invert Alpha", fadable.InvertAlpha,
+                        fadable.InvertAlpha.Value = EditorGUI.ToggleLeft(position, "Invert Alpha", fadable.InvertAlpha,
                                                                    SOFlowStyles.CenteredLabel);
 
                         position.x += position.width;
 
-                        fadable.InvertPercentage = EditorGUI.ToggleLeft(position, "Invert %", fadable.InvertPercentage,
+                        fadable.InvertPercentage.Value = EditorGUI.ToggleLeft(position, "Invert %", fadable.InvertPercentage,
                                                                         SOFlowStyles.CenteredLabel);
                     }
                 }

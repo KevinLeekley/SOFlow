@@ -1,5 +1,6 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
+using SOFlow.Data.Primitives;
 using UltEvents;
 using UnityEngine;
 
@@ -10,62 +11,62 @@ namespace SOFlow.Data.Events
         /// <summary>
         ///     Enable to listen for OnCollisionEnter events.
         /// </summary>
-        public bool ListenForCollisionEnter;
+        public BoolField ListenForCollisionEnter = new BoolField();
 
         /// <summary>
         ///     Enable to listen for OnCollisionExit events.
         /// </summary>
-        public bool ListenForCollisionExit;
+        public BoolField ListenForCollisionExit = new BoolField();
 
         /// <summary>
         ///     Enable to listen for OnCollisionStay events.
         /// </summary>
-        public bool ListenForCollisionStay;
+        public BoolField ListenForCollisionStay = new BoolField();
 
         /// <summary>
         ///     Enable to listen for OnTriggerEnter events.
         /// </summary>
-        public bool ListenForTriggerEnter;
+        public BoolField ListenForTriggerEnter = new BoolField();
 
         /// <summary>
         ///     Enable to listen for OnTriggerExit events.
         /// </summary>
-        public bool ListenForTriggerExit;
+        public BoolField ListenForTriggerExit = new BoolField();
 
         /// <summary>
         ///     Enable to listen for OnTriggerStay events.
         /// </summary>
-        public bool ListenForTriggerStay;
+        public BoolField ListenForTriggerStay = new BoolField();
 
         /// <summary>
         ///     The OnCollisionEnter game event.
         /// </summary>
-        public UltEvent OnCollisionEnterEvent;
+        public UltEvent OnCollisionEnterEvent = new UltEvent();
 
         /// <summary>
         ///     The OnCollisionExit game event.
         /// </summary>
-        public UltEvent OnCollisionExitEvent;
+        public UltEvent OnCollisionExitEvent = new UltEvent();
 
         /// <summary>
         ///     The OnCollisionStay game event.
         /// </summary>
-        public UltEvent OnCollisionStayEvent;
+        public UltEvent OnCollisionStayEvent = new UltEvent();
 
         /// <summary>
         ///     The OnTriggerEnter game event.
         /// </summary>
-        public UltEvent OnTriggerEnterEvent;
+        public UltEvent OnTriggerEnterEvent = new UltEvent();
 
         /// <summary>
         ///     The OnTriggerExit game event.
         /// </summary>
-        public UltEvent OnTriggerExitEvent;
+        public UltEvent OnTriggerExitEvent = new UltEvent();
 
         /// <summary>
         ///     The OnTriggerStay game event.
         /// </summary>
-        public UltEvent OnTriggerStayEvent;
+        public UltEvent OnTriggerStayEvent = new UltEvent();
 
         private void OnTriggerEnter(Collider other)
         {

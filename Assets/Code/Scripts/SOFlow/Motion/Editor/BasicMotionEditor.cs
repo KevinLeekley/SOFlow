@@ -1,6 +1,7 @@
 // Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 #if UNITY_EDITOR
+using SOFlow.Data.Primitives;
 using SOFlow.Internal;
 using UnityEditor;
 
@@ -51,7 +52,29 @@ namespace SOFlow.Motion
                                                  {
                                                      serializedObject.DrawProperty($"Use{axis}Velocity");
 
-                                                     if(serializedObject.FindProperty($"Use{axis}Velocity").boolValue)
+                                                     BoolField axisField;
+
+                                                     switch(axis)
+                                                     {
+                                                         case "Forward":
+                                                             axisField = _target.UseForwardVelocity;
+                                                             
+                                                             break;
+                                                         case "Horizontal":
+                                                             axisField = _target.UseHorizontalVelocity;
+
+                                                             break;
+                                                         case "Vertical":
+                                                             axisField = _target.UseVerticalVelocity;
+
+                                                             break;
+                                                         default:
+                                                             axisField = _target.UseForwardVelocity;
+
+                                                             break;
+                                                     }
+
+                                                     if(axisField)
                                                          SOFlowEditorUtilities.DrawTertiaryLayer(() =>
                                                                                              {
                                                                                                  serializedObject

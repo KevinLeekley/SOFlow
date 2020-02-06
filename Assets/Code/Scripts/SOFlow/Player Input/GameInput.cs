@@ -13,7 +13,7 @@ namespace SOFlow.PlayerInput
         /// <summary>
         ///     The event associated with this game input.
         /// </summary>
-        public UltEvent Event;
+        public UltEvent Event = new UltEvent();
 
         /// <summary>
         ///     The keys for this game input.

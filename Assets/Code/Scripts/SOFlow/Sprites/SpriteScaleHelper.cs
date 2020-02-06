@@ -39,8 +39,8 @@ namespace SOFlow.Sprites
                 _spriteSizeCaptured = true;
             }
 
-            float resolutionScaling = ResolutionState.DesignedScreenResolution.y /
-                                      ResolutionState.DesignedScreenResolution.x *
+            float resolutionScaling = ResolutionState.DesignedScreenResolution.Value.y /
+                                      ResolutionState.DesignedScreenResolution.Value.x *
                                       ResolutionState.CurrentScreenResolution.x /
                                       ResolutionState.CurrentScreenResolution.y;
 

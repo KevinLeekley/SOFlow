@@ -1,6 +1,7 @@
 // Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 using System.Collections.Generic;
+using SOFlow.Data.Primitives;
 using UltEvents;
 using UnityAsync;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace SOFlow.Fading
         /// <summary>
         ///     The faded colour.
         /// </summary>
-        public Color FadedColour = Color.white;
+        public ColorField FadedColour = new ColorField(Color.white);
 
         /// <summary>
         ///     The fade targets.
@@ -27,27 +28,27 @@ namespace SOFlow.Fading
         /// <summary>
         ///     The fade time.
         /// </summary>
-        public float FadeTime;
+        public FloatField FadeTime = new FloatField();
 
         /// <summary>
         ///     Event raised when the fading is completed.
         /// </summary>
-        public UltEvent OnFadeComplete;
+        public UltEvent OnFadeComplete = new UltEvent();
 
         /// <summary>
         ///     Event raised before the fade starts.
         /// </summary>
-        public UltEvent OnFadeStart;
+        public UltEvent OnFadeStart = new UltEvent();
 
         /// <summary>
         ///     Event raised when waiting between fades.
         /// </summary>
-        public UltEvent OnFadeWait;
+        public UltEvent OnFadeWait = new UltEvent();
 
         /// <summary>
         ///     Enable to only allow fading in.
         /// </summary>
-        public bool OnlyFade;
+        public BoolField OnlyFade = new BoolField();
 
         /// <summary>
         ///     The unfade curve.
@@ -57,17 +58,17 @@ namespace SOFlow.Fading
         /// <summary>
         ///     The unfaded colour.
         /// </summary>
-        public Color UnfadedColour = Color.white;
+        public ColorField UnfadedColour = new ColorField(Color.white);
 
         /// <summary>
         ///     The unfade time.
         /// </summary>
-        public float UnfadeTime;
+        public FloatField UnfadeTime = new FloatField();
 
         /// <summary>
         ///     The wait between fades.
         /// </summary>
-        public float WaitBetweenFades;
+        public FloatField WaitBetweenFades = new FloatField();
 
         /// <summary>
         ///     Indicates whether we are currently fading.

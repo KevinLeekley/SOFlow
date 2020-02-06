@@ -7,16 +7,6 @@ namespace SOFlow.CameraUtilities
     public class ScreenSizeMonitor : MonoBehaviour
     {
         /// <summary>
-        ///     The previous screen size.
-        /// </summary>
-        private Vector2Int _previousScreenSize;
-
-        /// <summary>
-        ///     The world resolution.
-        /// </summary>
-        private Vector2 _worldResolution;
-
-        /// <summary>
         ///     The game camera reference.
         /// </summary>
         public CameraReference GameCamera;
@@ -26,22 +16,31 @@ namespace SOFlow.CameraUtilities
         /// </summary>
         public ResolutionState ResolutionState;
 
+        /// <summary>
+        ///     The previous screen size.
+        /// </summary>
+        private Vector2Int _previousScreenSize;
+
+        /// <summary>
+        ///     The world resolution.
+        /// </summary>
+        private Vector2 _worldResolution;
+
         private void Update()
         {
-            CalculateWorldSize(GameCamera.Camera.orthographicSize, GameCamera.Camera.pixelRect);
+            CalculateWorldSize(GameCamera.Camera.pixelRect);
         }
 
         /// <summary>
         ///     Calculates the world size.
         /// </summary>
-        /// <param name="orthographicSize"></param>
         /// <param name="cameraPixelRect"></param>
-        public void CalculateWorldSize(float orthographicSize, Rect cameraPixelRect)
+        public void CalculateWorldSize(Rect cameraPixelRect)
         {
             int screenWidth  = (int)cameraPixelRect.width;
             int screenHeight = (int)cameraPixelRect.height;
 
-            if(screenWidth != _previousScreenSize.x && screenHeight != _previousScreenSize.y)
+            if(screenWidth != _previousScreenSize.x || screenHeight != _previousScreenSize.y)
             {
                 _previousScreenSize.x = screenWidth;
                 _previousScreenSize.y = screenHeight;
