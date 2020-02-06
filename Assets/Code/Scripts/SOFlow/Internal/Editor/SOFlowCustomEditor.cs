@@ -71,9 +71,10 @@ namespace SOFlow.Internal
         {
             if(_isScriptableObject && _scriptableObjectTarget)
             {
+                
                 SOFlowEditorUtilities.DrawTertiaryLayer(() =>
                                                         {
-                                                            if(SOFlowEditorUtilities.DrawColourButton("Save Assets",
+                                                            if(SOFlowEditorUtilities.DrawColourButton($"Save Assets {(EditorUtility.IsDirty(target) ? "*" : "")}",
                                                                                                       SOFlowEditorSettings
                                                                                                          .AcceptContextColour,
                                                                                                       SOFlowStyles
