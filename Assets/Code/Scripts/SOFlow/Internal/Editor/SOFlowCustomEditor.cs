@@ -1,6 +1,7 @@
 ﻿// Created by Kearan Petersen : https://www.blumalice.wordpress.com | https://www.linkedin.com/in/kearan-petersen/
 
 #if UNITY_EDITOR
+using System;
 using UnityEngine;
 using SOFlow.Utilities;
 using UnityEditor;
@@ -12,12 +13,28 @@ namespace SOFlow.Internal
         /// <summary>
         ///     Indicates whether this instance is a scriptable object.
         /// </summary>
-        private bool _isScriptableObject = true;
+        protected bool _isScriptableObject = true;
 
         /// <summary>
         ///     The cached scriptable object instance.
         /// </summary>
-        private ScriptableObject _scriptableObjectTarget;
+        protected ScriptableObject _scriptableObjectTarget;
+
+        protected void Awake()
+        {
+            if(_isScriptableObject && !_scriptableObjectTarget)
+            {
+                try
+                {
+                    _scriptableObjectTarget = (ScriptableObject)target;
+                    _isScriptableObject     = true;
+                }
+                catch
+                {
+                    _isScriptableObject = false;
+                }
+            }
+        }
 
         public override void OnInspectorGUI()
         {
@@ -52,6 +69,20 @@ namespace SOFlow.Internal
         /// </summary>
         protected virtual void DrawCustomInspector()
         {
+            if(_isScriptableObject && _scriptableObjectTarget)
+            {
+                SOFlowEditorUtilities.DrawTertiaryLayer(() =>
+                                                        {
+                                                            if(SOFlowEditorUtilities.DrawColourButton("Save Assets",
+                                                                                                      SOFlowEditorSettings
+                                                                                                         .AcceptContextColour,
+                                                                                                      SOFlowStyles
+                                                                                                         .Button))
+                                                            {
+                                                                AssetDatabase.SaveAssets();
+                                                            }
+                                                        });
+            }
         }
 
         /// <summary>
@@ -59,17 +90,6 @@ namespace SOFlow.Internal
         /// </summary>
         protected virtual void DrawScriptableObjectFileHandlingFields()
         {
-            if(_isScriptableObject && !_scriptableObjectTarget)
-                try
-                {
-                    _scriptableObjectTarget = (ScriptableObject)target;
-                    _isScriptableObject     = true;
-                }
-                catch
-                {
-                    _isScriptableObject = false;
-                }
-
             if(_isScriptableObject && _scriptableObjectTarget)
             {
                 string objectClassName = _scriptableObjectTarget.GetType().Name;
