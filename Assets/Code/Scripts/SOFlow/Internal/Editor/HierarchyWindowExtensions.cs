@@ -115,8 +115,9 @@ namespace SOFlow.Internal
             for(int i = _dirtyObjects.Count - 1; i >= 0; i--)
             {
                 int dirtyObjectID = _dirtyObjects[i];
+                GameObject sceneObject = (EditorUtility.InstanceIDToObject(dirtyObjectID) as GameObject);
 
-                if((EditorUtility.InstanceIDToObject(dirtyObjectID) as GameObject).scene.Equals(scene))
+                if(sceneObject && sceneObject.scene.Equals(scene))
                 {
                     _dirtyObjects.RemoveAt(i);
                 }
