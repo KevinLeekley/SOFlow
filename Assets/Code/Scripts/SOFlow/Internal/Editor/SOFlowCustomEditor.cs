@@ -20,6 +20,11 @@ namespace SOFlow.Internal
         /// </summary>
         protected ScriptableObject _scriptableObjectTarget;
 
+        /// <summary>
+        /// The Unity Project Browser window type. 
+        /// </summary>
+        private Type _projectBrowserType = typeof(Editor).Assembly.GetType("UnityEditor.ProjectBrowser");
+
         protected void Awake()
         {
             if(_isScriptableObject && !_scriptableObjectTarget)
@@ -60,7 +65,12 @@ namespace SOFlow.Internal
 
                 GUI.contentColor = originalTextColour;
 
-                if(GUI.changed) serializedObject.ApplyModifiedProperties();
+                if(GUI.changed)
+                {
+                    serializedObject.ApplyModifiedProperties();
+
+                    EditorWindow.GetWindow(_projectBrowserType)?.Repaint();
+                }
             }
         }
 
@@ -71,7 +81,6 @@ namespace SOFlow.Internal
         {
             if(_isScriptableObject && _scriptableObjectTarget)
             {
-                
                 SOFlowEditorUtilities.DrawTertiaryLayer(() =>
                                                         {
                                                             if(SOFlowEditorUtilities.DrawColourButton($"Save Assets {(EditorUtility.IsDirty(target) ? "*" : "")}",
